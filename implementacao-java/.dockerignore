@@ -1,0 +1,6 @@
+.git
+**/target
+.runtime
+docs
+*.md
+.env

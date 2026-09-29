@@ -35,4 +35,17 @@ class CanonicalEventCodecTest {
         assertThrows(IllegalArgumentException.class, () -> new AuditEvent(ID, "created", "order", "E1", "A1", "web",
             OffsetDateTime.parse("2026-09-29T12:34:56Z"), CanonicalEventCodec.mapper().readTree("[]")));
     }
+
+    @Test
+    void omittedIdentityGetsDefaultButExplicitNullOrIncompleteWireDoesNot() throws Exception {
+        AuditEvent defaulted = CanonicalEventCodec.mapper().readValue("""
+            {"event_type":"created","entity_type":"order","entity_id":"E1","actor_id":"A1","source":"web"}
+            """, AuditEvent.class);
+        org.junit.jupiter.api.Assertions.assertNotNull(defaulted.eventId());
+        org.junit.jupiter.api.Assertions.assertNotNull(defaulted.occurredAt());
+        assertThrows(com.fasterxml.jackson.databind.JsonMappingException.class, () ->
+            CanonicalEventCodec.mapper().readValue("""
+                {"event_id":null,"event_type":"created","entity_type":"order","entity_id":"E1","actor_id":"A1","source":"web"}
+                """, AuditEvent.class));
+    }
 }

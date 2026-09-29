@@ -1,6 +1,7 @@
 package br.com.ilan.tcc.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import java.time.OffsetDateTime;
@@ -8,6 +9,7 @@ import java.time.ZoneOffset;
 import java.util.UUID;
 
 /** The immutable wire contract shared by the REST and Kafka variants. */
+@JsonDeserialize(using = AuditEventDeserializer.class)
 public record AuditEvent(
     @JsonProperty("event_id") UUID eventId,
     @JsonProperty("event_type") String eventType,

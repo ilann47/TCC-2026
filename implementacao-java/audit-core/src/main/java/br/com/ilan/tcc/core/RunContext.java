@@ -10,7 +10,7 @@ public final class RunContext {
     private RunContext() {}
 
     public static String validate(String value) {
-        return value == null || value.isBlank() ? null : UUID.fromString(value).toString();
+        return value == null || value.isEmpty() ? null : UUID.fromString(value).toString();
     }
 
     public static void set(String runId, String variant) {
