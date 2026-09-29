@@ -7,6 +7,13 @@ import br.com.ilan.tcc.core.KafkaPublisher;
 import br.com.ilan.tcc.core.MilestoneLog;
 import br.com.ilan.tcc.core.PublicationFailure;
 import br.com.ilan.tcc.core.RunContext;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Auditoria assíncrona", description = "A API publica o evento no Kafka; o consumidor persiste depois.")
 public class AsyncAuditController {
     private final KafkaPublisher publisher;
     private final String topic;
@@ -26,9 +34,13 @@ public class AsyncAuditController {
         this.topic = topic;
     }
 
+    @Operation(summary = "Verificar se o processo HTTP está ativo")
     @GetMapping("/live")
     public Map<String, String> live() { return Map.of("status", "alive"); }
 
+    @Operation(summary = "Verificar a disponibilidade do Kafka")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Broker disponível"),
+        @ApiResponse(responseCode = "503", description = "Broker indisponível")})
     @GetMapping("/health")
     public ResponseEntity<?> health() {
         if (!publisher.ready(topic)) return ResponseEntity.status(503)
@@ -36,8 +48,23 @@ public class AsyncAuditController {
         return ResponseEntity.ok(Map.of("status", "ready", "dependency", "kafka"));
     }
 
+    @Operation(summary = "Publicar um evento de auditoria",
+        description = "Retorna 202 após o ACK do Kafka. Isso não confirma persistência no PostgreSQL; "
+            + "consulte o registro pela API síncrona usando o event_id retornado. "
+            + "event_id e occurred_at podem ser omitidos; nesse caso, a API gera seus valores.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "202", description = "Publicação confirmada pelo Kafka",
+            content = @Content(schema = @Schema(implementation = AuditAccepted.class))),
+        @ApiResponse(responseCode = "422", description = "Evento inválido"),
+        @ApiResponse(responseCode = "503", description = "Publicação não confirmada; verifique acceptance no corpo")})
     @PostMapping("/audit")
-    public ResponseEntity<?> accept(@RequestBody AuditEvent event) {
+    public ResponseEntity<?> accept(@RequestBody
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuditEvent.class),
+                examples = @ExampleObject(value = """
+                    {"event_type":"created","entity_type":"order","entity_id":"E1",
+                     "actor_id":"A1","source":"swagger-ui","payload":{"value":1}}
+                    """))) AuditEvent event) {
         long start = System.nanoTime();
         MilestoneLog.emit("request_received", "event_id", event.eventId());
         try {

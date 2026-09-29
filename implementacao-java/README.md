@@ -56,6 +56,12 @@ docker compose ps
 
 Para acompanhar a inicialização: `docker compose logs -f --tail=100`. Se quiser uma senha própria, crie `.runtime/compose.env` a partir de `.env.example`, preencha `POSTGRES_PASSWORD` e use `docker compose --env-file .runtime/compose.env up --build -d`. A pasta `.runtime` permanece ignorada pelo Git. Uma senha nova no arquivo não altera automaticamente a senha de um volume PostgreSQL já inicializado.
 
+## Testar pelo Swagger UI
+
+Com o Compose em execução, abra [Swagger da API síncrona](http://localhost:18002/swagger-ui/index.html) ou [Swagger da API assíncrona](http://localhost:18003/swagger-ui/index.html). Cada processo possui sua própria documentação OpenAPI: [JSON síncrono](http://localhost:18002/v3/api-docs) e [JSON assíncrono](http://localhost:18003/v3/api-docs). As portas correspondem aos valores padrão do `.env`; se forem alteradas, ajuste os links.
+
+Em `POST /audit`, clique em **Try it out** e depois em **Execute**. O exemplo já é válido e omite `event_id` e `occurred_at`, que são gerados pela API. Na variante síncrona, `201` confirma a transação no PostgreSQL. Na assíncrona, `202` confirma somente o ACK do Kafka; copie o `event_id` da resposta e consulte `GET /audit/{eventId}` no Swagger **síncrono** para verificar a persistência. Pode haver um breve intervalo até o consumidor gravar o evento.
+
 Exemplo de evento para ambas as APIs:
 
 ```json

@@ -49,6 +49,15 @@ jobs:
                   time.sleep(2)
               raise AssertionError(f'service {port} not ready')
           ready(18002); ready(18003)
+          for port, expected_title, success_code in (
+              (18002, 'Auditoria - API sincrona', '201'),
+              (18003, 'Auditoria - API assincrona', '202'),
+          ):
+              status, spec = call(f'http://127.0.0.1:{port}/v3/api-docs')
+              assert status == 200 and spec['info']['title'] == expected_title, spec.get('info')
+              assert success_code in spec['paths']['/audit']['post']['responses']
+              with urllib.request.urlopen(f'http://127.0.0.1:{port}/swagger-ui/index.html', timeout=8) as response:
+                  assert response.status == 200
           base = dict(event_type='created', entity_type='order', entity_id='E1', actor_id='A1', source='ci', occurred_at='2026-09-29T12:34:56Z', payload={'value':1})
           sync = dict(base, event_id=str(uuid.uuid4()))
           status, result = call('http://127.0.0.1:18002/audit', sync)
