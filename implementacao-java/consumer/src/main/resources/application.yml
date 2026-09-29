@@ -1,0 +1,23 @@
+spring:
+  main:
+    web-application-type: none
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/auditdb}
+    username: ${SPRING_DATASOURCE_USERNAME:audit}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    hikari:
+      connection-timeout: 5000
+  flyway:
+    enabled: true
+audit:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    topic: ${KAFKA_TOPIC:audit-events}
+    dlq-topic: ${KAFKA_DLQ_TOPIC:audit-events-dlq}
+    group-id: ${KAFKA_GROUP_ID:audit-persistence-java}
+    delivery-timeout-ms: ${DELIVERY_TIMEOUT_MS:10000}
+  retry:
+    attempts: ${RETRY_ATTEMPTS:3}
+    backoff-ms: ${RETRY_BACKOFF_MS:500}
+    backoff-max-ms: ${RETRY_BACKOFF_MAX_MS:5000}
+    reconnect-ms: ${RECONNECT_MS:2000}

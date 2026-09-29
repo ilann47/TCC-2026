@@ -1,0 +1,7 @@
+server:
+  port: ${SERVER_PORT:8081}
+audit:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    topic: ${KAFKA_TOPIC:audit-events}
+    delivery-timeout-ms: ${DELIVERY_TIMEOUT_MS:10000}
