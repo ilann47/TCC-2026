@@ -37,7 +37,6 @@ jobs:
         run: |
           python3 - <<'PY'
           import json, time, urllib.request, uuid
-          from urllib.error import URLError
           def call(url, data=None):
               body = None if data is None else json.dumps(data).encode()
               with urllib.request.urlopen(urllib.request.Request(url, data=body, headers={'Content-Type':'application/json'}), timeout=8) as response:
@@ -46,7 +45,7 @@ jobs:
               for _ in range(90):
                   try:
                       if call(f'http://127.0.0.1:{port}/health')[0] == 200: return
-                  except (URLError, TimeoutError): pass
+                  except OSError: pass
                   time.sleep(2)
               raise AssertionError(f'service {port} not ready')
           ready(18002); ready(18003)
@@ -65,7 +64,7 @@ jobs:
                   if status == 200:
                       assert result['status'] == 'persisted', result
                       break
-              except URLError: pass
+              except OSError: pass
               time.sleep(1)
           else: raise AssertionError('asynchronous event was not persisted')
           print('Java REST/Kafka/PostgreSQL smoke passed')
