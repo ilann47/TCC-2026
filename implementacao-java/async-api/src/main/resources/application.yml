@@ -1,6 +1,8 @@
 server:
   port: ${SERVER_PORT:8081}
 audit:
+  swagger:
+    allowed-origins: ${SWAGGER_ALLOWED_ORIGINS:http://localhost:18002,http://127.0.0.1:18002}
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     topic: ${KAFKA_TOPIC:audit-events}

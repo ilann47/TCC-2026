@@ -9,3 +9,11 @@ spring:
       connection-timeout: 5000
   flyway:
     enabled: true
+springdoc:
+  swagger-ui:
+    urls:
+      - name: "Síncrona (PostgreSQL)"
+        url: /v3/api-docs
+      - name: "Assíncrona (Kafka)"
+        url: ${SWAGGER_ASYNC_DOCS_URL:http://localhost:18003/v3/api-docs}
+    urls-primary-name: "Síncrona (PostgreSQL)"

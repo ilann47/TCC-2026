@@ -56,8 +56,22 @@ jobs:
               status, spec = call(f'http://127.0.0.1:{port}/v3/api-docs')
               assert status == 200 and spec['info']['title'] == expected_title, spec.get('info')
               assert success_code in spec['paths']['/audit']['post']['responses']
-              with urllib.request.urlopen(f'http://127.0.0.1:{port}/swagger-ui/index.html', timeout=8) as response:
-                  assert response.status == 200
+          with urllib.request.urlopen('http://127.0.0.1:18002/swagger-ui/index.html', timeout=8) as response:
+              assert response.status == 200
+          _, config = call('http://127.0.0.1:18002/v3/api-docs/swagger-config')
+          assert {entry['name']: entry['url'] for entry in config['urls']} == {
+              'Síncrona (PostgreSQL)': '/v3/api-docs',
+              'Assíncrona (Kafka)': 'http://localhost:18003/v3/api-docs',
+          }, config
+          origin = 'http://localhost:18002'
+          with urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:18003/v3/api-docs',
+                  headers={'Origin': origin}), timeout=8) as response:
+              assert response.headers['Access-Control-Allow-Origin'] == origin
+          preflight = urllib.request.Request('http://127.0.0.1:18003/audit', method='OPTIONS', headers={
+              'Origin': origin, 'Access-Control-Request-Method': 'POST',
+              'Access-Control-Request-Headers': 'content-type'})
+          with urllib.request.urlopen(preflight, timeout=8) as response:
+              assert response.headers['Access-Control-Allow-Origin'] == origin
           base = dict(event_type='created', entity_type='order', entity_id='E1', actor_id='A1', source='ci', occurred_at='2026-09-29T12:34:56Z', payload={'value':1})
           sync = dict(base, event_id=str(uuid.uuid4()))
           status, result = call('http://127.0.0.1:18002/audit', sync)

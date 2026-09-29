@@ -79,6 +79,7 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/auditdb?connectTimeout=5&socketTimeout=5&options=-c%20statement_timeout=5000%20-c%20lock_timeout=5000%20-c%20synchronous_commit=on"
       SPRING_DATASOURCE_USERNAME: audit
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in a local env file}
+      SWAGGER_ASYNC_DOCS_URL: "http://localhost:${ASYNC_PORT:-18003}/v3/api-docs"
     depends_on:
       postgres:
         condition: service_healthy
@@ -96,6 +97,7 @@ services:
       SERVER_PORT: 8081
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       KAFKA_TOPIC: audit-events
+      SWAGGER_ALLOWED_ORIGINS: "http://localhost:${SYNC_PORT:-18002},http://127.0.0.1:${SYNC_PORT:-18002}"
     depends_on:
       kafka-init:
         condition: service_completed_successfully

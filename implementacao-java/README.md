@@ -58,9 +58,9 @@ Para acompanhar a inicialização: `docker compose logs -f --tail=100`. Se quise
 
 ## Testar pelo Swagger UI
 
-Com o Compose em execução, abra [Swagger da API síncrona](http://localhost:18002/swagger-ui/index.html) ou [Swagger da API assíncrona](http://localhost:18003/swagger-ui/index.html). Cada processo possui sua própria documentação OpenAPI: [JSON síncrono](http://localhost:18002/v3/api-docs) e [JSON assíncrono](http://localhost:18003/v3/api-docs). As portas correspondem aos valores padrão do `.env`; se forem alteradas, ajuste os links.
+Com o Compose em execução, abra o [Swagger único](http://localhost:18002/swagger-ui/index.html). No seletor superior, escolha **Síncrona (PostgreSQL)** ou **Assíncrona (Kafka)**. A interface é única, mas cada processo continua gerando seu próprio contrato: [JSON síncrono](http://localhost:18002/v3/api-docs) e [JSON assíncrono](http://localhost:18003/v3/api-docs). As portas correspondem aos valores padrão do `.env`; o Compose ajusta a configuração do seletor e as origens CORS se `SYNC_PORT` ou `ASYNC_PORT` mudarem.
 
-Em `POST /audit`, clique em **Try it out** e depois em **Execute**. O exemplo já é válido e omite `event_id` e `occurred_at`, que são gerados pela API. Na variante síncrona, `201` confirma a transação no PostgreSQL. Na assíncrona, `202` confirma somente o ACK do Kafka; copie o `event_id` da resposta e consulte `GET /audit/{eventId}` no Swagger **síncrono** para verificar a persistência. Pode haver um breve intervalo até o consumidor gravar o evento.
+Em `POST /audit`, clique em **Try it out** e depois em **Execute**. O exemplo já é válido e omite `event_id` e `occurred_at`, que são gerados pela API. Na variante síncrona, `201` confirma a transação no PostgreSQL. Na assíncrona, `202` confirma somente o ACK do Kafka; copie o `event_id` da resposta, mude o seletor para **Síncrona (PostgreSQL)** e consulte `GET /audit/{eventId}` para verificar a persistência. Pode haver um breve intervalo até o consumidor gravar o evento. O acesso cruzado à API assíncrona é liberado via CORS apenas para a origem local da interface, sem alterar o caminho usado nos experimentos.
 
 Exemplo de evento para ambas as APIs:
 
