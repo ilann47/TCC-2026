@@ -69,6 +69,40 @@ jobs:
           else: raise AssertionError('asynchronous event was not persisted')
           print('Java REST/Kafka/PostgreSQL smoke passed')
           PY
+      - name: Smoke C4 - PostgreSQL indisponível e recuperação
+        working-directory: implementacao-java
+        run: |
+          docker compose stop postgres
+          python3 - <<'PY'
+          import json, time, urllib.request, uuid
+          from urllib.error import HTTPError
+          def post(port, event):
+              request = urllib.request.Request(f'http://127.0.0.1:{port}/audit', data=json.dumps(event).encode(), headers={'Content-Type':'application/json'})
+              try:
+                  with urllib.request.urlopen(request, timeout=8) as response: return response.status
+              except HTTPError as error: return error.code
+          base = dict(event_type='created', entity_type='order', entity_id='C4', actor_id='A1', source='ci-c4', occurred_at='2026-09-29T12:34:56Z', payload={'value':2})
+          for _ in range(15):
+              try:
+                  if post(18002, dict(base, event_id=str(uuid.uuid4()))) == 503: break
+              except OSError: pass
+              time.sleep(1)
+          else: raise AssertionError('synchronous variant did not signal unavailable database')
+          assert post(18003, dict(base, event_id=str(uuid.uuid4()))) == 202
+          print('C4 acceptance contrast passed; this is not a definitive experiment')
+          PY
+          docker compose start postgres
+          python3 - <<'PY'
+          import time, urllib.request
+          for _ in range(60):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:18002/health', timeout=5) as response:
+                      if response.status == 200: break
+              except OSError: pass
+              time.sleep(1)
+          else: raise AssertionError('PostgreSQL recovery was not observed by synchronous API')
+          print('PostgreSQL recovery smoke passed')
+          PY
       - name: Diagnóstico em falha
         if: failure()
         working-directory: implementacao-java

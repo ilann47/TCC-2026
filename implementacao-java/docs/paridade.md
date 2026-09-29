@@ -8,7 +8,7 @@ Fonte comparada: protótipo Python da `Entrega03_Fechamento_Desenvolvimento_2026
 |---|---|---|---|
 | Evento | Oito campos; `event_id`, `occurred_at` e `payload` defaultados quando omitidos na API | Mesmos campos e defaults | Teste unitário parcial |
 | Replay Kafka | `event_id` e `occurred_at` obrigatórios | Mesma exigência antes da desserialização | Teste unitário de evento inválido |
-| JSON/hash | `model_dump(mode="json")`, `json.dumps` sem espaços e com chaves ordenadas, SHA-256 | `CanonicalEventCodec` | Fixture Python com Unicode, objeto aninhado, `1.0`, `1e-5` e microssegundos passou |
+| JSON/hash | `model_dump(mode="json")`, `json.dumps` sem espaços e com chaves ordenadas, SHA-256 | `CanonicalEventCodec` | Fixtures Python com Unicode, objeto aninhado, `1.0`, `1e-5`, `1e-4`, `1e5` e microssegundos passaram |
 | Síncrono | `201` após commit; duplicata com mesmo hash; `409` em conflito | Mesmo fluxo com JDBC e `READ COMMITTED` | Código e compilação; integração ainda depende do CI |
 | Assíncrono | `202` após ACK individual do Kafka | `Future.get` do envio individual | Código e compilação; integração ainda depende do CI |
 | Consumidor | Commit manual após DB ou ACK da DLQ | `commitSync(offset+1)` após DB ou ACK da DLQ | Testes unitários; integração ainda depende do CI |

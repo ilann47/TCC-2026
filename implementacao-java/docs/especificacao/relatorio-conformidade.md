@@ -7,7 +7,7 @@
 | Item | Evidência | Verificação até agora |
 |---|---|---|
 | Contrato, defaults e validação | `AuditEvent`, `AuditEventDeserializer` | Teste unitário de omitido/nulo e limites básicos |
-| JSON/hash compatível em fixture | `CanonicalEventCodec` | Teste contra string/hash gerados pelo Python |
+| JSON/hash compatível em fixtures | `CanonicalEventCodec` | Testes contra string/hash gerados pelo Python, inclusive fronteira de notação numérica |
 | Persistência idempotente | `AuditRepository`, PK e migração V1 | Inspeção/compilação; integração real pendente de CI |
 | `201` após transação | `SyncAuditController`/`AuditRepository` | Inspeção/compilação; smoke CI previsto |
 | `202` após ACK Kafka | `AsyncAuditController`/`KafkaPublisher` | Inspeção/compilação; smoke CI previsto |
@@ -26,7 +26,7 @@ O Java exige timestamp de entrada com offset quando fornecido; o FastAPI/Pydanti
 
 1. Confirmar workflow GitHub Actions de build e smoke Docker após publicação.
 2. Testar concorrência real sobre o mesmo `event_id`, conflito, retry, falha de ACK da DLQ e offset em broker real.
-3. Executar cenário C4 e recuperação segundo protocolo congelado, com evidência separada de piloto e ensaio definitivo.
+3. Executar cenário C4 e recuperação segundo protocolo congelado, com evidência separada do smoke automatizado, do piloto e do ensaio definitivo.
 4. Conferir logs Java com o normalizador de métricas Python antes de reaproveitá-lo.
 
 Nenhum resultado de carga, comparação quantitativa ou conclusão científica foi fabricado a partir dos testes unitários.

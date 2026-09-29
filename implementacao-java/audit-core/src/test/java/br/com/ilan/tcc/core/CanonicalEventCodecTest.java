@@ -48,4 +48,13 @@ class CanonicalEventCodecTest {
                 {"event_id":null,"event_type":"created","entity_type":"order","entity_id":"E1","actor_id":"A1","source":"web"}
                 """, AuditEvent.class));
     }
+
+    @Test
+    void matchesPythonFloatNotationAtThePlainDecimalBoundary() throws Exception {
+        AuditEvent event = new AuditEvent(ID, "x", "x", "x", "x", "x",
+            OffsetDateTime.parse("2026-09-29T12:34:56Z"),
+            CanonicalEventCodec.mapper().readTree("{\"edge\":1e-4,\"whole\":1e5}"));
+        assertEquals("ae79723184ea9922e4d41ec84b44b5416335dc7059faea431694efc5c18b132b",
+            CanonicalEventCodec.hash(event));
+    }
 }

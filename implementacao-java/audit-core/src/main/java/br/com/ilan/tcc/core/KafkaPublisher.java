@@ -52,7 +52,9 @@ public final class KafkaPublisher implements AutoCloseable {
 
     public boolean ready(String topic) {
         try {
-            return producer.partitionsFor(topic).stream().anyMatch(partition -> partition.leader() != null);
+            var partitions = producer.partitionsFor(topic);
+            return !partitions.isEmpty() && partitions.stream()
+                .allMatch(partition -> partition.leader() != null && partition.leader().id() >= 0);
         } catch (KafkaException ex) {
             return false;
         }

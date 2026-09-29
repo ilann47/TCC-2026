@@ -112,7 +112,10 @@ public final class CanonicalEventCodec {
         int exponentAt = raw.indexOf('E');
         if (exponentAt < 0) return raw;
         int exponent = Integer.parseInt(raw.substring(exponentAt + 1));
-        if (exponent >= -4 && exponent < 16) return java.math.BigDecimal.valueOf(value).toPlainString();
+        if (exponent >= -4 && exponent < 16) {
+            String plain = java.math.BigDecimal.valueOf(value).stripTrailingZeros().toPlainString();
+            return plain.contains(".") ? plain : plain + ".0";
+        }
         String significand = raw.substring(0, exponentAt).replaceFirst("\\.0$", "");
         return significand + "e" + (exponent >= 0 ? "+" : "-")
             + String.format(Locale.ROOT, "%02d", Math.abs(exponent));
