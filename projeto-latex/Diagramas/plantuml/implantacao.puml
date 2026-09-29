@@ -1,0 +1,28 @@
+@startuml
+!include tema.puml
+left to right direction
+
+node "Computador do pesquisador\nWSL2 + Docker Compose" as host {
+  node "Rede Compose" as rede {
+    node "sync-api\nPython / FastAPI\n1 CPU; 256 MiB" as sync
+    node "async-api\nPython / FastAPI\n1 CPU; 256 MiB" as async
+    node "consumer\nPython\n1 CPU; 256 MiB" as worker
+    node "postgres\nPostgreSQL 16\n1 CPU; 512 MiB" as pg
+    node "kafka\nKafka 3.9.1; KRaft\n1 CPU; 1 GiB" as kafka
+  }
+  artifact "postgres-data\nvolume nomeado" as pgvol
+  artifact "kafka-data\nvolume nomeado" as kafkavol
+}
+
+actor "Cliente / k6" as client
+client --> sync : HTTP localhost:18000
+client --> async : HTTP localhost:18001
+sync --> pg : SQL / transação
+async --> kafka : publish + ACK
+kafka --> worker : audit-events
+worker --> pg : SQL / transação
+worker --> kafka : audit-events-dlq; offset
+pg --> pgvol
+kafka --> kafkavol
+
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+!include tema.puml
+start
+:Receber POST /audit e validar contrato;
+if (Contrato válido?) then (não)
+ :Responder 422;
+ stop
+endif
+:Calcular JSON determinístico e SHA-256;
+:INSERT ON CONFLICT DO NOTHING;
+if (Nova linha inserida?) then (sim)
+ :Concluir transação;\nRegistrar commit_completed;
+ :Responder 201 / persisted;
+ stop
+else (não)
+ :Consultar UUID em READ COMMITTED;
+endif
+if (Mesmo hash?) then (sim)
+ :Concluir transação;\nResponder 201 / duplicate;
+else (não)
+ :Rollback;\nResponder 409 / conflito;
+endif
+note right
+ Falha de banco: 503.
+ Resultado pode ser incerto
+ se a falha ocorrer no commit.
+end note
+stop
+@enduml

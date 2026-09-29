@@ -1,0 +1,100 @@
+\chapter{Metodologia}
+\label{cap:metodo}
+
+A pesquisa compreende desenvolvimento, verificação funcional, calibração dos instrumentos e comparação experimental. A verificação do software identifica se cada mecanismo funciona nas condições testadas; a comparação exige o conjunto de repetições e controles especificado neste capítulo. Os registros da primeira etapa não serão utilizados como substitutos da coleta definitiva.
+
+\section{Tipo de pesquisa}
+
+\subsection{Natureza da pesquisa}
+A pesquisa é aplicada porque constrói um protótipo para apoiar decisões de engenharia de software. O procedimento principal é experimental: duas configurações de comunicação serão submetidas a cargas e falhas controladas. Desempenho e recuperação dependem de condições de execução e, portanto, não podem ser estabelecidos apenas pela descrição das tecnologias. A definição prévia de variáveis e critérios de análise segue as recomendações de \citeonline{kitchenham2002}.
+
+\subsection{Abordagem metodológica}
+A abordagem é quantitativa. Latência, throughput, erros, recursos, backlog e recuperação serão expressos por medidas observáveis. A interpretação relacionará os números aos mecanismos executados e às limitações do ambiente. Cada execução completa constitui uma repetição; os eventos de uma mesma execução não serão tratados como repetições experimentais independentes.
+
+A relação com os objetivos específicos organiza o procedimento. Contrato e regras comuns estabelecem equivalência funcional; APIs, consumidor e repositório materializam as variantes; carga, instrumentação e injeção de falha operacionalizam os cenários; consolidação e análise dos dados permitem discutir os trade-offs. A equivalência funcional controla a regra de processamento, mas não elimina diferenças de topologia: Kafka e consumidor adicionais integram o custo observado da variante assíncrona.
+
+\subsection{Procedimentos técnicos}
+Os procedimentos incluem estudo de artigos científicos, desenvolvimento incremental, testes unitários e de integração, calibração e experimento controlado. O levantamento bibliográfico fundamenta conceitos e situa os estudos relacionados; a resposta à pergunta de pesquisa dependerá de medições no protótipo.
+
+\section{Procedimentos metodológicos}
+
+\subsection{Métodos de coleta de informações}
+A fundamentação utiliza exclusivamente artigos científicos publicados em periódicos e anais de conferências ou workshops. Os tipos de contribuição e as limitações dos estudos são discutidos no Capítulo~\ref{cap:revisao}.
+
+Na coleta computacional, cada evento possui UUID e instante de ocorrência definidos antes do envio. O conjunto completo de campos é preservado em reentregas. Um identificador UUID de execução, \texttt{run\_id}, é enviado no cabeçalho \texttt{X-Run-ID} e propagado ao consumidor por cabeçalho Kafka. Esse metadado identifica a coleta, sem alterar o conteúdo usado no hash.
+
+O gerador \texttt{scripts/load.js}, executado com k6, registra evento enviado, fase, variante, início e término da requisição, código HTTP e erro. Os logs JSONL das aplicações registram etapa, UUID, execução, resultado e marcos temporais. O marco \texttt{commit\_completed} é emitido pelo repositório comum depois do retorno da transação, tanto na variante síncrona quanto no consumidor. Uma repetição idempotente é identificada como \texttt{duplicate} e não representa uma nova linha persistida.
+
+A coleta mantém três instantes distintos: ocorrência do fato, conclusão observada pela aplicação depois do commit e recebimento da resposta HTTP. O campo \texttt{persisted\_at} é preenchido durante a inserção no PostgreSQL; não representa o término exato do commit. A consulta \texttt{GET /audit/\{event\_id\}} verifica a visibilidade da linha, mas seu instante de resposta também não substitui o marco pós-commit.
+
+O tempo de requisição é observado pelo gerador. Na correlação entre processos, utiliza-se a referência UTC do mesmo host; o início registrado pelo k6 tem resolução de milissegundos. A presença de timestamps em nanossegundos nos logs não aumenta a resolução da medida de ponta a ponta. Relógios monotônicos são preservados nos registros para durações locais. Antes da coleta definitiva, o piloto deve verificar resolução, consistência dos relógios e possíveis valores incompatíveis; estes serão sinalizados como falha de instrumentação, sem truncamento silencioso.
+
+As estatísticas Docker registram CPU e memória por contêiner. Offsets do tópico e do grupo permitem observar o lag; consultas ao PostgreSQL verificam existência, hash e unicidade. Os scripts preservam arquivos brutos, configuração, versões, identificação das imagens e checksums. O estado de validação desses instrumentos é apresentado na Seção~\ref{sec:implementacao-real}.
+
+\subsection{Métodos de análise das informações}
+A análise partirá dos dados brutos preservados, correlacionados por execução e UUID. Para cada repetição serão calculados quantidade oferecida, aceita e concluída; média, mediana, desvio-padrão e percentis p95 e p99 das latências; throughput concluído; erros por categoria; backlog máximo; reentregas e recuperação. A taxa oferecida efetiva e as iterações que o gerador não conseguiu iniciar serão apresentadas separadamente.
+
+Primeiro serão examinados os resultados de cada repetição. A agregação utilizará repetições independentes, acompanhadas de dispersão, tamanho de efeito e intervalos de confiança quando os dados sustentarem essas estimativas. A opção entre técnicas paramétricas e não paramétricas dependerá dos pressupostos e será justificada. Testes com poucos eventos destinados à depuração não sustentarão inferências sobre desempenho ou superioridade arquitetural.
+
+\section{Metodologia de desenvolvimento do sistema}
+
+\subsection{Modelo de desenvolvimento de software}
+O desenvolvimento é incremental: contrato, serialização e persistência; variante síncrona; produtor e consumidor; tratamento de falhas; instrumentação; calibração; coleta definitiva. Cada incremento mantém requisitos, código, diagramas e verificações correspondentes. Casos com doubles de bibliotecas verificam decisões locais; testes de integração utilizam Kafka e PostgreSQL reais.
+
+\subsection{Tecnologias utilizadas}
+O protótipo utiliza Python 3.12, FastAPI, PostgreSQL 16, Apache Kafka 3.9.1 e Docker Compose. O contrato declarativo e o repositório comum reduzem divergências funcionais. PostgreSQL oferece transações e unicidade; Kafka oferece retenção e posições de consumo; Compose descreve a implantação local. k6 1.4.0 e scripts Python compõem a geração e consolidação dos dados.
+
+Cada execução deve registrar sistema operacional, processador, memória, versões efetivas, identificadores das imagens, limites de CPU e memória, partições, replicação, parâmetros de timeout e retry e propriedades da carga. O snapshot dos arquivos é identificado por SHA-256; um hash de commit será acrescentado quando houver repositório Git. Credenciais permanecem na configuração privada do ambiente e não integram relatórios, capturas ou dados experimentais.
+
+\subsection{Arquitetura do sistema}
+As variantes compartilham \texttt{AuditEvent}, serialização determinística, SHA-256 e repositório PostgreSQL. Na síncrona, a resposta 201 sucede a transação ou o reconhecimento de duplicata. Na assíncrona, a API aguarda confirmação individual de publicação com \texttt{acks=all}; o consumidor processa posteriormente. A resposta 202 confirma essa publicação, sem atestar persistência no PostgreSQL. Um timeout de publicação é classificado como resultado incerto, pois a mensagem pode ter sido entregue sem que a confirmação chegasse ao cliente.
+
+O consumidor desabilita commit automático de offsets. Após inserção ou reentrega idêntica, confirma a posição consumida. Erros transitórios de persistência recebem tentativas limitadas com espera exponencial; mensagens inválidas, conflitos ou tentativas esgotadas são encaminhados à DLQ. A posição de origem somente é confirmada depois do ACK da DLQ. Se a publicação na DLQ ou a confirmação da posição falhar, a sessão é retomada sem avançar além da mensagem não resolvida. Isso permite reentrega e exige idempotência; não estabelece uma transação única entre Kafka e PostgreSQL.
+
+A topologia local contém um broker e uma réplica por tópico. A confirmação configurada não demonstra tolerância à perda física do broker nem alta disponibilidade de cluster. Limites de recursos do ambiente de desenvolvimento estão explícitos no Compose; sua adequação às configurações definitivas deverá ser verificada no piloto.
+
+\section{Procedimentos de teste e validação}
+
+\subsection{Tipos de testes aplicados}
+Testes unitários verificam contrato, serialização, hash, espera de ACK, classificação de erros, retry, ordem entre DLQ e confirmação da origem e respostas HTTP. Testes de integração verificam publicação, consumo, persistência, conflitos e submissões concorrentes com serviços reais. Testes funcionais de falha interrompem dependências do ambiente isolado, verificam retomada e preservam os registros de execução. Seus resultados documentam o software e não respondem isoladamente à pergunta experimental.
+
+O piloto verificará geração de carga, coleta, resolução temporal, limites e duração. Correções de instrumentação serão permitidas durante essa fase. O protocolo será congelado antes da coleta definitiva; uma alteração posterior relevante exigirá nova identificação de configuração e repetição das coletas afetadas.
+
+\subsection{Cenários de teste}
+C1 utilizará carga baixa para observar correção sem saturação. C2 aplicará níveis graduais para avaliar latência e capacidade. C3 produzirá uma rajada acima da taxa estável. C4 introduzirá indisponibilidade durante entrada ativa. C5 acompanhará a retomada e a drenagem do backlog.
+
+O piloto estimará uma taxa de referência estável por cinco minutos, sem crescimento contínuo de backlog nem erros de saturação. As proporções iniciais de C2 são 25\%, 50\%, 75\% e 100\%; C1 utiliza o menor nível. Para preservar a equivalência de volume, cada par comparado receberá a mesma taxa absoluta e o mesmo perfil de eventos. A escolha da referência comum, da intensidade e duração da rajada e da tolerância à diferença entre taxa programada e efetiva será registrada antes da coleta.
+
+A definição operacional de C4 permanece uma decisão prévia necessária: interromper o processo que persiste em cada variante (API síncrona e consumidor) avalia indisponibilidade desses processos; interromper o PostgreSQL em ambas avalia uma dependência comum. São falhas diferentes e não devem ser agregadas sob o mesmo identificador sem distinção. Também devem ser fixados duração da interrupção, prazo de drenagem e critério de estabilidade de C5.
+
+Cada execução definitiva terá 60 segundos de aquecimento excluídos da análise e 300 segundos de medição, salvo mudança justificada pelo piloto e registrada antes do congelamento. Serão realizadas no mínimo dez repetições por combinação de variante e cenário. A ordem das variantes será alternada e randomizada em blocos. Entre repetições definitivas, apenas o estado do projeto experimental isolado será reinicializado, com verificação posterior de serviços, banco e tópicos. Ensaios curtos de validação preservam identificação própria e não são contados entre essas repetições.
+
+\subsection{Métricas coletadas}
+A latência HTTP corresponde ao tempo entre início do envio e recebimento da resposta. Na variante síncrona, a resposta de sucesso sucede a persistência; na assíncrona, sucede o ACK de publicação. A latência de conclusão utiliza, em ambas as variantes, o início do envio e o marco comum pós-commit. Os dois indicadores serão apresentados separadamente, evitando comparar aceitação de uma variante com conclusão da outra.
+
+Throughput concluído é a quantidade de UUIDs únicos efetivamente persistidos na janela de medição dividida pela duração dessa janela. Eventos concluídos somente durante a drenagem são contabilizados à parte. Entradas oferecidas, respostas aceitas e linhas persistidas constituem conjuntos distintos. Uma confirmação pós-commit cujo registro de envio esteja ausente é uma inconsistência de coleta, e não uma amostra válida de latência.
+
+Taxa de erro será discriminada em HTTP, publicação, validação, persistência, conflito e falha terminal. O lag de Kafka resulta da diferença entre posição final e posição confirmada por partição. A diferença entre eventos aceitos e persistidos constitui outro indicador e não será tratada como sinônimo de lag. Tentativas locais de retry, releituras da mesma posição Kafka e reenvios de um mesmo UUID também serão contados separadamente.
+
+Ao fim do prazo de observação, os eventos aceitos sem persistência serão separados em falhas terminais registradas na DLQ, eventos ainda pendentes e ausências não conciliadas. Uma mensagem em DLQ foi retida para inspeção; não representa sucesso de auditoria, mas tampouco demonstra desaparecimento no transporte. A afirmação de perda exige investigar a ausência na persistência e nas evidências de retenção. Submissões de resultado incerto serão conciliadas sem serem automaticamente classificadas como aceites confirmados ou perdas.
+
+Duplicidade persistida corresponde a mais de uma linha para o mesmo UUID e deve ser zero. Conflito corresponde ao mesmo UUID associado a conteúdo diferente. O tempo de recuperação será medido desde a retomada até o atendimento do critério de estabilidade de backlog e throughput fixado no protocolo. O tempo até lag zero observado em uma validação curta não substitui esse critério científico.
+
+\subsection{Critérios de aceitação}
+O núcleo será considerado funcional nos cenários verificados quando: eventos válidos forem persistidos; entradas inválidas forem rejeitadas; 201 ocorrer após confirmação da transação; 202 depender de ACK individual; duplicatas preservarem uma linha; conflitos preservarem o registro original; retry e DLQ obedecerem à política; e offsets de origem não forem confirmados antes da persistência ou retenção na DLQ.
+
+A coleta definitiva será aceita se configuração e snapshot forem registrados, instrumentos estiverem validados, protocolo estiver congelado, aquecimento estiver separado, repetições mínimas forem concluídas, ordem estiver registrada e dados brutos permitirem conciliação. Falhas do instrumento, reinicializações externas e dados incompletos serão registrados como causas de invalidade conforme critérios prévios. Um resultado desfavorável à hipótese não invalida a execução.
+
+\subsection{Protocolo de execução e reprodutibilidade}
+O executor prepara a configuração privada; constrói as imagens; inicia o projeto Compose isolado; aguarda os testes de prontidão; confirma esquema e tópicos; identifica o snapshot; executa aquecimento e carga; registra os instantes de falha e retomada, quando aplicável; aguarda drenagem; exporta logs, offsets e registros; calcula checksums; e consolida indicadores a partir dos artefatos.
+
+Cada \texttt{run\_id} possui manifesto, eventos enviados, saída do k6, logs JSONL, estatísticas de recursos, offsets e exportação do banco. Diretórios de execuções anteriores não são sobrescritos. A documentação da implementação apresenta os comandos e distingue o modo de validação do protocolo definitivo. Erros de execução permanecem registrados com seu motivo.
+
+\subsection{Ameaças à validade}
+A validade interna é afetada por concorrência com outros processos, caches, aquecimento, virtualização, limites de recursos, coleta de telemetria e ordem dos ensaios. A mitigação inclui registrar o ambiente, utilizar configurações estáveis, reduzir processos concorrentes durante a coleta, repetir e alternar a ordem. O custo do broker adicional pertence ao objeto comparado; por isso, a pesquisa não isola universalmente um estilo arquitetural.
+
+A validade de construto depende dos marcos temporais e da classificação dos eventos. Separar ACK, commit e resposta HTTP reduz ambiguidade. Resolução de relógios, atraso da observação e custo de emissão dos logs limitam a precisão. Lag, fila pendente, DLQ e perda são estados distintos, cujo tratamento deve ser verificável nos dados.
+
+A validade de conclusão depende de repetições suficientes e de sua independência. A análise examinará distribuições, intervalos e magnitudes, sem interpretar milhares de eventos correlacionados como milhares de experimentos. Resultados de validação funcional não serão extrapolados para desempenho.
+
+A validade externa é limitada por dados sintéticos, domínio simplificado, uma implementação, broker único, versões e ambiente local. Não serão generalizadas conclusões para todas as APIs REST ou arquiteturas EDA. A preservação do protocolo, das versões e dos dados permite replicações que investiguem essas limitações.

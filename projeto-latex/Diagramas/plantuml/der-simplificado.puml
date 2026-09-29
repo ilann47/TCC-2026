@@ -1,0 +1,21 @@
+@startuml
+!include tema.puml
+hide methods
+entity audit_records {
+  * event_id : UUID <<PK>>
+  --
+  * event_type : varchar(100)
+  * entity_type : varchar(100)
+  * entity_id : varchar(200) <<INDEX>>
+  * actor_id : varchar(200)
+  * source : varchar(100)
+  * occurred_at : timestamptz
+  * payload : jsonb
+  * content_hash : text
+  persisted_at : timestamptz <<opcional histórico>>
+}
+note right of audit_records
+  event_id garante unicidade e suporta idempotência.
+  persisted_at indica inserção, não o término do commit.
+end note
+@enduml

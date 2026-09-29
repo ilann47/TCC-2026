@@ -1,0 +1,59 @@
+\chapter{Introdução}
+\label{cap:introducao}
+
+Sistemas de informação registram continuamente ações executadas por usuários, serviços e componentes de infraestrutura. Autenticações, alterações cadastrais, concessões de permissão e mudanças de configuração são exemplos de ocorrências que podem compor uma trilha de auditoria. \citeonline{amir2016} tratam a auditoria como mecanismo de segurança retrospectiva e mostram que a utilidade do registro depende de sua relação correta com a execução observada. Assim, produção consistente, integridade e recuperação posterior são propriedades relevantes para o uso desses dados como evidência.
+
+Em aplicações distribuídas, o componente que produz uma ocorrência nem sempre é o mesmo que valida, enriquece e persiste o registro de auditoria. Consequentemente, é necessário escolher uma forma de comunicação entre esses participantes. Em uma interação síncrona, o produtor envia uma requisição e aguarda a conclusão do processamento. APIs REST utilizam recursos e interfaces uniformes para organizar interações sobre a Web \cite{fielding2002,pautasso2008}. Essa alternativa oferece confirmação imediata, porém cria dependência temporal entre os participantes.
+
+Na comunicação assíncrona, a aceitação e o processamento podem ocorrer em momentos distintos. Um produtor publica uma mensagem, um broker a retém e um consumidor realiza o processamento. Esse mecanismo reduz o acoplamento temporal e permite absorver rajadas de carga, mas introduz questões de reentrega, duplicidade, ordenação, observabilidade e consistência temporal \cite{aksakalli2021,helland2007}. Em uma arquitetura orientada a eventos, os componentes produzem e reagem a representações de fatos ocorridos. A arquitetura não deve ser confundida com uma tecnologia específica: o Apache Kafka é uma implementação de mensageria distribuída baseada em log que pode integrar uma solução orientada a eventos \cite{kreps2011}.
+
+Estudos empíricos indicam que os efeitos dessas decisões dependem do contexto. \citeonline{cabane2024} compararam uma aplicação monolítica e uma implementação orientada a eventos e observaram diferenças em tempo de resposta e consumo de recursos. \citeonline{kazanavicius2023} avaliaram REST, RabbitMQ, Kafka, gRPC e GraphQL e concluíram que a seleção deve considerar necessidades e critérios específicos. Esses trabalhos desaconselham a suposição de que uma alternativa seja universalmente superior.
+
+Este estudo utiliza o processamento de registros de auditoria como cenário controlado. A funcionalidade é implementada em duas variantes com contrato, validação, cálculo de hash e persistência equivalentes. Na primeira, o cliente aguarda o processamento completo por uma API REST. Na segunda, a API publica um evento no Kafka e um consumidor realiza a persistência. Essa equivalência funcional permite comparar as duas configurações sem introduzir regras de negócio distintas. A topologia assíncrona acrescenta componentes e consumo de recursos; esses custos fazem parte da comparação e impedem atribuir todas as diferenças exclusivamente ao estilo de comunicação. REST não implica, por definição, conclusão síncrona: essa condição é uma decisão da variante construída neste trabalho.
+
+\section{Problema de pesquisa}
+
+A adoção de comunicação assíncrona pode reduzir o tempo pelo qual o cliente permanece bloqueado e permitir retenção de mensagens durante indisponibilidades do consumidor. Em contrapartida, adiciona broker, consumidor, gerenciamento de offsets e necessidade de idempotência. A comunicação síncrona apresenta um fluxo mais direto, mas o produtor depende da disponibilidade e do tempo de processamento do serviço de auditoria.
+
+Entre os trabalhos analisados, foram identificadas avaliações de arquiteturas monolíticas e distribuídas, de diferentes tecnologias de comunicação e do impacto de EDA sobre desempenho \cite{blinowski2022,cabane2024,kazanavicius2023}. O recorte deste trabalho não parte da afirmação de inexistência de estudos. Busca-se produzir evidência experimental adicional em um cenário delimitado, no qual as duas variantes executam a mesma função de auditoria e são avaliadas também durante indisponibilidade e recuperação.
+
+Formula-se, portanto, a seguinte pergunta de pesquisa:
+
+\begin{citacao}
+Quais trade-offs de desempenho e resiliência são observados entre a comunicação síncrona via REST e a comunicação assíncrona orientada a eventos no processamento de registros de auditoria?
+\end{citacao}
+
+\section{Justificativa}
+
+Do ponto de vista científico, a comparação controlada permite relacionar mecanismos de comunicação a métricas observáveis, evitando recomendações baseadas somente em características teóricas. \citeonline{cabane2024} destacam a necessidade de ampliar a evidência empírica sobre o impacto da arquitetura orientada a eventos. O estudo também explicitará protocolo, variáveis, repetições e ameaças à validade, seguindo as recomendações para estudos empíricos apresentadas por \citeonline{kitchenham2002}.
+
+Do ponto de vista prático, arquitetos precisam decidir se o desacoplamento oferecido por mensageria compensa sua complexidade operacional. Registros de auditoria podem ser produzidos em rajadas e precisam permanecer disponíveis para investigação, mas normalmente não integram o resultado funcional que deve ser exibido imediatamente ao usuário. Perda, duplicidade ou atraso excessivo reduzem a correspondência entre a execução e a evidência registrada, comprometendo o valor da trilha de auditoria \cite{amir2016}.
+
+\section{Objetivos}
+
+\subsection{Objetivo geral}
+
+Comparar experimentalmente o desempenho e a resiliência de uma implementação síncrona baseada em REST e de uma implementação assíncrona orientada a eventos no processamento de registros de auditoria.
+
+\subsection{Objetivos específicos}
+
+\begin{alineas}
+\item definir um modelo comum de registro de auditoria e uma regra de processamento equivalente;
+\item implementar uma variante síncrona baseada em API REST e PostgreSQL;
+\item implementar uma variante assíncrona baseada em Apache Kafka, consumidor e PostgreSQL;
+\item definir cenários controlados de carga, indisponibilidade e recuperação;
+\item coletar posteriormente latência, throughput, taxa de erro, uso de recursos, perda, duplicidade e tempo de recuperação;
+\item analisar os trade-offs observados sem pressupor superioridade de uma alternativa.
+\end{alineas}
+
+\section{Hipóteses de trabalho}
+
+As hipóteses orientam o experimento futuro e não representam resultados já obtidos. Espera-se que a variante síncrona apresente menor complexidade e menor custo básico em cargas reduzidas. Espera-se também que a variante assíncrona reduza a latência de aceitação e retenha eventos durante a indisponibilidade do consumidor, ao custo de maior uso de recursos e diferença entre aceitação e conclusão. Todas as hipóteses poderão ser refutadas pelos dados.
+
+\section{Delimitação}
+
+O estudo limita-se a REST e Kafka. Não serão comparados RabbitMQ, gRPC ou GraphQL. Não fazem parte do escopo Kubernetes, Debezium, Event Sourcing, CQRS, Saga, replicação geográfica ou integrações externas. O ambiente será local e conteinerizado. Os eventos utilizarão dados sintéticos e não conterão credenciais ou dados pessoais reais. As conclusões futuras serão restritas às versões, configurações, cargas e recursos documentados.
+
+\section{Organização do trabalho}
+
+O Capítulo~\ref{cap:revisao} apresenta a revisão bibliográfica. O Capítulo~\ref{cap:metodo} descreve os materiais e o método experimental. O Capítulo~\ref{cap:implementacao} documenta o estado atual do protótipo e seus diagramas. Os capítulos posteriores apresentarão os resultados obtidos, sua discussão e as conclusões da pesquisa após a execução dos experimentos.

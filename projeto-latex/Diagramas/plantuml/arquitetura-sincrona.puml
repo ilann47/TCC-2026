@@ -1,0 +1,15 @@
+@startuml
+!include tema.puml
+left to right direction
+rectangle "1. Cliente" as C
+component "2. API REST\nPOST /audit" as A
+component "3. Validação, hash\ne processamento" as P
+database "4. PostgreSQL\naudit_records" as D #FAF5FF
+C --> A : requisição
+A --> P : chamada direta
+P --> D : INSERT
+note bottom of A
+  A API responde **201 Created** somente após a persistência.
+  O cliente aguarda todo o caminho crítico.
+end note
+@enduml

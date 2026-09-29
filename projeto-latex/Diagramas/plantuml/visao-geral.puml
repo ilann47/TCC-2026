@@ -1,0 +1,27 @@
+@startuml
+!include tema.puml
+top to bottom direction
+rectangle "Cliente / eventos sintéticos" as C
+package "Núcleo implementado" {
+ component "API síncrona" as S
+ component "API produtora" as A
+ queue "Kafka / eventos e DLQ" as K
+ component "Consumidor / retry" as W
+ component "Contrato + hash + repositório comum" as N
+ database "PostgreSQL / audit_records" as D
+ C --> S
+ C --> A
+ S --> N
+ A --> K
+ K --> W
+ W --> N
+ N --> D
+}
+rectangle "k6 + coleta de logs, offsets e recursos\nScripts e relatórios" as M
+M ..> S
+M ..> W
+note bottom of M
+ Protocolo científico definitivo requer calibração.
+ Interfaces dedicadas: wireframes propostos.
+end note
+@enduml

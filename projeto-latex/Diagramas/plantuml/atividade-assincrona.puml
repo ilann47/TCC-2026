@@ -1,0 +1,27 @@
+@startuml
+!include tema.puml
+start
+:Receber POST /audit e validar contrato;
+if (Contrato válido?) then (não)
+ :Responder 422;
+ stop
+endif
+:Serializar evento completo;\nEnviar com chave entity_id;
+if (Publicador ausente ou buffer cheio?) then (sim)
+ :Responder 503 / rejeição local;
+ stop
+endif
+:Aguardar callback individual;\nAtender callbacks com poll;
+if (ACK recebido sem erro no prazo?) then (sim)
+ :Registrar tópico, partição e offset;
+ :Responder 202 / accepted;
+else (não)
+ :Registrar falha de confirmação;
+ :Responder 503 / resultado incerto;
+endif
+note right
+ ACK não confirma
+ persistência em PostgreSQL.
+end note
+stop
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+!include tema.puml
+actor Cliente
+participant "API produtora" as A
+queue Kafka as K
+participant Consumidor as C
+database PostgreSQL as D
+Cliente -> A : POST /audit
+A -> A : validar e serializar
+A -> K : produce (callback; acks=all)
+K --> A : ACK de publicação
+A --> Cliente : 202 accepted
+C -> K : poll
+K --> C : mensagem
+C -> C : validar contrato completo
+note over C,D
+ Falhas transitórias: até três tentativas totais,
+ com backoff antes de uma nova tentativa.
+ Contrato inválido não segue para o banco.
+end note
+alt persistência ou duplicata confirmada
+ C -> D : transação idempotente
+ D --> C : commit confirmado
+ C -> C : registrar commit_completed
+else inválida, conflito ou tentativas esgotadas
+ C -> K : publicar envelope em DLQ
+ K --> C : ACK da DLQ
+end
+C -> K : commit da posição de origem
+note over C,K
+ Commit de origem exige persistência ou ACK da DLQ.
+ Confirmação ausente: retomar sem avançar a origem.
+end note
+note over A,C
+ O consumo pode anteceder a chegada do 202 ao cliente.
+end note
+@enduml

@@ -1,0 +1,18 @@
+@startsalt
+skinparam dpi 180
+{
+{^WF02 - METRICAS - WIREFRAME PROPOSTO}
+{ Execucao | ^Selecionar run_id^ | Variante | ^sync / async^ }
+{ Janela | "Inicio UTC         " | "Fim UTC            " }
+{# Indicador | Valor | Unidade
+ Taxa oferecida | Sem coleta | eventos/s
+ Throughput persistido | Sem coleta | eventos/s
+ Latencia de aceitacao p95 | Sem coleta | ms
+ Latencia de conclusao p95 | Sem coleta | ms
+ Erros por etapa | Sem coleta | percentual
+ CPU / memoria | Sem coleta | percentual / bytes
+}
+{ [Atualizar] | [Exportar dados] }
+"Nenhuma medicao real representada neste wireframe."
+}
+@endsalt

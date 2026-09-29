@@ -1,0 +1,51 @@
+@startuml
+!include tema.puml
+hide circle
+top to bottom direction
+entity "audit_records\nEXISTENTE" as A {
+ * event_id : UUID <<PK>>
+ --
+ event_type : VARCHAR(100)
+ entity_type : VARCHAR(100)
+ entity_id : VARCHAR(200) <<INDEX>>
+ actor_id : VARCHAR(200)
+ source : VARCHAR(100)
+ occurred_at : TIMESTAMPTZ
+ payload : JSONB
+ content_hash : TEXT
+ persisted_at : TIMESTAMPTZ {opcional histórico}
+}
+entity "processing_log\nPROPOSTA" as L #FFF7ED {
+ * id : BIGINT <<PK>>
+ --
+ run_id : UUID
+ event_id : UUID <<correlação>>
+ component : VARCHAR(30)
+ status : VARCHAR(30)
+ attempt : INTEGER
+ started_at : TIMESTAMPTZ
+ finished_at : TIMESTAMPTZ {opcional}
+ detail : TEXT {opcional}
+}
+entity "retry_log\nPROPOSTA" as R #FFF7ED {
+ * id : BIGINT <<PK>>
+ --
+ processing_log_id : BIGINT <<FK>>
+ reason : VARCHAR(200)
+ retried_at : TIMESTAMPTZ
+}
+entity "metrics\nPROPOSTA" as M #FFF7ED {
+ * id : BIGINT <<PK>>
+ --
+ run_id : UUID
+ variant : VARCHAR(10)
+ metric_type : VARCHAR(50)
+ value : DOUBLE PRECISION
+ unit : VARCHAR(20)
+ window_start : TIMESTAMPTZ
+ window_end : TIMESTAMPTZ
+}
+A "0..1" .. "0..N" L : UUID; sem FK
+L ||--o{ R : processing_log_id
+L -[hidden]right- M
+@enduml

@@ -1,0 +1,49 @@
+@startuml
+!include tema.puml
+hide circle
+top to bottom direction
+class BaseModel <<Pydantic>> {
+ +model_validate(data)
+ +model_dump(mode)
+}
+class AuditEvent <<DTO>> {
+ +event_id: UUID
+ +event_type: str
+ +entity_type: str
+ +entity_id: str
+ +actor_id: str
+ +source: str
+ +occurred_at: datetime
+ +payload: dict
+}
+class AuditStored <<DTO>> {
+ +event_id: UUID
+ +status: str
+ +content_hash: str
+ +persisted_at: datetime | None
+}
+class AuditAccepted <<DTO>> {
+ +event_id: UUID
+ +status: str = accepted
+}
+class AuditRecord <<SQLAlchemy ORM>> {
+ +event_id: UUID {PK}
+ +event_type: str
+ +entity_type: str
+ +entity_id: str
+ +actor_id: str
+ +source: str
+ +occurred_at: datetime
+ +payload: dict
+ +content_hash: str
+ +persisted_at: datetime | None
+}
+BaseModel <|-- AuditEvent
+BaseModel <|-- AuditStored
+BaseModel <|-- AuditAccepted
+AuditEvent ..> AuditRecord : mapeamento de campos
+note bottom of AuditRecord
+  Herda de Base (DeclarativeBase).
+  Não implementa validate() ou hash().
+end note
+@enduml

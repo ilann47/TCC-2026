@@ -34,3 +34,22 @@ replay_pid*
 **/.runtime/
 **/evidence/
 **/results/
+
+# Python e ambiente de execução local
+**/__pycache__/
+**/.pytest_cache/
+**/.venv/
+**/venv/
+*.py[cod]
+
+# Saídas da compilação LaTeX e verificações visuais locais
+projeto-latex/modelo.aux
+projeto-latex/modelo.bbl
+projeto-latex/modelo.blg
+projeto-latex/modelo.fls
+projeto-latex/modelo.fdb_latexmk
+projeto-latex/modelo.lof
+projeto-latex/modelo.lot
+projeto-latex/modelo.toc
+projeto-latex/modelo.pdf
+projeto-latex/qa-render/

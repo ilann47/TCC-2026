@@ -1,0 +1,62 @@
+@startuml
+!include tema.puml
+hide circle
+top to bottom direction
+class "sync_api.main" as S <<módulo>> {
+ +app: FastAPI
+ +health(): dict
+ +get_audit(event_id): AuditStored
+ +create_audit(event): AuditStored
+}
+class "async_api.main" as A <<módulo>> {
+ +app: FastAPI
+ +publisher: KafkaPublisher
+ +health(): dict
+ +accept_audit(event): AuditAccepted
+}
+class "consumer.main" as C <<módulo>> {
+ +run(): None
+ +handle_message(...): str
+ +send_to_dlq(...): None
+ +commit_message(...): None
+}
+class "shared.database" as D <<módulo>> {
+ +engine: Engine
+ +initialize_database(): None
+ +database_ready(): bool
+ +find_event(event_id): AuditStored | None
+ +persist_event(event): AuditStored
+}
+class "shared.processing" as H <<módulo>> {
+ +canonical_event(event): str
+ +content_hash(event): str
+}
+class KafkaPublisher {
+ +producer: Producer
+ +timeout: float
+ +publish(...): DeliveryReceipt
+ +ready(topic): bool
+ +close(): int
+}
+class Consumer <<confluent_kafka>> {
+ +subscribe(topics)
+ +poll(timeout)
+ +commit(message, asynchronous)
+ +close()
+}
+S --> D
+C --> D
+D --> H
+A --> KafkaPublisher
+C --> KafkaPublisher : DLQ
+C --> Consumer
+S -[hidden]right- C
+C -[hidden]right- A
+D -[hidden]right- Consumer
+Consumer -[hidden]right- KafkaPublisher
+note bottom of H
+ DTOs e ORM: visão de dados.
+ Logs: shared.observability.
+ KafkaPublisher encapsula Producer.
+end note
+@enduml
