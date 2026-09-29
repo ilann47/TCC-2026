@@ -4,7 +4,7 @@
 
 Três processos executáveis implementam o mesmo contrato `AuditEvent`: `sync-api` grava antes da resposta `201`; `async-api` responde `202` após o ACK do Kafka; `consumer` grava o evento, controla tentativas/DLQ e só então confirma o offset. `audit-core` e `audit-storage` são bibliotecas compartilhadas. Esta é a implementação usada na [Entrega 03 em Java](../entregas/entrega-03-java/README.md). A versão Python anterior permanece no histórico do repositório, sem que seus resultados sejam atribuídos a este código. A comparação quantitativa definitiva ainda não foi executada.
 
-O build e os testes unitários são executáveis com o Maven Wrapper. O [workflow GitHub de 29/09/2026](https://github.com/ilann47/TCC-2026/actions/runs/36627197788) passou nos testes, no smoke Docker REST/Kafka/PostgreSQL e no smoke C4 de interrupção/recuperação do banco. Isso verifica o funcionamento básico, **não** fornece resultados quantitativos definitivos. O ambiente local desta criação não dispõe de Docker.
+O build e os testes unitários são executáveis com o Maven Wrapper. O [workflow GitHub de 29/09/2026](https://github.com/ilann47/TCC-2026/actions/runs/36627197788) passou nos testes, no smoke Docker REST/Kafka/PostgreSQL e no smoke C4 de interrupção/recuperação do banco. Em 29/09/2026, o ambiente local WSL também iniciou os cinco serviços permanentes: as duas APIs retornaram `/health` 200; um POST síncrono retornou 201 e pôde ser consultado; um POST assíncrono retornou 202 e foi encontrado no banco após o consumidor processá-lo. Isso verifica o funcionamento básico, **não** fornece resultados quantitativos definitivos.
 
 ## Arquitetura
 
@@ -47,15 +47,14 @@ No Linux/macOS: `./mvnw verify`. Os testes atuais cobrem um vetor de referência
 
 ## Execução isolada com Docker
 
-Crie `implementacao-java/.runtime/compose.env` com base em `.env.example` e preencha `POSTGRES_PASSWORD` com uma senha local. A pasta `.runtime` está ignorada pelo Git. Nunca registre a senha em commit, apresentação ou evidência.
+O arquivo `.env` versionado contém apenas uma **senha pública de desenvolvimento local** e as portas padrão. Não a reutilize em outros sistemas nem use este ambiente com dados reais. No WSL/Linux, dentro de `implementacao-java`:
 
-```powershell
-New-Item -ItemType Directory -Force .runtime
-Copy-Item .env.example .runtime/compose.env
-# Edite .runtime/compose.env e defina POSTGRES_PASSWORD.
-docker compose --env-file .runtime/compose.env up --build -d
-docker compose --env-file .runtime/compose.env ps
+```bash
+docker compose up --build -d
+docker compose ps
 ```
+
+Para acompanhar a inicialização: `docker compose logs -f --tail=100`. Se quiser uma senha própria, crie `.runtime/compose.env` a partir de `.env.example`, preencha `POSTGRES_PASSWORD` e use `docker compose --env-file .runtime/compose.env up --build -d`. A pasta `.runtime` permanece ignorada pelo Git. Uma senha nova no arquivo não altera automaticamente a senha de um volume PostgreSQL já inicializado.
 
 Exemplo de evento para ambas as APIs:
 
@@ -74,7 +73,7 @@ Exemplo de evento para ambas as APIs:
 
 Envie esse JSON para `http://localhost:18002/audit` (síncrono) ou `http://localhost:18003/audit` (assíncrono), com `Content-Type: application/json`. Para consultar, use `GET http://localhost:18002/audit/123e4567-e89b-12d3-a456-426614174000`. Não reutilize esse `event_id` com conteúdo diferente: a resposta será `409` na variante síncrona e a mensagem irá para a DLQ na assíncrona.
 
-Para desligar sem apagar dados: `docker compose --env-file .runtime/compose.env down`. O comando `down -v` apaga os volumes desta versão; use-o apenas se desejar descartar deliberadamente o banco e o Kafka locais.
+Para desligar sem apagar dados: `docker compose down`. O comando `down -v` apaga os volumes desta versão; use-o apenas se desejar descartar deliberadamente o banco e o Kafka locais.
 
 ## Contratos e significado das confirmações
 

@@ -29,6 +29,7 @@ replay_pid*
 .vscode/
 *.iml
 .env
+!implementacao-java/.env
 *.env.*
 !.env.example
 **/.runtime/
