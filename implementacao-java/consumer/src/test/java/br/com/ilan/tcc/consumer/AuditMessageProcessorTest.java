@@ -22,6 +22,7 @@ import org.apache.kafka.common.TopicPartition;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.transaction.CannotCreateTransactionException;
 
 class AuditMessageProcessorTest {
     private final AuditRepository repository = Mockito.mock(AuditRepository.class);
@@ -60,6 +61,14 @@ class AuditMessageProcessorTest {
     @Test
     void databaseFailureUsesDlqAfterRetryBudget() {
         when(repository.persist(any())).thenThrow(new DataAccessResourceFailureException("db unavailable"));
+        assertEquals("dlq", processor.process(record(valid()), consumer));
+        verify(publisher).publish(eq("audit-events-dlq"), any(), any(), any());
+        verify(consumer).commitSync(any(Map.class));
+    }
+
+    @Test
+    void transactionOpeningFailureAlsoUsesDlqAfterRetryBudget() {
+        when(repository.persist(any())).thenThrow(new CannotCreateTransactionException("db unavailable"));
         assertEquals("dlq", processor.process(record(valid()), consumer));
         verify(publisher).publish(eq("audit-events-dlq"), any(), any(), any());
         verify(consumer).commitSync(any(Map.class));

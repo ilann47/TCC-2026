@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +38,7 @@ public class SyncAuditController {
         try {
             return repository.find(eventId).<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(404).body(Map.of("detail", Map.of("reason", "event_not_found"))));
-        } catch (DataAccessException ex) {
+        } catch (DataAccessException | TransactionException ex) {
             return ResponseEntity.status(503).body(Map.of("detail", Map.of("reason", "database_unavailable")));
         }
     }
@@ -55,7 +56,7 @@ public class SyncAuditController {
             MilestoneLog.emit("request_failed", "event_id", event.eventId(), "reason", "event_id_content_conflict");
             return ResponseEntity.status(409).body(Map.of("detail", Map.of(
                 "reason", "event_id_content_conflict", "event_id", event.eventId().toString())));
-        } catch (DataAccessException ex) {
+        } catch (DataAccessException | TransactionException ex) {
             MilestoneLog.emit("request_failed", "event_id", event.eventId(), "reason", "database_unavailable");
             return ResponseEntity.status(503).body(Map.of("detail", Map.of(
                 "reason", "database_unavailable", "acceptance", "unknown", "event_id", event.eventId().toString())));

@@ -24,6 +24,7 @@ import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.TopicPartition;
 import org.springframework.dao.DataAccessException;
+import org.springframework.transaction.TransactionException;
 
 /** At-least-once source processing with an explicit DLQ ACK boundary. */
 public final class AuditMessageProcessor {
@@ -80,7 +81,7 @@ public final class AuditMessageProcessor {
                 } catch (EventConflictException ex) {
                     sendToDlq(record, consumer, "event_id_content_conflict", attempt, event.eventId());
                     return "dlq";
-                } catch (DataAccessException ex) {
+                } catch (DataAccessException | TransactionException ex) {
                     if (attempt == retryAttempts) {
                         sendToDlq(record, consumer, "persistence_retries_exhausted", attempt, event.eventId());
                         return "dlq";
