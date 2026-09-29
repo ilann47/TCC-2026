@@ -67,7 +67,8 @@ public class AuditRepository {
 
     public boolean ready() {
         try {
-            jdbc.queryForObject("SELECT 1 FROM audit_records LIMIT 1", Integer.class);
+            // An empty audit table is healthy; queryForObject would misclassify zero rows as a failure.
+            jdbc.execute("SELECT 1 FROM audit_records LIMIT 1");
             return true;
         } catch (org.springframework.dao.DataAccessException ex) {
             return false;
