@@ -4,7 +4,7 @@
 
 Três processos executáveis implementam o mesmo contrato `AuditEvent`: `sync-api` grava antes da resposta `201`; `async-api` responde `202` após o ACK do Kafka; `consumer` grava o evento, controla tentativas/DLQ e só então confirma o offset. `audit-core` e `audit-storage` são bibliotecas compartilhadas. O código foi desenvolvido em paralelo à versão Python, que permanece intacta. Este repositório não contém o texto do TCC nem os dados dos ensaios definitivos.
 
-O build e os testes unitários são executáveis com o Maven Wrapper. A integração Docker é verificada pelo workflow do GitHub após cada push; antes da confirmação desse workflow, não se deve afirmar que os serviços foram validados de ponta a ponta. O ambiente local desta criação não dispõe de Docker.
+O build e os testes unitários são executáveis com o Maven Wrapper. O [workflow GitHub de 29/09/2026](https://github.com/ilann47/TCC-2026/actions/runs/36626692629) passou nos testes, no smoke Docker REST/Kafka/PostgreSQL e no smoke C4 de interrupção/recuperação do banco. Isso verifica o funcionamento básico, **não** fornece resultados quantitativos definitivos. O ambiente local desta criação não dispõe de Docker.
 
 ## Arquitetura
 
@@ -96,4 +96,4 @@ As variáveis principais são `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNA
 
 A configuração de Compose usa uma partição e uma réplica Kafka em ambiente local, cargas sintéticas e limites de recursos explícitos. Ela serve à comparação controlada, não a uma implantação de produção. O cenário C4 previsto interrompe o **PostgreSQL em ambas as variantes**. Nenhum número de latência, throughput ou taxa de erro deve ser tratado como conclusão antes de o protocolo experimental estar congelado e executado. Consultar [paridade](docs/paridade.md) e [especificação](docs/especificacao/README.md).
 
-Referências técnicas usadas nas escolhas de implementação: [Spring Boot 3.5 — requisitos](https://docs.spring.io/spring-boot/3.5/system-requirements.html), [Spring JDBC](https://docs.spring.io/spring-boot/reference/data/sql.html), [Kafka Consumer API](https://kafka.apache.org/39/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html) e [Maven Wrapper](https://maven.apache.org/tools/wrapper/maven-wrapper-plugin/usage.html). Elas não substituem os artigos científicos citados no TCC.
+Referências técnicas usadas nas escolhas de implementação: [Spring Boot 3.5 — requisitos](https://docs.spring.io/spring-boot/3.5/system-requirements.html), [Spring JDBC](https://docs.spring.io/spring-boot/reference/data/sql.html), [Kafka Consumer API](https://kafka.apache.org/39/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html), [timeouts do pgJDBC](https://jdbc.postgresql.org/documentation/use/) e [Maven Wrapper](https://maven.apache.org/tools/wrapper/maven-wrapper-plugin/usage.html). Elas não substituem os artigos científicos citados no TCC.
