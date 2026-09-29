@@ -1,0 +1,19 @@
+@startuml
+!include tema.puml
+left to right direction
+rectangle "Cliente" as E
+component "sync-api" as S
+component "async-api" as A
+queue "Kafka" as K
+component "consumer" as C
+component "audit-storage" as R
+database "PostgreSQL" as D
+
+E --> S
+S --> R
+E --> A
+A --> K
+K --> C
+C --> R
+R --> D
+@enduml

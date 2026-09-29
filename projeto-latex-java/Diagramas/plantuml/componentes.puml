@@ -1,0 +1,21 @@
+@startuml
+!include tema.puml
+top to bottom direction
+
+component "sync-api\nexecutável" as S
+component "async-api\nexecutável" as A
+component "consumer\nexecutável" as C
+component "audit-storage\nbiblioteca" as R
+component "audit-core\nbiblioteca" as N
+
+S -[hidden]right- C
+C -[hidden]right- A
+S --> R
+C --> R
+A --> N
+R --> N
+note right of A
+  Não depende de audit-storage
+  nem acessa PostgreSQL.
+end note
+@enduml

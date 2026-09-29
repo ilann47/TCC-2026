@@ -1,0 +1,15 @@
+@startuml
+!include tema.puml
+top to bottom direction
+actor Cliente as C
+component "async-api\nPOST /audit; 202 após ACK" as A
+queue "Kafka\naudit-events" as K
+component "consumer\nretry + audit-storage\ncommit offset após resolução" as W
+database "PostgreSQL\naudit_records" as D
+queue "Kafka\naudit-events-dlq" as Q
+C -down-> A
+A -down-> K
+K -down-> W
+W -down-> D
+W -right-> Q
+@enduml

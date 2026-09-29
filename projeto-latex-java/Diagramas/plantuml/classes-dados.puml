@@ -1,0 +1,37 @@
+@startuml
+!include tema.puml
+hide circle
+top to bottom direction
+skinparam classAttributeIconSize 0
+
+class AuditEvent <<record>> {
+  +eventId: UUID
+  +eventType: String
+  +entityType: String
+  +entityId: String
+  +actorId: String
+  +source: String
+  +occurredAt: OffsetDateTime
+  +payload: JsonNode
+}
+class AuditStored <<record>> {
+  +eventId: UUID
+  +status: String
+  +contentHash: String
+  +persistedAt: OffsetDateTime
+}
+class AuditAccepted <<record>> {
+  +eventId: UUID
+  +status: String
+}
+class AuditRepository <<Spring JDBC>> {
+  +persist(event: AuditEvent): AuditStored
+  +find(eventId: UUID): Optional<AuditStored>
+  +ready(): boolean
+}
+
+AuditEvent -[hidden]right- AuditStored
+AuditStored -[hidden]right- AuditAccepted
+AuditRepository ..> AuditEvent : entrada
+AuditRepository ..> AuditStored : resultado
+@enduml

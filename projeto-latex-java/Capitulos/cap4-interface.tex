@@ -1,0 +1,21 @@
+\section{Prototipação da interface}
+\label{sec:interface}
+O núcleo atual é uma API, sem frontend próprio. Os wireframes desta seção representam interfaces propostas de operação e inspeção, não capturas de telas funcionais. As telas não executam o experimento nem contêm resultados medidos; usam estados vazios para indicar o que deverá ser apresentado após instrumentação.
+
+\subsection{Envio de registro}
+A Figura~\ref{fig:wf-envio} apresenta WF01, que permite escolher a variante e informar todos os campos do contrato. O usuário poderá gerar UUID e instante antes do envio e reutilizá-los em uma reentrega. A ação de envio mostrará código HTTP, corpo da resposta e UUID. Na variante assíncrona, a interface deverá distinguir aceitação de conclusão e não apresentar 202 como comprovante de persistência. Os campos obrigatórios e seus limites seguem o dicionário da Seção~\ref{sec:banco}. Relaciona-se a RF01, RF02 e RF15.
+\capfig{wf-envio}{WF01: wireframe proposto para envio de registros}{fig:wf-envio}{0.39}
+
+\subsection{Visualização de métricas}
+A Figura~\ref{fig:wf-metricas} apresenta WF02, que seleciona execução, variante e janela; apresenta taxa oferecida, throughput persistido, erros e percentis. Aceitação e conclusão ficam em campos distintos. O botão de exportação representa integração futura com os arquivos que serão produzidos pelo executor experimental Java. Falta de instrumentação deve aparecer como ausência de dados, não como medição igual a zero. Relaciona-se a RF11 e RF14.
+\capfig{wf-metricas}{WF02: wireframe proposto para métricas}{fig:wf-metricas}{0.32}
+
+\subsection{Acompanhamento de backlog}
+A Figura~\ref{fig:wf-backlog} apresenta WF03, que permite inspecionar tópico, grupo e estado de coleta. Exibe offsets, diferença de posições e quantidade conciliada de eventos aceitos e persistidos. Esses números não são intercambiáveis: offsets dependem de partições e confirmações, enquanto a conciliação depende de UUIDs. O controle de falhas deverá exigir identificação do cenário e registrar os instantes de interrupção e retomada. Relaciona-se a RF12 e RF13.
+\capfig{wf-backlog}{WF03: wireframe proposto para backlog e recuperação}{fig:wf-backlog}{0.34}
+
+\subsection{Comparação entre variantes}
+A Figura~\ref{fig:wf-comparacao} apresenta WF04, que organiza lado a lado as mesmas métricas por variante. A interface deverá impedir comparação entre configurações incompatíveis ou apresentar explicitamente as diferenças. A latência de aceitação não substituirá a de conclusão. Não haverá rótulo de vencedor automático: a interpretação considera dispersão, recursos, falhas e limites de generalização. Relaciona-se a RF14 e RN10.
+\capfig{wf-comparacao}{WF04: wireframe proposto para comparação experimental}{fig:wf-comparacao}{0.32}
+
+\textbf{Síntese.} Os quatro wireframes descrevem a interação desejada e os estados sem dados. A interface dedicada permanece proposta; os \textit{smokes} e testes Java descritos na Seção~\ref{sec:validacao-funcional} fornecem evidência funcional limitada, mas ainda não alimentam essas telas. As imagens desta seção representam exclusivamente prototipação de interface.

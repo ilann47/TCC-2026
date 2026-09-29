@@ -1,0 +1,20 @@
+# TCC — fonte LaTeX da Entrega 03 Java
+
+Este diretório é a fonte editável da [Entrega 03 em Java](../entregas/entrega-03-java/README.md). O código executável está em [implementacao-java](../implementacao-java/README.md). O diretório antigo `projeto-latex` foi preservado como histórico da versão Python; seus números e capturas não foram reutilizados como evidência do Java.
+
+O arquivo principal é `modelo.tex`. Os capítulos ficam em `Capitulos/`, os metadados e a bibliografia em `Configuracoes/`, e os diagramas editáveis em `Diagramas/plantuml/` (`.puml` com PNG correspondente).
+
+## Compilação
+
+Com MiKTeX/TeX Live e BibTeX disponíveis, execute nesta pasta:
+
+```powershell
+pdflatex -interaction=nonstopmode -halt-on-error modelo.tex
+bibtex modelo
+pdflatex -interaction=nonstopmode -halt-on-error modelo.tex
+pdflatex -interaction=nonstopmode -halt-on-error modelo.tex
+```
+
+Para regenerar os PNG dos diagramas, use PlantUML nos arquivos `.puml`. O PDF já compilado para envio está em [TCC_Entrega03_Java.pdf](../entregas/entrega-03-java/TCC_Entrega03_Java.pdf).
+
+O texto diferencia explicitamente funcionalidades implementadas, verificações funcionais e instrumentos experimentais ainda planejados. Não apresenta métricas da implementação Python como se fossem resultados Java.

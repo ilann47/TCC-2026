@@ -1,0 +1,38 @@
+@startuml
+!include tema.puml
+hide circle
+top to bottom direction
+skinparam classAttributeIconSize 0
+
+class SyncAuditController {
+  +create(event): ResponseEntity
+  +find(eventId): ResponseEntity
+}
+class AsyncAuditController {
+  +accept(event): ResponseEntity
+}
+class ConsumerWorker {
+  +start(): void
+  +stop(): void
+}
+class AuditMessageProcessor {
+  +process(record, consumer): String
+}
+class AuditRepository {
+  +persist(event): AuditStored
+  +find(eventId): Optional
+}
+class KafkaPublisher {
+  +publish(topic, key, value, runId): RecordMetadata
+}
+class CanonicalEventCodec {
+  +encode(event): String
+  +hash(event): String
+}
+
+SyncAuditController --> AuditRepository
+AsyncAuditController --> KafkaPublisher
+ConsumerWorker --> AuditMessageProcessor
+AuditMessageProcessor --> AuditRepository
+AuditRepository --> CanonicalEventCodec
+@enduml

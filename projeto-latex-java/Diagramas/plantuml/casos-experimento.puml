@@ -1,0 +1,15 @@
+@startuml
+!include tema.puml
+left to right direction
+actor Pesquisador as P
+rectangle "Camada de avaliação planejada" {
+ usecase "UC05\nExecutar cenário de avaliação" as U5
+ usecase "UC06\nConsolidar e consultar indicadores" as U6
+}
+P -- U5
+P -- U6
+note bottom of U5
+ A CI verifica apenas um smoke de falha.
+ O executor quantitativo não está implementado.
+end note
+@enduml

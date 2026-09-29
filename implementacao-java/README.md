@@ -2,9 +2,9 @@
 
 ## Finalidade e estado
 
-Três processos executáveis implementam o mesmo contrato `AuditEvent`: `sync-api` grava antes da resposta `201`; `async-api` responde `202` após o ACK do Kafka; `consumer` grava o evento, controla tentativas/DLQ e só então confirma o offset. `audit-core` e `audit-storage` são bibliotecas compartilhadas. O código foi desenvolvido em paralelo à versão Python, que permanece intacta. Este repositório não contém o texto do TCC nem os dados dos ensaios definitivos.
+Três processos executáveis implementam o mesmo contrato `AuditEvent`: `sync-api` grava antes da resposta `201`; `async-api` responde `202` após o ACK do Kafka; `consumer` grava o evento, controla tentativas/DLQ e só então confirma o offset. `audit-core` e `audit-storage` são bibliotecas compartilhadas. Esta é a implementação usada na [Entrega 03 em Java](../entregas/entrega-03-java/README.md). A versão Python anterior permanece no histórico do repositório, sem que seus resultados sejam atribuídos a este código. A comparação quantitativa definitiva ainda não foi executada.
 
-O build e os testes unitários são executáveis com o Maven Wrapper. O [workflow GitHub de 29/09/2026](https://github.com/ilann47/TCC-2026/actions/runs/36626692629) passou nos testes, no smoke Docker REST/Kafka/PostgreSQL e no smoke C4 de interrupção/recuperação do banco. Isso verifica o funcionamento básico, **não** fornece resultados quantitativos definitivos. O ambiente local desta criação não dispõe de Docker.
+O build e os testes unitários são executáveis com o Maven Wrapper. O [workflow GitHub de 29/09/2026](https://github.com/ilann47/TCC-2026/actions/runs/36627197788) passou nos testes, no smoke Docker REST/Kafka/PostgreSQL e no smoke C4 de interrupção/recuperação do banco. Isso verifica o funcionamento básico, **não** fornece resultados quantitativos definitivos. O ambiente local desta criação não dispõe de Docker.
 
 ## Arquitetura
 
@@ -43,7 +43,7 @@ No PowerShell, dentro desta pasta:
 .\mvnw.cmd verify
 ```
 
-No Linux/macOS: `./mvnw verify`. Os testes atuais cobrem JSON/hash de referência gerado pelo Python, validação básica do contrato, confirmação do offset após persistência, DLQ para evento inválido, exaustão de tentativas e ausência de commit quando o ACK da DLQ falha. Eles **não substituem** um ensaio de integração com serviços reais.
+No Linux/macOS: `./mvnw verify`. Os testes atuais cobrem um vetor de referência de JSON/hash, validação básica do contrato, confirmação do offset após persistência, DLQ para evento inválido, exaustão de tentativas e ausência de commit quando o ACK da DLQ falha. Eles **não substituem** um ensaio de integração com serviços reais.
 
 ## Execução isolada com Docker
 

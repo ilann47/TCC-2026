@@ -1,0 +1,15 @@
+@startuml
+!include tema.puml
+left to right direction
+rectangle "1. Cliente" as C
+component "2. sync-api\nPOST /audit" as A
+component "3. audit-core +\naudit-storage" as P
+database "4. PostgreSQL\naudit_records" as D #FAF5FF
+C --> A
+A --> P
+P --> D
+note bottom of A
+  A API responde **201 Created** somente após a persistência.
+  O cliente aguarda todo o caminho crítico.
+end note
+@enduml

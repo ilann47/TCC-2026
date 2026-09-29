@@ -1,0 +1,31 @@
+@startuml
+!include tema.puml
+left to right direction
+
+node "Host experimental\nDocker Compose" as Host {
+  node "Rede Compose" {
+    node "sync-api\nSpring Boot\n1 CPU; 512 MiB" as S
+    node "async-api\nSpring Boot\n1 CPU; 512 MiB" as A
+    node "consumer\nJava\n1 CPU; 512 MiB" as C
+    database "postgres\nPostgreSQL 16\n1 CPU; 512 MiB" as D
+    queue "kafka\nKafka 3.9.1\n1 CPU; 1 GiB" as K
+  }
+  artifact "postgres-data\nvolume" as DV
+  artifact "kafka-data\nvolume" as KV
+}
+actor "Cliente externo" as E
+E --> S : localhost:18002
+E --> A : localhost:18003
+S --> D : JDBC
+A --> K : publicação
+K --> C : audit-events
+C --> D : JDBC
+C --> K : DLQ / offset
+D --> DV
+K --> KV
+note bottom of Host
+  postgres: localhost:15433
+  Kafka externo: localhost:19093
+  kafka-init e kafka-volume-init são transitórios.
+end note
+@enduml

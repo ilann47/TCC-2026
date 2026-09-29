@@ -1,0 +1,17 @@
+@startsalt
+skinparam dpi 180
+{
+{^WF03 - BACKLOG - WIREFRAME PROPOSTO}
+{ Execucao | ^Selecionar run_id^ }
+{ Topico | "audit-events       " | Grupo | "audit-persistence" }
+{# Particao | Offset produzido | Offset confirmado | Lag
+ Sem coleta | Sem coleta | Sem coleta | Sem coleta
+}
+{ Eventos aceitos | "Sem coleta" | Persistidos | "Sem coleta" }
+{ Interrupcao UTC | "Nao registrada" }
+{ Retomada UTC | "Nao registrada" }
+{ Drenagem | "Sem coleta" }
+{ [Consultar estado] | [Registrar falha controlada] }
+"Acao de falha pertence a um cenario planejado."
+}
+@endsalt

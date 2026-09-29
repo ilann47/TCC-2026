@@ -1,0 +1,160 @@
+\section{Modelagem UML}
+\label{sec:uml}
+As vistas representam o contrato, as responsabilidades e os caminhos de execução. A fronteira operacional é a implementação Java, com duas APIs Spring Boot e um consumidor independente; Kafka e PostgreSQL são sistemas externos de suporte. Na visão de implantação, esses serviços integram a infraestrutura do ambiente experimental. As bibliotecas Maven compartilhadas não são atores nem processos independentes.
+
+\subsection{Diagrama de casos de uso}
+A aplicação cliente inicia UC01 e UC02; Kafka fornece mensagens a UC03; o pesquisador consulta prontidão e registros em UC04 e UC07. A Figura~\ref{fig:casos-uso} apresenta essas interações. A Figura~\ref{fig:casos-exp} reúne os casos planejados de avaliação quantitativa, cujo executor ainda não integra o projeto Java.
+
+\capfig{casos-de-uso}{Casos de uso da aplicação operacional}{fig:casos-uso}{0.44}
+\capfig{casos-experimento}{Casos de uso da camada de avaliação}{fig:casos-exp}{0.25}
+
+\subsubsection{UC01 --- Registrar auditoria sincronamente}
+\textbf{Objetivo e atores:} persistir evento antes da resposta; aplicação cliente e PostgreSQL.
+\textbf{Pré-condições:} API inicializada e banco acessível.
+\textbf{Ativação:} \texttt{POST /audit}.
+\textbf{Pós-condição:} linha inserida ou reentrega idêntica reconhecida.
+\textbf{Regras:} RN01--RN05 e RN08.
+\begin{enumerate}
+\item A aplicação envia o evento à API síncrona.
+\item O contrato é validado e recebe os valores padrão permitidos.
+\item O repositório calcula a representação determinística e o SHA-256.
+\item Executa \texttt{INSERT ON CONFLICT DO NOTHING}, verificando o resultado.
+\item A transação é concluída; o marco pós-commit é registrado.
+\item A API retorna 201, UUID, hash, status e timestamp de inserção.
+\end{enumerate}
+\textbf{A1 --- Reentrega:} quando o UUID já existe, uma nova consulta na mesma transação em \texttt{READ COMMITTED} obtém a linha. Hash igual produz \texttt{duplicate}; nenhuma nova linha é criada.
+\textbf{E1 --- Contrato inválido:} retorna 422 antes de chamar o repositório.
+\textbf{E2 --- Conflito:} hash diferente provoca rollback e resposta 409 com \texttt{event\_id\_content\_conflict}, preservando a linha original.
+\textbf{E3 --- Banco indisponível:} retorna 503 com \texttt{database\_unavailable}. Uma falha durante o commit pode deixar o resultado incerto; consulta e reenvio devem preservar o evento completo.
+
+\subsubsection{UC02 --- Aceitar auditoria assincronamente}
+\textbf{Objetivo e atores:} confirmar publicação sem aguardar persistência; aplicação cliente e Kafka.
+\textbf{Pré-condição:} API e publicador inicializados.
+\textbf{Ativação:} \texttt{POST /audit} na API assíncrona.
+\textbf{Pós-condição:} publicação confirmada individualmente pelo broker.
+\textbf{Regras:} RN01, RN02, RN06 e RN09.
+\begin{enumerate}
+\item A API valida o mesmo contrato da variante síncrona.
+\item Serializa os campos completos e usa \texttt{entity\_id} como chave.
+\item O publicador chama \texttt{send(...).get(...)} e aguarda a confirmação individual dentro do prazo.
+\item Registra o ACK, incluindo tópico, partição e offset, e retorna 202.
+\end{enumerate}
+\textbf{A1 --- Reenvio:} a API não consulta duplicidade; o consumidor e o banco reconhecem eventos idênticos.
+\textbf{E1 --- Contrato inválido:} retorna 422.
+\textbf{E2 --- Buffer do produtor cheio:} retorna 503 com \texttt{acceptance=rejected}.
+\textbf{E3 --- Timeout ou erro de confirmação:} retorna 503 com \texttt{acceptance=unknown}. A mensagem pode ter sido entregue; a resposta não autoriza assumir perda.
+\textbf{Limite:} ACK de publicação e persistência são pós-condições distintas. O consumidor pode processar a mensagem antes ou depois de o cliente receber a resposta.
+
+\subsubsection{UC03 --- Consumir e persistir evento}
+\textbf{Objetivo e atores:} processar ou reter uma falha identificável; Kafka e PostgreSQL.
+\textbf{Pré-condições:} consumidor inscrito no tópico e configuração de retry válida.
+\textbf{Ativação:} mensagem retornada por \texttt{poll}.
+\textbf{Pós-condição:} persistência idempotente ou retenção confirmada na DLQ, seguida da confirmação da posição de origem.
+\textbf{Regras:} RN03--RN05, RN07, RN09 e RN11.
+\begin{enumerate}
+\item O consumidor recebe a mensagem e recupera o identificador da execução.
+\item Valida JSON, contrato e presença explícita de UUID e instante.
+\item Registra a tentativa e chama o repositório comum.
+\item Depois da transação ou reconhecimento de duplicata, registra o resultado.
+\item Confirma o offset de origem de forma síncrona e retorna à espera.
+\end{enumerate}
+\textbf{A1 --- Reentrega idêntica:} preserva a linha e confirma a posição após reconhecimento de duplicata.
+\textbf{A2 --- Falha transitória:} repete a persistência até o limite configurado, com backoff exponencial limitado e registro das tentativas.
+\textbf{E1 --- Mensagem inválida, conflito ou tentativas esgotadas:} publica envelope na DLQ com identidade da origem, motivo e conteúdo original, aguarda ACK e então confirma a origem.
+\textbf{E2 --- DLQ não confirmada:} retoma a sessão sem confirmar a mensagem de origem. Mensagens posteriores não justificam avançar sua posição.
+\textbf{E3 --- Falha de commit de offset:} retoma a sessão; a persistência ou a publicação em DLQ já pode ter ocorrido. A reentrega é tratada por UUID no banco ou pela identidade da origem na conciliação da DLQ.
+\textbf{E4 --- Dependência indisponível:} o laço externo aguarda e reinicia a sessão; a política de restart do Compose cobre encerramento do processo. Mensagens já retidas na DLQ exigem inspeção e não retornam automaticamente ao fluxo principal.
+
+\subsubsection{UC04 --- Consultar prontidão}
+\textbf{Ator:} pesquisador.
+\textbf{Ativação:} \texttt{GET /health}.
+\textbf{Pré-condição:} processo HTTP iniciado.
+\textbf{Fluxo principal:} verificar acesso ao esquema PostgreSQL na API síncrona ou existência e liderança das partições do tópico na API assíncrona; retornar 200 com \texttt{ready}.
+\textbf{Alternativa:} \texttt{GET /live} retorna \texttt{alive} para verificar apenas a resposta do processo.
+\textbf{Exceção:} dependência sem prontidão produz 503; processo parado causa falha de conexão.
+\textbf{Pós-condição:} resultado de uma verificação pontual, sem garantia de disponibilidade futura ou de conclusão de todos os eventos. Relaciona-se a RF10.
+
+\subsubsection{UC05 --- Executar cenário de avaliação (planejado)}
+\textbf{Ator:} pesquisador.
+\textbf{Pré-condições:} ambiente isolado preparado, dados sintéticos e configuração identificada; protocolo congelado para coleta definitiva.
+\textbf{Ativação prevista:} comando do executor e seleção do perfil.
+\textbf{Fluxo previsto:} criar diretório exclusivo; registrar manifesto; preparar eventos; executar aquecimento e carga; coletar logs, recursos e offsets; interromper o PostgreSQL em C4; registrar a retomada; aguardar drenagem; consolidar arquivos.
+\textbf{Alternativas:} teste dos instrumentos ou execução conforme protocolo definitivo.
+\textbf{Exceção prevista:} configuração incompleta ou falha de coleta deve ser registrada; validação funcional não vira resultado definitivo.
+\textbf{Pós-condição esperada:} artefatos verificáveis da execução, com indicação de completude. O projeto Java atual contém apenas \textit{smokes} de CI, sem esse executor. Relaciona-se a RF12, RF13 e RN10.
+
+\subsubsection{UC06 --- Consolidar e consultar indicadores (planejado)}
+\textbf{Ator:} pesquisador.
+\textbf{Pré-condição:} arquivos brutos de execução disponíveis.
+\textbf{Ativação prevista:} execução de um normalizador ainda não adaptado ao Java.
+\textbf{Fluxo previsto:} verificar arquivos; correlacionar UUIDs; separar fases; calcular métricas e unidades; registrar inconsistências; produzir tabelas e relatório.
+\textbf{Alternativa:} inspecionar lag, reentregas, retry, DLQ e recuperação.
+\textbf{Exceção:} ausência de instrumentação é sinalizada e não substituída por medição zero.
+\textbf{Pós-condição esperada:} indicadores rastreáveis aos dados brutos. A interface dedicada dos wireframes permanece proposta. Relaciona-se a RF11, RF14 e RN10.
+
+\subsubsection{UC07 --- Consultar registro por UUID}
+\textbf{Ator:} pesquisador ou aplicação cliente.
+\textbf{Pré-condições:} API síncrona e banco acessíveis.
+\textbf{Ativação:} \texttt{GET /audit/\{event\_id\}}.
+\textbf{Fluxo principal:} validar UUID, consultar a projeção da linha e retornar 200 com hash e timestamp.
+\textbf{Alternativa:} após reenvio, conferir a preservação do hash.
+\textbf{Exceções:} UUID inválido retorna 422; linha não localizada, 404; banco indisponível, 503.
+\textbf{Pós-condição:} existência ou ausência observada naquele instante; 404 durante processamento assíncrono não prova perda. Relaciona-se a RF17 e RN04.
+
+\subsection{Diagramas de atividades}
+A Figura~\ref{fig:atividade-sync} representa a inserção síncrona e as decisões de duplicidade e conflito. As Figuras~\ref{fig:atividade-async} e~\ref{fig:atividade-consumidor} separam o aceite da API produtora e o processamento do consumidor. Os dois processos assíncronos não dependem da ordem em que a resposta HTTP chega ao cliente.
+
+\capfig{atividade-sincrona}{Atividade síncrona: transação, duplicidade e conflito}{fig:atividade-sync}{0.62}
+\capfig{atividade-assincrona}{Atividade da API produtora e confirmação de publicação}{fig:atividade-async}{0.59}
+\capfig{atividade-consumidor}{Atividade do consumidor, retry e confirmação da origem}{fig:atividade-consumidor}{0.75}
+
+A atividade de persistência com retry corresponde ao laço limitado de UC03. O caminho de quarentena inclui a espera pelo ACK da DLQ. Um término da iteração não significa encerramento do serviço: o laço externo mantém a espera ou a reconexão, conforme indicado nas ações.
+
+\FloatBarrier
+\subsection{Diagramas de classes}
+A Figura~\ref{fig:classes-dados} apresenta os \textit{records} do contrato e o repositório JDBC. A Figura~\ref{fig:classes} mostra as classes de entrada e processamento dos três módulos executáveis, além das dependências compartilhadas. Nenhuma herança ORM é representada porque o projeto Java usa Spring JDBC e uma migração SQL.
+
+\capfig{classes-dados}{Classes de contrato e persistência}{fig:classes-dados}{0.46}
+\capfig{classes}{Classes de aplicação e processamento Java}{fig:classes}{0.45}
+
+A notação \(+\) indica membros públicos. A validação pertence ao contrato \texttt{AuditEvent}. A serialização e o hash ficam na \texttt{CanonicalEventCodec}; a transação, na \texttt{AuditRepository}; e os marcos, na \texttt{MilestoneLog}. O broker é infraestrutura, não classe de domínio. O \texttt{AuditMessageProcessor} chama \texttt{commitSync} sobre o consumidor Kafka depois da persistência ou do ACK da DLQ.
+
+\FloatBarrier
+\subsection{Diagramas complementares}
+As Figuras~\ref{fig:seq-sync} e~\ref{fig:seq-async} detalham a ordem entre transação, resposta, ACK e confirmação de posição. A Figura~\ref{fig:componentes} sintetiza as dependências entre os módulos Maven; o caminho de publicação na DLQ pelo consumidor é detalhado na atividade, na sequência e na arquitetura assíncronas para manter esta vista legível. As Figuras~\ref{fig:arq-sync} e~\ref{fig:arq-async} distinguem os fluxos arquiteturais e a participação da DLQ.
+
+\capfig{sequencia-sincrona}{Sequência síncrona com inserção idempotente}{fig:seq-sync}{0.62}
+\capfig{sequencia-assincrona}{Sequência assíncrona com ACK e tratamento de falhas}{fig:seq-async}{0.61}
+\capfig{componentes}{Dependências entre os cinco módulos Maven}{fig:componentes}{0.44}
+\capfig{arquitetura-sincrona}{Arquitetura da variante síncrona}{fig:arq-sync}{0.38}
+\capfig{arquitetura-assincrona}{Arquitetura da variante assíncrona e DLQ}{fig:arq-async}{0.43}
+
+\subsubsection{Diagrama de implantação}
+A Figura~\ref{fig:implantacao} localiza os cinco serviços permanentes na rede Docker Compose e separa o cliente de carga, executado pelo pesquisador, dos processos de aplicação. Os serviços \texttt{kafka-init} e \texttt{kafka-volume-init} são transitórios e, por isso, aparecem na anotação do diagrama, não como processos permanentes. As portas publicadas estão restritas ao \textit{loopback} do host. Os volumes nomeados conservam os dados do PostgreSQL e os logs do Kafka entre reinícios de contêiner. Esta é uma implantação experimental com um broker, uma partição por tópico e um banco; não representa alta disponibilidade.
+
+\capfig{implantacao}{Implantação real do protótipo no Docker Compose}{fig:implantacao}{0.48}
+
+\FloatBarrier
+\subsection{Rastreabilidade entre requisitos, regras e UML}
+A Tabela~\ref{tab:rastreabilidade} relaciona cada requisito funcional às regras e aos elementos que o representam. Os elementos planejados não indicam código já existente. A cobertura funcional verificada é delimitada na Seção~\ref{sec:validacao-funcional}.
+{\small
+\begin{longtable}{p{0.20\textwidth}p{0.20\textwidth}p{0.51\textwidth}}
+\caption{Rastreabilidade funcional e comportamental}\label{tab:rastreabilidade}\\
+\hline Requisitos & Regras & Casos e elementos de modelagem\\ \hline
+\endfirsthead
+\hline Requisitos & Regras & Casos e elementos de modelagem\\ \hline
+\endhead
+RF01, RF02 & RN01, RN02 & UC01, UC02; AuditEvent e validação dos dois fluxos.\\ \hline
+RF03, RF06, RF07 & RN03, RN08 & UC01; atividade e sequência síncronas; CanonicalEventCodec e AuditRepository.\\ \hline
+RF04 & RN06, RN09 & UC02; KafkaPublisher; ACK na atividade e sequência assíncronas.\\ \hline
+RF05, RF09, RF16 & RN07, RN11 & UC03; retry, DLQ e confirmação de origem; atividade do consumidor.\\ \hline
+RF08 & RN04, RN05 & UC01 e UC03; decisões de hash e unicidade; tabela audit\_records.\\ \hline
+RF10 & RN10 & UC04; prontidão e vivacidade das APIs.\\ \hline
+RF11, RF14 & RN10 & UC06 planejado; normalizador e wireframes de métricas/comparação.\\ \hline
+RF12, RF13 & RN07, RN10 & UC05 planejado; protocolo e acompanhamento de backlog ainda incompletos.\\ \hline
+RF15 & RN01, RN02, RN06 & UC01 e UC02; wireframe de envio com identidade preservada.\\ \hline
+RF17 & RN04, RN05 & UC07; consulta por UUID no repositório.\\ \hline
+\end{longtable}
+\noindent{\footnotesize Fonte: Elaborado pelo autor (2026).}\par
+}
+\textbf{Síntese.} Os casos de uso descrevem objetivos e exceções; atividades e sequências mostram as decisões; classes e componentes localizam suas responsabilidades. As condições da coleta definitiva permanecem ligadas ao protocolo metodológico.

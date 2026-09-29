@@ -1,0 +1,76 @@
+\section{Levantamento e especificação de requisitos}
+\label{sec:requisitos}
+Os identificadores RF01 a RF10 são preservados para manter a rastreabilidade com a documentação anterior. RF11 a RF15 tornam explícitas as funcionalidades de avaliação e interface previstas; RF16 e RF17 detalham tratamento de falhas e consulta por UUID. A prioridade \textbf{essencial} designa uma condição necessária ao núcleo ou à validade experimental; \textbf{desejável} designa uma facilidade de uso. A Tabela~\ref{tab:rf} distingue código Java existente de instrumentos planejados; o alcance dos testes está na Seção~\ref{sec:validacao-funcional}.
+
+\subsection{Requisitos funcionais}
+{\small
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.32\textwidth}>{\raggedright\arraybackslash}p{0.42\textwidth}}
+\caption{Requisitos funcionais e critérios de aceitação}\label{tab:rf}\\
+\hline
+ID e estado & Descrição, prioridade e justificativa & Critério verificável de aceitação\\ \hline
+\endfirsthead
+\hline ID e estado & Descrição, prioridade e justificativa & Critério verificável de aceitação\\ \hline
+\endhead
+RF01\newline Implementado & Receber evento em \texttt{POST /audit}. Essencial: entrada equivalente nas variantes. & As duas APIs aceitam o mesmo JSON e retornam o UUID em respostas de sucesso.\\ \hline
+RF02\newline Implementado & Validar contrato. Essencial: impedir dados estruturalmente inválidos. & UUID e data informados devem ser válidos; textos respeitam os limites do dicionário; entrada inválida retorna 422, sem processamento posterior.\\ \hline
+RF03\newline Implementado & Concluir registro síncrono antes da resposta. Essencial: definir a semântica síncrona. & Resposta 201 ocorre somente após commit ou identificação de duplicata idêntica; status distingue \texttt{persisted} de \texttt{duplicate}.\\ \hline
+RF04\newline Implementado & Encaminhar evento ao Kafka. Essencial: viabilizar processamento desacoplado. & Evento preserva UUID e conteúdo; chave é \texttt{entity\_id}. 202 somente após ACK individual do broker com tópico, partição e offset no log. Timeout de entrega retorna 503 com resultado incerto.\\ \hline
+RF05\newline Implementado & Consumir mensagens. Essencial: concluir a rota assíncrona. & Mensagem válida do tópico configurado é desserializada, validada e encaminhada ao mesmo repositório da variante síncrona.\\ \hline
+RF06\newline Implementado & Gerar hash determinístico. Essencial: detectar conteúdo divergente. & O mesmo evento completo gera o mesmo SHA-256 hexadecimal de 64 caracteres; a ordenação de chaves não altera a representação serializada.\\ \hline
+RF07\newline Implementado & Persistir registro. Essencial: manter efeito observável. & Linha contém os campos de \texttt{AuditEvent} e \texttt{content\_hash}; \texttt{event\_id} é chave primária.\\ \hline
+RF08\newline Implementado & Reconhecer reentrega idêntica. Essencial: evitar efeito duplicado. & Duas submissões com UUID e conteúdo iguais mantêm uma linha e retornam status de duplicata na segunda; conteúdo divergente não substitui o original.\\ \hline
+RF09\newline Implementado & Confirmar offset após persistência. Essencial: reduzir risco de perda por confirmação antecipada. & Commit automático desativado; confirmar origem somente após persistência idempotente ou ACK da DLQ. Falha de confirmação mantém possibilidade de reentrega.\\ \hline
+RF10\newline Implementado & Expor \texttt{GET /health}. Essencial: verificar resposta da API. & \texttt{/health} verifica PostgreSQL na API síncrona e metadados do tópico na assíncrona; retorna 200 ou 503. \texttt{/live} verifica apenas a resposta do processo.\\ \hline
+RF11\newline Planejado & Coletar métricas por execução. Essencial: responder à pergunta experimental. & Um futuro coletor deverá produzir arquivos conciliáveis por UUID e execução, com aceitação, conclusão, throughput, erros e recursos, incluindo unidade e janela. Os logs Java isolados não satisfazem esse critério.\\ \hline
+RF12\newline Parcial & Executar cenários de carga e falha. Essencial: controle experimental. & Há um \textit{smoke} de interrupção do banco na CI. O executor definitivo ainda deverá registrar taxa, duração, semente, variante, falha e configuração em manifesto reproduzível.\\ \hline
+RF13\newline Parcial & Acompanhar recuperação. Essencial: avaliar comportamento após falhas. & O \textit{smoke} verifica retomada da saúde do banco, mas ainda falta registrar backlog, drenagem e conciliação dos eventos aceitos e persistidos.\\ \hline
+RF14\newline Planejado & Consultar indicadores e comparar variantes. Desejável: facilitar inspeção. & Um relatório futuro deverá separar latência HTTP de conclusão e sinalizar ausência de dados. Não há interface ou normalizador comparativo Java implementado.\\ \hline
+RF15\newline Planejado & Disponibilizar formulário de envio. Desejável: facilitar demonstração. & O wireframe preserva UUID e instante e distingue variantes. A interface dedicada e documentação interativa de API não integram a implementação Java atual.\\ \hline
+RF16\newline Implementado & Tratar falhas e quarentena. Essencial: evitar perda por avanço prematuro. & Aplicar retry limitado com backoff; publicar erro terminal na DLQ e aguardar ACK antes de confirmar a origem.\\ \hline
+RF17\newline Implementado & Consultar registro por UUID. Essencial: verificar efeito persistido. & A API síncrona retorna hash e timestamp da linha; 404 indica ausência observada e 503 indica consulta indisponível.\\ \hline
+\end{longtable}
+\noindent{\footnotesize Fonte: Elaborado pelo autor (2026).}\par
+}
+
+\subsection{Requisitos não funcionais}
+A Tabela~\ref{tab:rnf} relaciona propriedades de qualidade, critérios verificáveis e justificativas.
+Desempenho não é definido por um código HTTP: 201 e 202 não são limites de tempo. Não se impõe, antes do piloto, que a alternativa assíncrona seja mais rápida. Os critérios de medição e as condições de comparação substituem expressões não verificáveis como \textit{tempo reduzido}.
+
+{\small
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.12\textwidth}>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}p{0.55\textwidth}}
+\caption{Requisitos não funcionais}\label{tab:rnf}\\
+\hline ID & Categoria e prioridade & Critério e justificativa\\ \hline
+\endfirsthead
+\hline ID & Categoria e prioridade & Critério e justificativa\\ \hline
+\endhead
+RNF01 & Equivalência; essencial & Utilizar DTO, serialização e repositório comuns; comparar o mesmo conjunto de eventos com a mesma configuração de persistência. Evita atribuir diferenças funcionais à comunicação.\\ \hline
+RNF02 & Reprodutibilidade; essencial & Registrar imagens, dependências, commit, recursos, scripts e parâmetros. O Compose explicita limites de desenvolvimento; manifesto e checksums da coleta definitiva ainda precisam ser implementados e validados.\\ \hline
+RNF03 & Segurança; essencial & Usar dados sintéticos sem segredos; executar em ambiente isolado. O protótipo não possui autenticação nem é autorizado para exposição pública ou dados pessoais reais.\\ \hline
+RNF04 & Portabilidade; essencial & Descrever build e inicialização com Docker Compose, além dos pré-requisitos. Versões de bibliotecas são fixadas; tags de imagens deverão ter digest registrado na coleta.\\ \hline
+RNF05 & Integridade e correlação; essencial & Preservar UUID e instante de origem nos reenvios; manter hash e restrição de unicidade. Conflitos devem ser distinguíveis de duplicatas legítimas nos registros de diagnóstico.\\ \hline
+RNF06 & Desempenho; essencial & Medir latência de aceitação e de conclusão separadamente, p50/p95/p99, throughput persistido e taxa oferecida; definir tolerâncias de carga no piloto, conforme o Capítulo~\ref{cap:metodo}.\\ \hline
+RNF07 & Resiliência; essencial & Após falha controlada e retomada, conciliar os UUIDs dentro da janela de drenagem; zero linhas duplicadas. Eventos na DLQ exigem tratamento posterior e não retornam automaticamente ao banco.\\ \hline
+RNF08 & Observabilidade; essencial & Registrar execução, UUID, componente, etapa, instante e resultado; coletar recursos com intervalo fixado. Os marcos JSON já existem; coletores, completude e resolução temporal ainda precisam de validação para cada execução definitiva.\\ \hline
+RNF09 & Escalabilidade; desejável & Registrar partições e número de consumidores em cada configuração. Não inferir escalabilidade horizontal a partir de uma execução em broker único.\\ \hline
+RNF10 & Usabilidade experimental; desejável & Identificar a variante e o estado dos dados em cada tela; oferecer mensagens legíveis e unidades. Wireframes não equivalem a um painel implementado.\\ \hline
+\end{longtable}
+\noindent{\footnotesize Fonte: Elaborado pelo autor (2026).}\par
+}
+
+\subsection{Regras de negócio}
+Neste contexto, regras de negócio são invariantes do processamento de auditoria e do contrato experimental, e não políticas de um sistema comercial.
+
+\begin{description}
+\item[RN01 --- Identidade.] Todo evento processado possui UUID. O DTO gera UUID se omitido; nos ensaios, o gerador deverá fornecê-lo antes do envio e preservá-lo nas novas tentativas. Novo UUID significa novo evento.
+\item[RN02 --- Validação.] Tipo do evento, tipo e ID da entidade, ator e origem são obrigatórios e respeitam os limites do DTO. UUID, instante e payload possuem valores padrão quando omitidos. A obrigatoriedade no banco não significa obrigatoriedade de envio desses três campos na API. Na mensagem Kafka, identidade e instante devem estar explícitos: o consumidor rejeita sua ausência para que uma reentrega não gere outro evento.
+\item[RN03 --- Hash.] O SHA-256 abrange todos os campos do evento validado, incluindo UUID e instante. JSON usa chaves ordenadas e separadores compactos. A regra é determinística no contexto da implementação; não se declara conformidade com um padrão externo de canonicalização.
+\item[RN04 --- Idempotência.] Mesmo UUID e mesmo hash preservam a linha original e produzem status \texttt{duplicate}. O cliente deve reenviar o mesmo instante; gerar outra data pode tornar o conteúdo divergente.
+\item[RN05 --- Conflito.] Mesmo UUID e hash diferente não podem sobrescrever a linha. A API síncrona retorna 409 com motivo \texttt{event\_id\_content\_conflict}. No consumidor, o conflito é encaminhado à DLQ sem alterar a linha original.
+\item[RN06 --- Aceitação assíncrona.] O 202 não confirma persistência em PostgreSQL. Confirma publicação segundo \texttt{acks=all} e a topologia configurada. Se o ACK não chegar no prazo, a resposta 503 informa resultado incerto; o cliente deve conciliar e preservar o evento completo em eventual reenvio.
+\item[RN07 --- Offset e falha.] O offset de origem é confirmado após inserção, reconhecimento idempotente ou ACK da DLQ. Falhas de persistência recebem tentativas limitadas com backoff. Se DLQ ou commit de offset não forem confirmados, a sessão é retomada sem avançar além da origem não resolvida.
+\item[RN08 --- Confirmação síncrona.] A API retorna 201 após persistência ou reconhecimento de reentrega, distinguindo-os pelo campo status. Em falha de persistência não deve declarar sucesso.
+\item[RN09 --- Particionamento.] A chave enviada ao produtor é \texttt{entity\_id}. A ordem relativa depende da manutenção da chave, do particionamento e da sequência produzida; não se promete ordenação global entre partições.
+\item[RN10 --- Evidência experimental.] As métricas definitivas deverão identificar execução, variante, unidade e janela. Eventos gerados, aceitos e persistidos são conjuntos distintos. O marco pós-commit comum define conclusão; instante de ocorrência e timestamp de inserção não o substituem.
+\item[RN11 --- Quarentena.] Mensagens inválidas, conflitos e tentativas esgotadas são retidos na DLQ. A chave de origem usa tópico, partição e offset. Se a DLQ for confirmada e o commit de origem falhar, podem existir cópias na DLQ; a conciliação futura deverá usar essa chave. Não há replay automático de mensagens em quarentena.
+\end{description}
+\textbf{Síntese.} Os requisitos indicam o comportamento esperado, o critério de verificação e o estado de implementação. As regras tornam explícitos os limites do aceite assíncrono, da identidade do evento e da recuperação.

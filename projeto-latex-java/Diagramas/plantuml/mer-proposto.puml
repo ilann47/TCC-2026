@@ -1,0 +1,16 @@
+@startuml
+!include tema.puml
+hide circle
+top to bottom direction
+entity "Registro de auditoria\n(existente)" as E
+entity "Log de processamento\n(proposto)" as L
+entity "Tentativa de recuperação\n(proposta)" as R
+entity "Amostra de métrica\n(proposta)" as M
+E "0..1" .. "0..N" L : correlação por UUID\nnão exige persistência
+L "1" -- "0..N" R : motiva
+L .. M : mesma execução\nrun_id
+note bottom of M
+  Métricas podem agregar vários eventos.
+  Manifesto externo identifica a execução.
+end note
+@enduml
