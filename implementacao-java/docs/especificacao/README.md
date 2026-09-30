@@ -15,7 +15,7 @@ Esta documentação versionável descreve **o código Java existente** e seus li
 9. [Diagramas de sequência](09-diagramas-sequencia.md)
 10. [Requisitos não funcionais](10-requisitos-nao-funcionais.md)
 
-O [relatório de conformidade](relatorio-conformidade.md) registra o que foi implementado, validado e o que permanece pendente; o [plano de refatoração](plano-refatoracao.md) prioriza mudanças futuras sem apresentá-las como realizadas. A operação está descrita em [README da implementação](../../README.md) e a [paridade com Python](../paridade.md).
+O [relatório de conformidade](relatorio-conformidade.md) registra o que foi implementado, validado e o que permanece pendente; o [plano de refatoração](plano-refatoracao.md) prioriza mudanças futuras sem apresentá-las como realizadas. A operação está descrita no [README da implementação](../../README.md).
 
 ## Divergências deliberadas do modelo documental
 

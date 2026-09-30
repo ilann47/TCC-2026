@@ -1,6 +1,6 @@
 # TCC 2026 — REST síncrono versus comunicação orientada a eventos
 
-Este repositório reúne o texto editável do TCC, diagramas, entregas acadêmicas e o protótipo experimental de processamento de registros de auditoria. A **Entrega 03 atual usa Java** nas duas variantes. A pesquisa compara comunicação REST síncrona com comunicação assíncrona orientada a eventos; **não** compara o desempenho de Java e Python.
+Este repositório reúne o texto editável do TCC, diagramas, entregas acadêmicas e o protótipo experimental de processamento de registros de auditoria. As duas variantes são implementadas em Java: uma usa comunicação REST síncrona e a outra usa comunicação assíncrona orientada a eventos.
 
 | Pasta | Conteúdo |
 |---|---|

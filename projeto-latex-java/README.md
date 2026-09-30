@@ -17,4 +17,4 @@ pdflatex -interaction=nonstopmode -halt-on-error modelo.tex
 
 Para regenerar os PNG dos diagramas, use PlantUML nos arquivos `.puml`. O PDF já compilado para envio está em [TCC_Entrega03_Java.pdf](../entregas/entrega-03-java/TCC_Entrega03_Java.pdf).
 
-O texto diferencia explicitamente funcionalidades implementadas, verificações funcionais e instrumentos experimentais ainda planejados. Não apresenta métricas da implementação Python como se fossem resultados Java.
+O texto diferencia explicitamente funcionalidades implementadas, verificações funcionais e instrumentos experimentais ainda planejados. Não apresenta resultados quantitativos como concluídos antes da execução dos experimentos.
