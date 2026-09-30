@@ -19,4 +19,4 @@ O [relatório de conformidade](relatorio-conformidade.md) registra o que foi imp
 
 ## Divergências deliberadas do modelo documental
 
-Este é um **protótipo acadêmico sem interface gráfica, empresa comercial, usuários autenticados, cadastros CRUD ou relatórios de negócio**. As seções correspondentes documentam essa ausência, em vez de inventar funcionalidades. O ator “aplicação cliente” é outro sistema ou script de carga; o operador prepara o ambiente experimental. A migração Flyway destina-se exclusivamente ao banco novo da versão Java.
+Este é um **protótipo acadêmico sem frontend próprio, empresa comercial, usuários autenticados, cadastros CRUD ou relatórios de negócio**. A página Swagger UI é documentação interativa para testes manuais, não uma tela operacional ou um painel de resultados. As seções correspondentes documentam essas distinções, em vez de inventar funcionalidades. O ator “aplicação cliente” é outro sistema ou script de carga; o operador prepara o ambiente experimental. A migração Flyway destina-se exclusivamente ao banco novo da versão Java.

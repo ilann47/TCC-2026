@@ -12,11 +12,12 @@
 | `201` após transação | `SyncAuditController`/`AuditRepository` | Smoke CI confirmou `201` e `503` sob falha de banco |
 | `202` após ACK Kafka | `AsyncAuditController`/`KafkaPublisher` | Smoke CI confirmou `202` e posterior persistência normal; `202` continuou sob C4 |
 | DLQ e offset manual | `AuditMessageProcessor` | Testes unitários com dependências simuladas; DLQ real pendente |
-| Ambiente isolado | `docker-compose.yml` | Executado com sucesso no CI; Docker indisponível localmente |
+| Ambiente isolado | `docker-compose.yml` | Executado com sucesso no CI e no WSL local |
+| Documentação interativa | Swagger UI na API síncrona e OpenAPI nas duas APIs | Seletor, contratos e CORS verificados no CI; não substitui o executor experimental |
 
 ## Divergências em relação ao modelo genérico de documentação
 
-Não há empresa, autenticação, telas, entidades cadastrais múltiplas, relacionamentos FK ou relatórios de negócio. A ausência foi registrada nas seções 1, 3, 4 e 6. Não se adicionou funcionalidade artificial para satisfazer um template. A arquitetura é de protótipo acadêmico: Kafka com uma partição e sem proteção de transporte; isso está registrado nos RNF.
+Não há empresa, autenticação, telas operacionais próprias, entidades cadastrais múltiplas, relacionamentos FK ou relatórios de negócio. A página Swagger UI apenas documenta e testa as APIs. Essa distinção foi registrada nas seções 1, 3, 4 e 6. Não se adicionou funcionalidade artificial para satisfazer um template. A arquitetura é de protótipo acadêmico: Kafka com uma partição e sem proteção de transporte; isso está registrado nos RNF.
 
 ## Divergências entre Java e Python
 
@@ -24,7 +25,7 @@ O Java exige timestamp de entrada com offset quando fornecido; o FastAPI/Pydanti
 
 ## Pendências de validação
 
-O [workflow de 29/09/2026](https://github.com/ilann47/TCC-2026/actions/runs/36626692629) passou em build, testes, integração normal e smoke C4/recovery. Permanecem:
+O [workflow de 29/09/2026](https://github.com/ilann47/TCC-2026/actions/runs/36647710056) passou em build, testes, integração normal, Swagger UI único e smoke C4/recovery. Permanecem:
 
 1. Testar concorrência real sobre o mesmo `event_id`, conflito, retry, falha de ACK da DLQ e offset em broker real.
 2. Executar cenário C4 **quantitativo** segundo protocolo congelado, com evidência separada do smoke automatizado, do piloto e do ensaio definitivo.

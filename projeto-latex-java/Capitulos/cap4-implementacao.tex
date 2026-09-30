@@ -3,7 +3,7 @@
 Esta versão do protótipo foi implementada em Java e inspecionada em 29 de setembro de 2026. O projeto é uma implementação paralela do mesmo recorte experimental, não uma comparação entre linguagens. O código-fonte e sua configuração estão no repositório \url{https://github.com/ilann47/TCC-2026}, no diretório \texttt{implementacao-java}. As verificações funcionais descritas nesta seção não constituem a coleta quantitativa definitiva prevista no Capítulo~\ref{cap:metodo}.
 
 \subsection{Tecnologias e módulos}
-O projeto utiliza Java com bytecode alvo 21, Spring Boot 3.5.16, Maven Wrapper, driver PostgreSQL, Spring JDBC, Flyway e cliente Apache Kafka 3.9.1. A implantação descrita em \texttt{docker-compose.yml} utiliza PostgreSQL 16 e Kafka 3.9.1. O Maven compila cinco módulos: \texttt{audit-core}, \texttt{audit-storage}, \texttt{sync-api}, \texttt{async-api} e \texttt{consumer}. Os dois primeiros são bibliotecas compartilhadas; os três últimos são processos executáveis independentes.
+O projeto utiliza Java com bytecode alvo 21, Spring Boot 3.5.16, Maven Wrapper, driver PostgreSQL, Spring JDBC, Flyway, cliente Apache Kafka 3.9.1 e springdoc-openapi 2.9.1 para a documentação das APIs. A implantação descrita em \texttt{docker-compose.yml} utiliza PostgreSQL 16 e Kafka 3.9.1. O Maven compila cinco módulos: \texttt{audit-core}, \texttt{audit-storage}, \texttt{sync-api}, \texttt{async-api} e \texttt{consumer}. Os dois primeiros são bibliotecas compartilhadas; os três últimos são processos executáveis independentes.
 
 \begin{table}[htbp]
 \centering\small
@@ -22,6 +22,8 @@ Módulo & Responsabilidade\\ \hline
 
 O Compose inicia os três processos executáveis, PostgreSQL e Kafka. A API síncrona expõe a porta local 18002 e a assíncrona, 18003; PostgreSQL e Kafka expõem 15433 e 19093 somente em \textit{loopback}. O consumidor não expõe HTTP. Os serviços auxiliares \texttt{kafka-init} e \texttt{kafka-volume-init} preparam os tópicos e as permissões antes do uso. O ambiente possui um broker e uma partição por tópico; não representa alta disponibilidade. Os limites configurados são 1 CPU e 512 MiB para cada processo Java, 1 CPU e 512 MiB para PostgreSQL, e 1 CPU e 1 GiB para Kafka. Esses valores delimitam a configuração de desenvolvimento, sem constituir calibração científica.
 
+A API síncrona hospeda uma única página Swagger UI na porta local 18002. Seu seletor carrega separadamente os contratos OpenAPI das variantes síncrona e assíncrona; a segunda API expõe o documento JSON, mas não outra interface Swagger. A configuração de CORS da API assíncrona permite à origem local da página consultar o contrato e executar requisições de teste. Essa ferramenta auxilia a inspeção manual das respostas 201 e 202, sem constituir frontend próprio, gerador de carga ou instrumento de medição do experimento.
+
 \subsection{Comportamento implementado}
 O contrato \texttt{AuditEvent} é compartilhado pelas duas APIs. Campos de texto obrigatórios respeitam os comprimentos definidos no DTO; \texttt{event\_id}, \texttt{occurred\_at} e \texttt{payload} recebem valores padrão apenas quando omitidos no HTTP. O consumidor exige UUID e instante explícitos na mensagem recebida para não regenerar identidade em uma reentrega. A serialização canônica e o SHA-256 são comuns às variantes.
 
@@ -33,7 +35,7 @@ O consumidor usa commit manual de offsets. Após persistência ou reconhecimento
 
 \subsection{Verificação funcional e limites da evidência}
 \label{sec:validacao-funcional}
-O Maven Wrapper executa build e testes unitários dos módulos Java. O fluxo de integração contínua publicado no repositório executou \texttt{mvnw verify}, iniciou PostgreSQL e Kafka em contêineres e verificou o caminho normal de registro síncrono e assíncrono. Um \textit{smoke test} de C4 interrompeu o PostgreSQL e verificou a resposta 503 da API síncrona, a aceitação 202 da API assíncrona enquanto Kafka permanecia disponível e a retomada da saúde do banco. O registro de execução do fluxo está disponível em \url{https://github.com/ilann47/TCC-2026/actions/runs/36627197788}.
+O Maven Wrapper executa build e testes unitários dos módulos Java. O fluxo de integração contínua publicado no repositório executou \texttt{mvnw verify}, iniciou PostgreSQL e Kafka em contêineres, verificou o caminho normal de registro síncrono e assíncrono e conferiu o seletor da documentação e a política CORS necessária ao teste manual. Um \textit{smoke test} de C4 interrompeu o PostgreSQL e verificou a resposta 503 da API síncrona, a aceitação 202 da API assíncrona enquanto Kafka permanecia disponível e a retomada da saúde do banco. O registro de execução do fluxo está disponível em \url{https://github.com/ilann47/TCC-2026/actions/runs/36647710056}.
 
 Essas verificações demonstram apenas os comportamentos observados no ambiente de CI. O \textit{smoke test} C4 não prova que cada evento aceito durante a falha seja persistido depois da recuperação; tampouco mede latência, throughput ou tempo de drenagem de maneira comparativa. Não foram transportados para esta versão Java as capturas, contagens de testes, medianas ou coletas curtas da versão Python. A implementação Java ainda não contém o executor e o normalizador do protocolo experimental descrito no Capítulo~\ref{cap:metodo}. Eles permanecem atividades necessárias antes da coleta definitiva.
 

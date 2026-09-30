@@ -1,6 +1,6 @@
 \section{Prototipação da interface}
 \label{sec:interface}
-O núcleo atual é uma API, sem frontend próprio. Os wireframes desta seção representam interfaces propostas de operação e inspeção, não capturas de telas funcionais. As telas não executam o experimento nem contêm resultados medidos; usam estados vazios para indicar o que deverá ser apresentado após instrumentação.
+O núcleo atual é uma API, sem frontend de aplicação próprio. O Swagger UI permite documentar e testar manualmente as duas variantes, mas não corresponde aos wireframes desta seção nem executa o protocolo experimental. Os wireframes representam interfaces propostas de operação e inspeção, não capturas de telas funcionais. As telas não contêm resultados medidos; usam estados vazios para indicar o que deverá ser apresentado após instrumentação.
 
 \subsection{Envio de registro}
 A Figura~\ref{fig:wf-envio} apresenta WF01, que permite escolher a variante e informar todos os campos do contrato. O usuário poderá gerar UUID e instante antes do envio e reutilizá-los em uma reentrega. A ação de envio mostrará código HTTP, corpo da resposta e UUID. Na variante assíncrona, a interface deverá distinguir aceitação de conclusão e não apresentar 202 como comprovante de persistência. Os campos obrigatórios e seus limites seguem o dicionário da Seção~\ref{sec:banco}. Relaciona-se a RF01, RF02 e RF15.
