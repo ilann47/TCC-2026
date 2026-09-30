@@ -1,4 +1,4 @@
-# Artigos citados no TCC — Entrega 03 em Java
+# Referências bibliográficas do TCC
 
 Esta pasta contém, **na cópia local**, os 12 PDFs dos artigos que aparecem na bibliografia efetiva do TCC (`projeto-latex-java/Configuracoes/entrega01.bib` e `modelo.bbl`). Cada arquivo foi conferido como PDF válido e cópia idêntica ao acervo local de artigos utilizado no trabalho. Livros, tese, normas e materiais não citados não foram incluídos.
 
@@ -19,4 +19,4 @@ O repositório GitHub é público. **Três PDFs** têm licença identificada que
 | `niedermaier2019` | `11_Niedermaier_et_al_2019_Entrevistas_sobre_Observabilidade_Distribuida.pdf` | [Niedermaier et al. (2019), observabilidade](https://doi.org/10.1007/978-3-030-33702-5_3) | Só link |
 | `kitchenham2002` | `12_Kitchenham_et_al_2002_Diretrizes_para_Pesquisa_Empirica.pdf` | [Kitchenham et al. (2002), pesquisa empírica](https://doi.org/10.1109/TSE.2002.1027796) | Só link |
 
-Este catálogo registra as referências efetivamente citadas na versão do TCC arquivada em 29/09/2026. Se a bibliografia mudar em uma entrega posterior, faça um novo registro datado, sem alterar este conjunto histórico.
+Este catálogo compartilhado registra os 12 artigos citados na versão Java do TCC em 29/09/2026. Quando a bibliografia de uma entrega posterior mudar, atualize-o junto com o arquivo `.bib`; o histórico de cada versão permanece nos commits do Git, enquanto os PDFs e apresentações das entregas ficam nas pastas datadas.
