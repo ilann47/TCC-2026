@@ -1,6 +1,6 @@
 # TCC — fonte LaTeX da Entrega 03 Java
 
-Este diretório é a fonte editável da [Entrega 03 em Java](../entregas/entrega-03-java/README.md). O código executável está em [implementacao-java](../implementacao-java/README.md). O diretório antigo `projeto-latex` foi preservado como histórico da versão Python; seus números e capturas não foram reutilizados como evidência do Java.
+Este diretório é a fonte editável da [Entrega 03 em Java](../entregas/entrega-03-java/README.md). O código executável está em [implementacao-java](../implementacao-java/README.md). As versões anteriores dos arquivos enviados ficam em [entregas](../entregas/README.md); seus números e capturas não foram reutilizados como evidência do Java.
 
 O arquivo principal é `modelo.tex`. Os capítulos ficam em `Capitulos/`, os metadados e a bibliografia em `Configuracoes/`, e os diagramas editáveis em `Diagramas/plantuml/` (`.puml` com PNG correspondente).
 
