@@ -4,6 +4,7 @@ Registro histórico dos arquivos preparados para o item do portal **"Entrega 03 
 
 - [TCC em PDF](TCC_Entrega03_Java.pdf) — arquivo principal da entrega.
 - [Apresentação de 10 minutos](Apresentacao_Entrega03_Java_10min.pptx) — material da apresentação, para envio no campo correspondente quando solicitado.
+- [Referências](referencias/README.md) — 12 artigos citados, com PDFs na cópia local e catálogo de acesso no GitHub. Os PDFs não são publicados no repositório público sem autorização de redistribuição.
 
 Os dois arquivos são cópias sem alterações dos artefatos em [`entrega-03-java`](../entrega-03-java/) na data acima. O código e as fontes editáveis permanecem versionados no repositório; a revisão de origem deste registro é [`995c0a0`](https://github.com/ilann47/TCC-2026/commit/995c0a0).
 
