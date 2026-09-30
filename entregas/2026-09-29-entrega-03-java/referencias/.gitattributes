@@ -1,0 +1,2 @@
+# Preserva os PDFs de terceiros byte a byte no Git.
+*.pdf binary

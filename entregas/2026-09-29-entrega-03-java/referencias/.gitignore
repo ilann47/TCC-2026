@@ -1,2 +1,6 @@
-# Os PDFs estão disponíveis na cópia local, mas não são redistribuídos no repositório público.
+# Os 12 PDFs ficam na cópia local. Somente os três com licença de redistribuição
+# verificada abaixo são versionados no repositório público.
 *.pdf
+!04_Blinowski_et_al_2022_Experimento_Monolito_vs_Microsservicos.pdf
+!05_Laigner_et_al_2021_Dados_e_Consistencia_em_Microsservicos.pdf
+!06_Helland_2007_Artigo_Posicao_Transacoes_Distribuidas.pdf
