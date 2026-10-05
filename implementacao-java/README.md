@@ -97,6 +97,10 @@ O consumidor é **at-least-once**. Reentrega pode ocorrer após falha de commit 
 
 As variáveis principais são `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, `KAFKA_BOOTSTRAP_SERVERS`, `KAFKA_TOPIC`, `KAFKA_DLQ_TOPIC`, `KAFKA_GROUP_ID`, `DELIVERY_TIMEOUT_MS`, `RETRY_ATTEMPTS`, `RETRY_BACKOFF_MS`, `RETRY_BACKOFF_MAX_MS` e `RECONNECT_MS`. O header opcional `X-Run-ID` deve ser UUID; ele identifica uma execução experimental e não participa do hash. Logs JSON emitem `request_received`, `broker_acknowledged`, `commit_completed`, `persistence_confirmed`, `dlq_acknowledged` e `offset_committed`, sem registrar payload ou credenciais.
 
+## Piloto de medição
+
+O [piloto com k6 e analisador Java](experimento/README.md) permite conferir separadamente resposta HTTP e conclusão da persistência, conciliando os eventos com logs e banco. No WSL/Linux, com o Compose saudável, execute `bash experimento/pilot.sh sync` e depois `bash experimento/pilot.sh async`. As evidências ficam em `.runtime/pilot/`, sem apagar dados existentes. É uma validação curta da instrumentação; não substitui a calibração e a campanha experimental e não produz conclusões para os capítulos 5 e 6.
+
 ## Escopo da pesquisa e limitações
 
 A configuração de Compose usa uma partição e uma réplica Kafka em ambiente local, cargas sintéticas e limites de recursos explícitos. Ela serve à comparação controlada, não a uma implantação de produção. O cenário C4 previsto interrompe o **PostgreSQL em ambas as variantes**. Nenhum número de latência, throughput ou taxa de erro deve ser tratado como conclusão antes de o protocolo experimental estar congelado e executado. Consultar [paridade](docs/paridade.md) e [especificação](docs/especificacao/README.md).

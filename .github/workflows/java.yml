@@ -17,10 +17,18 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
-          cache-dependency-path: implementacao-java/pom.xml
+          cache-dependency-path: |
+            implementacao-java/pom.xml
+            implementacao-java/experimento/analyzer/pom.xml
       - name: Testes unitários e empacotamento
         working-directory: implementacao-java
         run: ./mvnw -B verify
+      - name: Testes do analisador do piloto
+        working-directory: implementacao-java
+        run: ./mvnw -B -f experimento/analyzer/pom.xml verify
+      - name: Sintaxe do executor do piloto
+        working-directory: implementacao-java
+        run: bash -n experimento/pilot.sh
 
   integration-smoke:
     runs-on: ubuntu-latest
