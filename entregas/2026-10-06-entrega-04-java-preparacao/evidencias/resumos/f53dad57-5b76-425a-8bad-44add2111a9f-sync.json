@@ -1,0 +1,142 @@
+{
+  "kind" : "validation",
+  "run_id" : "f53dad57-5b76-425a-8bad-44add2111a9f",
+  "dataset_id" : "3f3507a6-a06a-4430-b853-e9a4058b0be3",
+  "variant" : "sync",
+  "profile" : "postgres-stop",
+  "rate" : 5,
+  "measure_seconds" : 18,
+  "instrument_valid" : true,
+  "offered" : 91,
+  "accepted" : 39,
+  "stored_at_observation_end" : 39,
+  "stored_within_measurement" : 31,
+  "completed_per_second" : 1.7222222222222223,
+  "http_status_counts" : {
+    "201" : 39,
+    "503" : 52
+  },
+  "http_error_fraction" : 0.5714285714285714,
+  "dropped_iterations_all_phases" : 0.0,
+  "dlq_terminal" : 0,
+  "dlq_message_with_already_stored_uuid" : 0,
+  "pending_retained" : 0,
+  "accepted_unreconciled" : 0,
+  "stored_despite_unconfirmed_http" : 0,
+  "integrity_mismatches" : 0,
+  "retry_scheduled" : 0,
+  "idempotent_replays" : 0,
+  "http_duration_ms" : {
+    "n" : 91,
+    "mean" : 3174.07818356044,
+    "median" : 5004.438751,
+    "sd_sample" : 2358.760782010241,
+    "p95" : 5005.901933,
+    "p99" : 5012.513431,
+    "max" : 5012.513431
+  },
+  "send_to_response_ms" : {
+    "n" : 91,
+    "mean" : 3174.57898878022,
+    "median" : 5004.95456,
+    "sd_sample" : 2358.7854809781024,
+    "p95" : 5006.366862,
+    "p99" : 5012.7865,
+    "max" : 5012.7865
+  },
+  "send_to_commit_ms" : {
+    "n" : 39,
+    "mean" : 858.763130025641,
+    "median" : 7.944744,
+    "sd_sample" : 1709.2313246238966,
+    "p95" : 4645.399633,
+    "p99" : 4841.600293,
+    "max" : 4841.600293
+  },
+  "resources" : {
+    "tcc-entrega04-kafka-1" : {
+      "memory_mib" : {
+        "n" : 6,
+        "mean" : 409.2166666666667,
+        "median" : 399.75,
+        "sd_sample" : 23.213911059247792,
+        "p95" : 456.6,
+        "p99" : 456.6,
+        "max" : 456.6
+      },
+      "cpu_percent" : {
+        "n" : 6,
+        "mean" : 17.66,
+        "median" : 1.46,
+        "sd_sample" : 39.72221141880195,
+        "p95" : 98.74,
+        "p99" : 98.74,
+        "max" : 98.74
+      }
+    },
+    "tcc-entrega04-postgres-1" : {
+      "memory_mib" : {
+        "n" : 6,
+        "mean" : 15.283333333333331,
+        "median" : 9.07,
+        "sd_sample" : 21.235576438294924,
+        "p95" : 54.41,
+        "p99" : 54.41,
+        "max" : 54.41
+      },
+      "cpu_percent" : {
+        "n" : 6,
+        "mean" : 0.6666666666666666,
+        "median" : 0.025,
+        "sd_sample" : 1.584192749215406,
+        "p95" : 3.9,
+        "p99" : 3.9,
+        "max" : 3.9
+      }
+    },
+    "tcc-entrega04-sync-api-1" : {
+      "memory_mib" : {
+        "n" : 6,
+        "mean" : 170.35,
+        "median" : 170.64999999999998,
+        "sd_sample" : 2.5633961847517823,
+        "p95" : 173.2,
+        "p99" : 173.2,
+        "max" : 173.2
+      },
+      "cpu_percent" : {
+        "n" : 6,
+        "mean" : 5.623333333333332,
+        "median" : 5.6,
+        "sd_sample" : 2.5958248528486405,
+        "p95" : 9.6,
+        "p99" : 9.6,
+        "max" : 9.6
+      }
+    }
+  },
+  "measurement_windows_10s" : [ {
+    "duration_seconds" : 10,
+    "accepted_not_persisted_at_boundary" : 0,
+    "unique_commits" : 31,
+    "start_seconds" : 0,
+    "offered" : 50
+  }, {
+    "duration_seconds" : 8,
+    "accepted_not_persisted_at_boundary" : 0,
+    "unique_commits" : 0,
+    "start_seconds" : 10,
+    "offered" : 40
+  } ],
+  "recovery" : {
+    "applicable" : true,
+    "restore_command_completed_utc" : "2026-10-06T13:09:19.204303151Z",
+    "accepted_not_persisted_at_restore" : 0,
+    "first_commit_after_restore_ms" : 9216.096301,
+    "all_pre_restore_accepted_persisted" : null,
+    "backlog_persistence_recovery_ms" : null,
+    "stable_throughput_recovery" : "not_estimated: first commit and complete backlog drainage are distinct; a rolling stability criterion requires the full campaign"
+  },
+  "issues" : [ ],
+  "loss_interpretation" : "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+}

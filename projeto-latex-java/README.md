@@ -17,4 +17,4 @@ pdflatex -interaction=nonstopmode -halt-on-error modelo.tex
 
 Para regenerar os PNG dos diagramas, use PlantUML nos arquivos `.puml`. O PDF já compilado para envio está em [TCC_Entrega03_Java.pdf](../entregas/entrega-03-java/TCC_Entrega03_Java.pdf).
 
-O texto diferencia explicitamente funcionalidades implementadas, verificações funcionais e instrumentos experimentais ainda planejados. Não apresenta resultados quantitativos como concluídos antes da execução dos experimentos.
+O texto diferencia funcionalidades implementadas, verificações funcionais, instrumentos experimentais implementados e campanha comparativa ainda pendente. O capítulo 5 foi iniciado com a comparação documentada dos geradores, o piloto e a validação do modelo comum. Hipóteses comparativas permanecem inconclusivas; o capítulo 6 não foi habilitado sem a campanha definitiva. Não apresenta ensaios curtos como se fossem os resultados das repetições exigidas.

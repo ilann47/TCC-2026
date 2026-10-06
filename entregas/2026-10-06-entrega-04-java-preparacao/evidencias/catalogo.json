@@ -1,0 +1,2840 @@
+{
+  "status": "preparation_not_final_submission",
+  "generated_utc": "2026-10-06T13:35:52.820Z",
+  "definitive_repetitions": 0,
+  "hardware": {
+    "cpu": "AMD Ryzen 7 5825U",
+    "physical_cores": 8,
+    "logical_processors": 16,
+    "windows_memory_gib": 31.36
+  },
+  "model_equivalence": {
+    "kind": "functional_model_equivalence_not_performance",
+    "sync_records": 50,
+    "async_records": 50,
+    "excluded_field": "persisted_at",
+    "same_ids_fields_payload_hash": true
+  },
+  "analysis_version": "v5; independent Java reanalysis; original raw files and their original analyses preserved",
+  "analysis_runtime": "Windows Java 25.0.2; application and original analyzer containers use Java 21",
+  "analyzer_jar_sha256": "b45183db42760dff02d3d171a9be91b739424bb819dab796588f0310dfde00cf",
+  "pending": [
+    "Portal description and deadline",
+    "Common reference calibration",
+    "Validated generator/resource overhead and stable recovery criterion",
+    "Frozen protocol and 10 repetitions per variant/condition",
+    "Between-run statistical analysis",
+    "Final chapter 6 based only on chapter 5 results"
+  ],
+  "runs": [
+    {
+      "run_id": "07e1ba22-38cf-4f99-817b-b28d886d3c55",
+      "raw_path": "implementacao-java/.runtime/entrega04/07e1ba22-38cf-4f99-817b-b28d886d3c55-sync",
+      "classification": "incomplete_collection",
+      "issues": [
+        "Script was edited while Bash was executing it; evidence incomplete, not a definitive repetition."
+      ],
+      "checksums": [],
+      "metadata": {
+        "kind": "validation",
+        "run_id": "07e1ba22-38cf-4f99-817b-b28d886d3c55",
+        "dataset_id": "be23efc3-7b28-4841-a5f4-daa32ca69d9f",
+        "variant": "sync",
+        "profile": "steady",
+        "rate": "5",
+        "warmup_seconds": "5",
+        "measure_seconds": "12",
+        "drain_seconds": "5",
+        "vus": "16",
+        "commit": "2e16db124373d829e84345b2acb96c9c73b656d5",
+        "started_utc": "2026-10-06T12:57:25.193366619Z",
+        "working_tree": "dirty",
+        "topic": "audit-07e1ba22-38cf-4f99-817b-b28d886d3c55",
+        "k6_image": "grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34",
+        "docker_client": "29.1.3 docker_server=29.1.3",
+        "docker_cpus": "16 docker_memory_bytes=16426614784 kernel=6.18.33.2-microsoft-standard-WSL2",
+        "background_container": "tcc-revisao-20260907-kafka-1",
+        "container": "/tcc-entrega04-sync-api-1 image=sha256:e24c8bdc5b4b61b3dbeb1d4e273c9cdd6a9ec205d31f4c5a40881826902f9b82 nano_cpus=1000000000 memory_bytes=536870912",
+        "analyzer_image_id": "sha256:ed815ca0346972be3fb1f4913fcc2afcdc4e35e6404505323e8ea56d38f97dfe",
+        "measurement_start_ms": "1791291497743",
+        "k6_exit": "0",
+        "load_end_utc": "2026-10-06T12:58:30.242536121Z",
+        "generator_image": "sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34 generator_cpus=2000000000 generator_memory=1073741824"
+      }
+    },
+    {
+      "run_id": "0cc8785b-c5fb-4d60-925b-67417ac7f4de",
+      "raw_path": "implementacao-java/.runtime/entrega04/0cc8785b-c5fb-4d60-925b-67417ac7f4de-sync",
+      "classification": "valid_functional_instrument_check_not_definitive",
+      "issues": [],
+      "checksums": [
+        {
+          "file": "./analyzer-console.txt",
+          "sha256": "9d554311cdd96ba629b0cf04ccb014ad95f515c543033b249390f100fd42858c",
+          "matches": true
+        },
+        {
+          "file": "./app.log",
+          "sha256": "8cf4dd0603f8fed4437358092f35f35c0f6e4d3575c54cdb4080155a5d41e999",
+          "matches": true
+        },
+        {
+          "file": "./controller.log",
+          "sha256": "8bb73b14ed8897f63b23caa7fe1f4744aa0156836b33090e8d12ddb941be3fb1",
+          "matches": true
+        },
+        {
+          "file": "./database.jsonl",
+          "sha256": "8cd8a7c49cab9bbb7d279749d11ef1c72dc237c0aa5fd68016a03b9340d441a1",
+          "matches": true
+        },
+        {
+          "file": "./dlq-export.log",
+          "sha256": "00b548b81e48a4fef6424b7ad686cb702ff4cee775efba86d99d402cb892dfce",
+          "matches": true
+        },
+        {
+          "file": "./dlq.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./events.csv",
+          "sha256": "aa9563c1792ed69be9d2098a0dc88a3466ba39b7514b6ea32d1198426322777c",
+          "matches": true
+        },
+        {
+          "file": "./k6-console.txt",
+          "sha256": "974d4298b1917874128b9da7915f53da84cf0f0ed4af1c50527d6dcfe36309c0",
+          "matches": true
+        },
+        {
+          "file": "./k6.jsonl.gz",
+          "sha256": "5b9171cecc2339ab6a32f200abf7fd149d99312cf754954639e324ec6637c0a6",
+          "matches": true
+        },
+        {
+          "file": "./kafka-lag-end.txt",
+          "sha256": "f686f013227dff541f5db52302dc7152a535a7e438ce3c32b5f652c160f64e6e",
+          "matches": true
+        },
+        {
+          "file": "./manifest.txt",
+          "sha256": "644f5a4a03e533f6eb214977799fda28bd9fd045f851f9cca1e8d46eb2f8922e",
+          "matches": true
+        },
+        {
+          "file": "./resources-errors.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./resources.tsv",
+          "sha256": "c164979af667d3be57c92f1b5e6e59cb3478290f2aee4fc2c84ee32949b0a763",
+          "matches": true
+        },
+        {
+          "file": "./retained-export.log",
+          "sha256": "f5b4aba43fdfbbfc3e7a2e69c8438f10bedc6f736dbdeb9b0bd6232d33b7d22b",
+          "matches": true
+        },
+        {
+          "file": "./retained.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./summary.json",
+          "sha256": "66f40d3b414bbd3e3be782a4717ee305cb6efd561cab20db2ca296bd611449ab",
+          "matches": true
+        }
+      ],
+      "metadata": {
+        "kind": "validation",
+        "run_id": "0cc8785b-c5fb-4d60-925b-67417ac7f4de",
+        "dataset_id": "8a28f21d-09c1-4f7f-978e-8ac5d26f8ece",
+        "variant": "sync",
+        "profile": "burst",
+        "rate": "5",
+        "warmup_seconds": "5",
+        "measure_seconds": "18",
+        "drain_seconds": "5",
+        "vus": "32",
+        "commit": "2e16db124373d829e84345b2acb96c9c73b656d5",
+        "started_utc": "2026-10-06T13:11:27.552867686Z",
+        "working_tree": "dirty",
+        "topic": "audit-0cc8785b-c5fb-4d60-925b-67417ac7f4de",
+        "k6_image": "grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34",
+        "docker_client": "29.1.3 docker_server=29.1.3",
+        "docker_cpus": "16 docker_memory_bytes=16426614784 kernel=6.18.33.2-microsoft-standard-WSL2",
+        "background_container": "tcc-revisao-20260907-kafka-1",
+        "container": "/tcc-entrega04-sync-api-1 image=sha256:e24c8bdc5b4b61b3dbeb1d4e273c9cdd6a9ec205d31f4c5a40881826902f9b82 nano_cpus=1000000000 memory_bytes=536870912",
+        "analyzer_image_id": "sha256:902523b0493a9842e2146b70e838ac1c6802a2956023a71f3159f57cab882600",
+        "measurement_start_ms": "1791292334147",
+        "k6_exit": "0",
+        "load_end_utc": "2026-10-06T13:12:32.623188749Z",
+        "generator_image": "sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34 generator_cpus=2000000000 generator_memory=1073741824",
+        "collection_end_utc": "2026-10-06T13:12:57.811526651Z",
+        "analyzer_exit": "0"
+      },
+      "summary": {
+        "kind": "validation",
+        "run_id": "0cc8785b-c5fb-4d60-925b-67417ac7f4de",
+        "dataset_id": "8a28f21d-09c1-4f7f-978e-8ac5d26f8ece",
+        "variant": "sync",
+        "profile": "burst",
+        "rate": 5,
+        "measure_seconds": 18,
+        "instrument_valid": true,
+        "offered": 120,
+        "accepted": 120,
+        "stored_at_observation_end": 120,
+        "stored_within_measurement": 119,
+        "completed_per_second": 6.611111111111111,
+        "http_status_counts": {
+          "201": 120
+        },
+        "http_error_fraction": 0,
+        "dropped_iterations_all_phases": 0,
+        "dlq_terminal": 0,
+        "dlq_message_with_already_stored_uuid": 0,
+        "pending_retained": 0,
+        "accepted_unreconciled": 0,
+        "stored_despite_unconfirmed_http": 0,
+        "integrity_mismatches": 0,
+        "retry_scheduled": 0,
+        "idempotent_replays": 0,
+        "http_duration_ms": {
+          "n": 120,
+          "mean": 7.458343366666667,
+          "median": 7.3741795,
+          "sd_sample": 0.8239912287090159,
+          "p95": 8.626735,
+          "p99": 10.387083,
+          "max": 10.750374
+        },
+        "send_to_response_ms": {
+          "n": 120,
+          "mean": 7.8071187166666665,
+          "median": 7.7287870000000005,
+          "sd_sample": 0.8557282727642699,
+          "p95": 8.991804,
+          "p99": 10.80641,
+          "max": 11.040925
+        },
+        "send_to_commit_ms": {
+          "n": 120,
+          "mean": 6.213649075,
+          "median": 6.174987,
+          "sd_sample": 0.6638821405715032,
+          "p95": 7.139243,
+          "p99": 8.569881,
+          "max": 8.884328
+        },
+        "resources": {
+          "tcc-entrega04-kafka-1": {
+            "memory_mib": {
+              "n": 6,
+              "mean": 408.3666666666666,
+              "median": 408.29999999999995,
+              "sd_sample": 0.5085928299402834,
+              "p95": 409.3,
+              "p99": 409.3,
+              "max": 409.3
+            },
+            "cpu_percent": {
+              "n": 6,
+              "mean": 9.928333333333333,
+              "median": 1.15,
+              "sd_sample": 21.56636493864153,
+              "p95": 53.95,
+              "p99": 53.95,
+              "max": 53.95
+            }
+          },
+          "tcc-entrega04-postgres-1": {
+            "memory_mib": {
+              "n": 6,
+              "mean": 36.169999999999995,
+              "median": 36.345,
+              "sd_sample": 0.6081776056383525,
+              "p95": 36.57,
+              "p99": 36.57,
+              "max": 36.57
+            },
+            "cpu_percent": {
+              "n": 6,
+              "mean": 1.17,
+              "median": 0.35,
+              "sd_sample": 2.0321712526261164,
+              "p95": 5.3,
+              "p99": 5.3,
+              "max": 5.3
+            }
+          },
+          "tcc-entrega04-sync-api-1": {
+            "memory_mib": {
+              "n": 6,
+              "mean": 175.6833333333333,
+              "median": 175.55,
+              "sd_sample": 1.1889771514485312,
+              "p95": 177,
+              "p99": 177,
+              "max": 177
+            },
+            "cpu_percent": {
+              "n": 6,
+              "mean": 7.234999999999999,
+              "median": 7.49,
+              "sd_sample": 3.847085910140297,
+              "p95": 11.56,
+              "p99": 11.56,
+              "max": 11.56
+            }
+          }
+        },
+        "measurement_windows_10s": [
+          {
+            "duration_seconds": 10,
+            "accepted_not_persisted_at_boundary": 0,
+            "unique_commits": 67,
+            "start_seconds": 0,
+            "offered": 67
+          },
+          {
+            "duration_seconds": 8,
+            "accepted_not_persisted_at_boundary": 0,
+            "unique_commits": 52,
+            "start_seconds": 10,
+            "offered": 52
+          }
+        ],
+        "recovery": {
+          "applicable": false
+        },
+        "issues": [],
+        "loss_interpretation": "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+      },
+      "analysis_path": "implementacao-java/.runtime/entrega04-reanalysis-v5/0cc8785b-c5fb-4d60-925b-67417ac7f4de-sync/summary.json",
+      "summary_sha256": "7f92bb2348f86e3fd60f5e444e708bb892511f5ae95725a3d86a5b9d4ef4575c"
+    },
+    {
+      "run_id": "3744207b-00e6-492c-b90d-ab3242e30f51",
+      "raw_path": "implementacao-java/.runtime/entrega04/3744207b-00e6-492c-b90d-ab3242e30f51-async",
+      "classification": "valid_functional_instrument_check_not_definitive",
+      "issues": [],
+      "checksums": [
+        {
+          "file": "./analyzer-console.txt",
+          "sha256": "56c9c03671e45de8ca80deb1a74cc1be54abd8b3c0001be53bdc0f5aa587ff87",
+          "matches": true
+        },
+        {
+          "file": "./app.log",
+          "sha256": "3aa7a230348740f3581886b187b01d081b1fea274f5a5828498238de155bcb5a",
+          "matches": true
+        },
+        {
+          "file": "./controller.log",
+          "sha256": "62f9474e5bcc2a7039d75796c4756b3bed71936e1905e5a8ec3cc010015da41f",
+          "matches": true
+        },
+        {
+          "file": "./database.jsonl",
+          "sha256": "7ccff342dc742ad8483d976518cc17d175d3f43c49230cd8310d064e7b6a370d",
+          "matches": true
+        },
+        {
+          "file": "./dlq-export.log",
+          "sha256": "a3bf7c610fa5aa0c40ab3c1573379024acc1bbbd187a34e0f36f990331b825e9",
+          "matches": true
+        },
+        {
+          "file": "./dlq.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./events.csv",
+          "sha256": "22b72b35fb1c05ee3055018cad7f5b009b4a6c8e9cf7eb0e3b8cf06f57887bcf",
+          "matches": true
+        },
+        {
+          "file": "./k6-console.txt",
+          "sha256": "136ad9e850b9e61c6cd4d8509e68734de3afd719d2b433bdc556c12b6dd336c0",
+          "matches": true
+        },
+        {
+          "file": "./k6.jsonl.gz",
+          "sha256": "5023b3b671687ff2fa95057c25b2ce3775bedae7790ed84d34ac327b8007f600",
+          "matches": true
+        },
+        {
+          "file": "./kafka-lag-end.txt",
+          "sha256": "7878046e8cec19ad3bcfc9cde1d525f3f604ecad6f5f4aae887376e174ccdc7b",
+          "matches": true
+        },
+        {
+          "file": "./manifest.txt",
+          "sha256": "8ab1180d0878da466569dab26576701bd99d4ab952e9e793b5f4647a310da21f",
+          "matches": true
+        },
+        {
+          "file": "./resources-errors.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./resources.tsv",
+          "sha256": "ba67472395fe9d8c0736dc55d8fba489b56076e46053377d1c201c1d51302aa7",
+          "matches": true
+        },
+        {
+          "file": "./retained-export.log",
+          "sha256": "69df01601eb6301acc21bcb9420a64a780f1ea3741d955d3d565c72a09934453",
+          "matches": true
+        },
+        {
+          "file": "./retained.jsonl",
+          "sha256": "b2efe4c9eec831c3e4429666424149b434f6f9b4db525820b0f81e0a62dc76a5",
+          "matches": true
+        },
+        {
+          "file": "./summary.json",
+          "sha256": "fcf22a8c499002d0f89572bf7d81964a7e061b67935d5d3a9b8260174f20bfaf",
+          "matches": true
+        }
+      ],
+      "metadata": {
+        "kind": "validation",
+        "run_id": "3744207b-00e6-492c-b90d-ab3242e30f51",
+        "dataset_id": "8a693e80-e982-469a-ab0c-8aba05ebe1bd",
+        "variant": "async",
+        "profile": "consumer-stop",
+        "rate": "5",
+        "warmup_seconds": "5",
+        "measure_seconds": "18",
+        "drain_seconds": "5",
+        "vus": "32",
+        "commit": "2e16db124373d829e84345b2acb96c9c73b656d5",
+        "started_utc": "2026-10-06T13:14:34.632315697Z",
+        "working_tree": "dirty",
+        "topic": "audit-3744207b-00e6-492c-b90d-ab3242e30f51",
+        "k6_image": "grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34",
+        "docker_client": "29.1.3 docker_server=29.1.3",
+        "docker_cpus": "16 docker_memory_bytes=16426614784 kernel=6.18.33.2-microsoft-standard-WSL2",
+        "background_container": "tcc-revisao-20260907-kafka-1",
+        "container": "/tcc-entrega04-consumer-1 image=sha256:fdcb3171de2990861d06e2b211882e412e80104abe414187080c1d2d4642a434 nano_cpus=1000000000 memory_bytes=536870912",
+        "analyzer_image_id": "sha256:902523b0493a9842e2146b70e838ac1c6802a2956023a71f3159f57cab882600",
+        "measurement_start_ms": "1791292526004",
+        "fault_stop_command_utc": "2026-10-06T13:15:32.769566601Z",
+        "fault_seconds": "5",
+        "fault_stopped_utc": "2026-10-06T13:15:33.551731006Z",
+        "fault_restore_utc": "2026-10-06T13:15:44.270207208Z",
+        "k6_exit": "0",
+        "load_end_utc": "2026-10-06T13:15:44.521991334Z",
+        "generator_image": "sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34 generator_cpus=2000000000 generator_memory=1073741824",
+        "collection_end_utc": "2026-10-06T13:16:12.745993376Z",
+        "analyzer_exit": "0"
+      },
+      "summary": {
+        "kind": "validation",
+        "run_id": "3744207b-00e6-492c-b90d-ab3242e30f51",
+        "dataset_id": "8a693e80-e982-469a-ab0c-8aba05ebe1bd",
+        "variant": "async",
+        "profile": "consumer-stop",
+        "rate": 5,
+        "measure_seconds": 18,
+        "instrument_valid": true,
+        "offered": 91,
+        "accepted": 91,
+        "stored_at_observation_end": 37,
+        "stored_within_measurement": 37,
+        "completed_per_second": 2.0555555555555554,
+        "http_status_counts": {
+          "202": 91
+        },
+        "http_error_fraction": 0,
+        "dropped_iterations_all_phases": 0,
+        "dlq_terminal": 0,
+        "dlq_message_with_already_stored_uuid": 0,
+        "pending_retained": 54,
+        "accepted_unreconciled": 0,
+        "stored_despite_unconfirmed_http": 0,
+        "integrity_mismatches": 0,
+        "retry_scheduled": 0,
+        "idempotent_replays": 0,
+        "http_duration_ms": {
+          "n": 91,
+          "mean": 8.359807604395604,
+          "median": 7.884054,
+          "sd_sample": 2.1782356312474853,
+          "p95": 12.453819,
+          "p99": 16.423151,
+          "max": 16.423151
+        },
+        "send_to_response_ms": {
+          "n": 91,
+          "mean": 8.810108604395603,
+          "median": 8.300504,
+          "sd_sample": 2.282128214717924,
+          "p95": 13.312937,
+          "p99": 16.844552,
+          "max": 16.844552
+        },
+        "send_to_commit_ms": {
+          "n": 37,
+          "mean": 14.23110062162162,
+          "median": 13.380746,
+          "sd_sample": 3.405630413369245,
+          "p95": 21.556368,
+          "p99": 21.651524,
+          "max": 21.651524
+        },
+        "resources": {
+          "tcc-entrega04-async-api-1": {
+            "cpu_percent": {
+              "n": 6,
+              "mean": 5.1433333333333335,
+              "median": 5.4350000000000005,
+              "sd_sample": 2.731824786963225,
+              "p95": 7.95,
+              "p99": 7.95,
+              "max": 7.95
+            },
+            "memory_mib": {
+              "n": 6,
+              "mean": 167.98333333333332,
+              "median": 167.7,
+              "sd_sample": 0.6705718952257583,
+              "p95": 169.1,
+              "p99": 169.1,
+              "max": 169.1
+            }
+          },
+          "tcc-entrega04-consumer-1": {
+            "cpu_percent": {
+              "n": 6,
+              "mean": 1.3766666666666667,
+              "median": 0,
+              "sd_sample": 3.3721308792315083,
+              "p95": 8.26,
+              "p99": 8.26,
+              "max": 8.26
+            },
+            "memory_mib": {
+              "n": 6,
+              "mean": 25.349999999999998,
+              "median": 0,
+              "sd_sample": 62.09456497955356,
+              "p95": 152.1,
+              "p99": 152.1,
+              "max": 152.1
+            }
+          },
+          "tcc-entrega04-kafka-1": {
+            "cpu_percent": {
+              "n": 6,
+              "mean": 17.51,
+              "median": 2.88,
+              "sd_sample": 36.766703414910616,
+              "p95": 92.54,
+              "p99": 92.54,
+              "max": 92.54
+            },
+            "memory_mib": {
+              "n": 6,
+              "mean": 417.65000000000003,
+              "median": 411.3,
+              "sd_sample": 15.46360242634296,
+              "p95": 449.2,
+              "p99": 449.2,
+              "max": 449.2
+            }
+          },
+          "tcc-entrega04-postgres-1": {
+            "cpu_percent": {
+              "n": 6,
+              "mean": 1.5266666666666666,
+              "median": 0.215,
+              "sd_sample": 2.2043925845154413,
+              "p95": 4.42,
+              "p99": 4.42,
+              "max": 4.42
+            },
+            "memory_mib": {
+              "n": 6,
+              "mean": 22.615,
+              "median": 20.215,
+              "sd_sample": 6.4650777257508665,
+              "p95": 35.78,
+              "p99": 35.78,
+              "max": 35.78
+            }
+          }
+        },
+        "measurement_windows_10s": [
+          {
+            "accepted_not_persisted_at_boundary": 13,
+            "duration_seconds": 10,
+            "offered": 50,
+            "start_seconds": 0,
+            "unique_commits": 37
+          },
+          {
+            "accepted_not_persisted_at_boundary": 53,
+            "duration_seconds": 8,
+            "offered": 40,
+            "start_seconds": 10,
+            "unique_commits": 0
+          }
+        ],
+        "recovery": {
+          "applicable": true,
+          "restore_command_completed_utc": "2026-10-06T13:15:44.270207208Z",
+          "accepted_not_persisted_at_restore": 54,
+          "first_commit_after_restore_ms": null,
+          "all_pre_restore_accepted_persisted": false,
+          "backlog_persistence_recovery_ms": null,
+          "stable_throughput_recovery": "not_estimated: first commit and complete backlog drainage are distinct; a rolling stability criterion requires the full campaign"
+        },
+        "issues": [],
+        "loss_interpretation": "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+      },
+      "analysis_path": "implementacao-java/.runtime/entrega04-reanalysis-v5/3744207b-00e6-492c-b90d-ab3242e30f51-async/summary.json",
+      "summary_sha256": "27a0d931bf81eb8bc3612ef48c3cef5d6d1768dad807f67908548e5babd152d8"
+    },
+    {
+      "run_id": "3d835b52-5990-457e-89e6-8aff51bf4c29",
+      "raw_path": "implementacao-java/.runtime/entrega04/3d835b52-5990-457e-89e6-8aff51bf4c29-sync",
+      "classification": "incomplete_collection",
+      "issues": [
+        "Executor terminated before reading the console due to a file-creation race; no valid completed collection."
+      ],
+      "checksums": [],
+      "metadata": {
+        "kind": "validation",
+        "run_id": "3d835b52-5990-457e-89e6-8aff51bf4c29",
+        "dataset_id": "cfc6f0b3-36d5-4ec2-9a16-0835b5ee7483",
+        "variant": "sync",
+        "profile": "steady",
+        "rate": "5",
+        "warmup_seconds": "5",
+        "measure_seconds": "12",
+        "drain_seconds": "5",
+        "vus": "16",
+        "commit": "2e16db124373d829e84345b2acb96c9c73b656d5",
+        "started_utc": "2026-10-06T12:55:34.747795399Z",
+        "working_tree": "dirty",
+        "topic": "audit-3d835b52-5990-457e-89e6-8aff51bf4c29",
+        "k6_image": "grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34",
+        "docker_client": "29.1.3 docker_server=29.1.3",
+        "docker_cpus": "16 docker_memory_bytes=16426614784 kernel=6.18.33.2-microsoft-standard-WSL2",
+        "background_container": "tcc-revisao-20260907-kafka-1",
+        "container": "/tcc-entrega04-sync-api-1 image=sha256:e24c8bdc5b4b61b3dbeb1d4e273c9cdd6a9ec205d31f4c5a40881826902f9b82 nano_cpus=1000000000 memory_bytes=536870912",
+        "analyzer_image_id": "sha256:ed815ca0346972be3fb1f4913fcc2afcdc4e35e6404505323e8ea56d38f97dfe"
+      }
+    },
+    {
+      "run_id": "4734b17b-e48b-48bc-b02e-f99d7f9e1f4b",
+      "raw_path": "implementacao-java/.runtime/entrega04/4734b17b-e48b-48bc-b02e-f99d7f9e1f4b-async",
+      "classification": "valid_functional_instrument_check_not_definitive",
+      "issues": [],
+      "checksums": [
+        {
+          "file": "./analyzer-console.txt",
+          "sha256": "5051b4ae70b4b927937dc1598b499d941e1216e23c3ab57de8f53120d96ce7a7",
+          "matches": true
+        },
+        {
+          "file": "./app.log",
+          "sha256": "f9e209a173df5a2886089d3ad6f37e65d469989f128fa8eafd36913bdd44915c",
+          "matches": true
+        },
+        {
+          "file": "./controller.log",
+          "sha256": "df75c81433ac339c197e17893fc7ac1e09c7f4dbace10de5df633e6e7c44e4e2",
+          "matches": true
+        },
+        {
+          "file": "./database.jsonl",
+          "sha256": "cf8fb9b906f00ee01c5d6b347bbf611dd941bbed14b11d6de667ed622cd4e8f3",
+          "matches": true
+        },
+        {
+          "file": "./dlq-export.log",
+          "sha256": "745c66b262ec2d37a7a5339461db2772f0782af276e7334306c39aa5e9704c9e",
+          "matches": true
+        },
+        {
+          "file": "./dlq.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./events.csv",
+          "sha256": "2386c3d3ea80bf8b07f4d6fe6b8d9236957e1e491980b77a85eb4fde521036bb",
+          "matches": true
+        },
+        {
+          "file": "./k6-console.txt",
+          "sha256": "6e5a932347393491827d29daf2cb86de5aca04c3f7e09f9dbac0fbd1fb2efd4b",
+          "matches": true
+        },
+        {
+          "file": "./k6.jsonl.gz",
+          "sha256": "bc054221f3d82a414f6be7e3acc273f4f919ec1785b46da924d40313011b587e",
+          "matches": true
+        },
+        {
+          "file": "./kafka-lag-end.txt",
+          "sha256": "8408dc40f8a4ecf3626c465c4bafbacc9b431f543a6aa965d171216119e7ab92",
+          "matches": true
+        },
+        {
+          "file": "./manifest.txt",
+          "sha256": "c492f8796804bba9d3957086ffe765cdfbf10c45279a54d1d1573d936520a500",
+          "matches": true
+        },
+        {
+          "file": "./resources-errors.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./resources.tsv",
+          "sha256": "5aa77d87268a90d457b783607e9e89a57fa72640d7300c0fe5eb3b517d00a7ad",
+          "matches": true
+        },
+        {
+          "file": "./retained-export.log",
+          "sha256": "f56163bf084be0ea0b9b47675a88ac08e7e764a93409aa8b7a11c716e1876454",
+          "matches": true
+        },
+        {
+          "file": "./retained.jsonl",
+          "sha256": "fdc42da0ecd7e3b6e019534c273264936f9f3561f24a66da731659034a353261",
+          "matches": true
+        },
+        {
+          "file": "./summary.json",
+          "sha256": "87977d3774c0a54e353b45c26cb974f5c36ab78c668068f0ac7bc149aaa9e303",
+          "matches": true
+        }
+      ],
+      "metadata": {
+        "kind": "validation",
+        "run_id": "4734b17b-e48b-48bc-b02e-f99d7f9e1f4b",
+        "dataset_id": "96182c7d-8000-4a57-bd7a-8c9925360e34",
+        "variant": "async",
+        "profile": "consumer-stop",
+        "rate": "5",
+        "warmup_seconds": "5",
+        "measure_seconds": "18",
+        "drain_seconds": "40",
+        "vus": "32",
+        "commit": "2e16db124373d829e84345b2acb96c9c73b656d5",
+        "started_utc": "2026-10-06T13:18:12.699128850Z",
+        "working_tree": "dirty",
+        "topic": "audit-4734b17b-e48b-48bc-b02e-f99d7f9e1f4b",
+        "k6_image": "grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34",
+        "docker_client": "29.1.3 docker_server=29.1.3",
+        "docker_cpus": "16 docker_memory_bytes=16426614784 kernel=6.18.33.2-microsoft-standard-WSL2",
+        "background_container": "tcc-revisao-20260907-kafka-1",
+        "container": "/tcc-entrega04-consumer-1 image=sha256:fdcb3171de2990861d06e2b211882e412e80104abe414187080c1d2d4642a434 nano_cpus=1000000000 memory_bytes=536870912",
+        "analyzer_image_id": "sha256:e0b0adb889ef2924f2478fd755a791c27b0e6f2d21a1b83bbe02e0228435a560",
+        "measurement_start_ms": "1791292740650",
+        "fault_stop_command_utc": "2026-10-06T13:19:06.210959485Z",
+        "fault_seconds": "5",
+        "fault_stopped_utc": "2026-10-06T13:19:06.927628094Z",
+        "fault_restore_utc": "2026-10-06T13:19:16.943324484Z",
+        "k6_exit": "0",
+        "load_end_utc": "2026-10-06T13:19:19.235149141Z",
+        "generator_image": "sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34 generator_cpus=2000000000 generator_memory=1073741824",
+        "collection_end_utc": "2026-10-06T13:20:20.298779298Z",
+        "analyzer_exit": "0"
+      },
+      "summary": {
+        "kind": "validation",
+        "run_id": "4734b17b-e48b-48bc-b02e-f99d7f9e1f4b",
+        "dataset_id": "96182c7d-8000-4a57-bd7a-8c9925360e34",
+        "variant": "async",
+        "profile": "consumer-stop",
+        "rate": 5,
+        "measure_seconds": 18,
+        "instrument_valid": true,
+        "offered": 91,
+        "accepted": 91,
+        "stored_at_observation_end": 91,
+        "stored_within_measurement": 31,
+        "completed_per_second": 1.7222222222222223,
+        "http_status_counts": {
+          "202": 91
+        },
+        "http_error_fraction": 0,
+        "dropped_iterations_all_phases": 0,
+        "dlq_terminal": 0,
+        "dlq_message_with_already_stored_uuid": 0,
+        "pending_retained": 0,
+        "accepted_unreconciled": 0,
+        "stored_despite_unconfirmed_http": 0,
+        "integrity_mismatches": 0,
+        "retry_scheduled": 0,
+        "idempotent_replays": 0,
+        "http_duration_ms": {
+          "n": 91,
+          "mean": 7.823795065934067,
+          "median": 6.20668,
+          "sd_sample": 8.102137391883224,
+          "p95": 8.503711,
+          "p99": 52.546895,
+          "max": 52.546895
+        },
+        "send_to_response_ms": {
+          "n": 91,
+          "mean": 8.174685472527473,
+          "median": 6.595871,
+          "sd_sample": 8.11256415987909,
+          "p95": 8.874776,
+          "p99": 52.977253,
+          "max": 52.977253
+        },
+        "send_to_commit_ms": {
+          "n": 91,
+          "mean": 9496.652604901099,
+          "median": 11466.256939,
+          "sd_sample": 7354.6776553368145,
+          "p95": 19149.645735,
+          "p99": 19917.310826,
+          "max": 19917.310826
+        },
+        "resources": {
+          "tcc-entrega04-async-api-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 170.26,
+              "median": 170.7,
+              "sd_sample": 0.9659192512834593,
+              "p95": 171.4,
+              "p99": 171.4,
+              "max": 171.4
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 5.994,
+              "median": 4.81,
+              "sd_sample": 3.773165779554352,
+              "p95": 12.52,
+              "p99": 12.52,
+              "max": 12.52
+            }
+          },
+          "tcc-entrega04-consumer-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 30.26,
+              "median": 0,
+              "sd_sample": 67.66341699914364,
+              "p95": 151.3,
+              "p99": 151.3,
+              "max": 151.3
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 1.052,
+              "median": 0,
+              "sd_sample": 2.352343512329779,
+              "p95": 5.26,
+              "p99": 5.26,
+              "max": 5.26
+            }
+          },
+          "tcc-entrega04-kafka-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 423.91999999999996,
+              "median": 413.4,
+              "sd_sample": 23.582027054517617,
+              "p95": 466.1,
+              "p99": 466.1,
+              "max": 466.1
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 27.408000000000005,
+              "median": 5.08,
+              "sd_sample": 42.308852737931815,
+              "p95": 100.73,
+              "p99": 100.73,
+              "max": 100.73
+            }
+          },
+          "tcc-entrega04-postgres-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 23.92,
+              "median": 20.34,
+              "sd_sample": 6.934987382829187,
+              "p95": 35.95,
+              "p99": 35.95,
+              "max": 35.95
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 0.396,
+              "median": 0.01,
+              "sd_sample": 0.7085407539443302,
+              "p95": 1.64,
+              "p99": 1.64,
+              "max": 1.64
+            }
+          }
+        },
+        "measurement_windows_10s": [
+          {
+            "duration_seconds": 10,
+            "accepted_not_persisted_at_boundary": 19,
+            "unique_commits": 31,
+            "start_seconds": 0,
+            "offered": 50
+          },
+          {
+            "duration_seconds": 8,
+            "accepted_not_persisted_at_boundary": 59,
+            "unique_commits": 0,
+            "start_seconds": 10,
+            "offered": 40
+          }
+        ],
+        "recovery": {
+          "applicable": true,
+          "restore_command_completed_utc": "2026-10-06T13:19:16.943324484Z",
+          "accepted_not_persisted_at_restore": 51,
+          "first_commit_after_restore_ms": 9825.38584,
+          "all_pre_restore_accepted_persisted": true,
+          "backlog_persistence_recovery_ms": 10440.747376,
+          "stable_throughput_recovery": "not_estimated: first commit and complete backlog drainage are distinct; a rolling stability criterion requires the full campaign"
+        },
+        "issues": [],
+        "loss_interpretation": "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+      },
+      "analysis_path": "implementacao-java/.runtime/entrega04-reanalysis-v5/4734b17b-e48b-48bc-b02e-f99d7f9e1f4b-async/summary.json",
+      "summary_sha256": "0145407e4ab2aca11b731ed64a0bd49a828fb2b62681c1b08f9acda3fa996513"
+    },
+    {
+      "run_id": "6cdf03fd-1d50-45b3-b77e-1afd41691e95",
+      "raw_path": "implementacao-java/.runtime/entrega04/6cdf03fd-1d50-45b3-b77e-1afd41691e95-async",
+      "classification": "valid_functional_instrument_check_not_definitive",
+      "issues": [],
+      "checksums": [
+        {
+          "file": "./analyzer-console.txt",
+          "sha256": "114b7e018689c78761f3a128a5e1cd8949aa970ac3623d9e41ffb193c94bf9b5",
+          "matches": true
+        },
+        {
+          "file": "./app.log",
+          "sha256": "f938bae51eaf7128673da05bdd785da87b1abeeaf8428a5248fbb09222255427",
+          "matches": true
+        },
+        {
+          "file": "./contract-console.txt",
+          "sha256": "612a21cc2ef764aab705658de95bfc60ec957f838adbe53394f7c49dc95bcc0f",
+          "matches": true
+        },
+        {
+          "file": "./controller.log",
+          "sha256": "c0cfe94a8951b093b9f859a511fe5cabd50ec4113e53bc4a733e7a755deed596",
+          "matches": true
+        },
+        {
+          "file": "./database.jsonl",
+          "sha256": "d4ac792915e774f0645d102b92ac262cd4941ac33dc5c4e8b2178eeeb685db13",
+          "matches": true
+        },
+        {
+          "file": "./dlq-export.log",
+          "sha256": "11bd7813ff8225c13862d6640baccbfca8847670e7c8b7f8587007091f1b5dbe",
+          "matches": true
+        },
+        {
+          "file": "./dlq.jsonl",
+          "sha256": "8342464b3a257e6fc8ff2e9904df38c4143ecddad419fe293925fa12c3fb761a",
+          "matches": true
+        },
+        {
+          "file": "./events.csv",
+          "sha256": "a4f53e82c45e5ef164d8890a6dce239761fd7283e0fad64c2966a471255119f0",
+          "matches": true
+        },
+        {
+          "file": "./k6-console.txt",
+          "sha256": "5f1403f66f2488d4651e149aeb59462ca01a9c08ad523cb58028b28b2fd34785",
+          "matches": true
+        },
+        {
+          "file": "./k6.jsonl.gz",
+          "sha256": "7e4b66c049bf5aeac4ff4078cb1e3fb87598df6087ab419723315f15c2b50e2c",
+          "matches": true
+        },
+        {
+          "file": "./kafka-lag-end.txt",
+          "sha256": "eabae311fc0cd893b128b4b75db2eed34b3987e7fd29b22bb73ab68b9ac01e43",
+          "matches": true
+        },
+        {
+          "file": "./manifest.txt",
+          "sha256": "3ba18eb4ead266f69ce7b710246b5e02b7fc05301244b90d6a6ae1e8988ef904",
+          "matches": true
+        },
+        {
+          "file": "./resources-errors.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./resources.tsv",
+          "sha256": "ceb34cf2f476e0b7d6b742d4623c5002dd67efe64f9d3122b679f3a4300cf793",
+          "matches": true
+        },
+        {
+          "file": "./retained-export.log",
+          "sha256": "0ee998cbefcc9d5b2b54f4e28c2be8b35c291d6ee30eaf381be44f5d9bcae349",
+          "matches": true
+        },
+        {
+          "file": "./retained.jsonl",
+          "sha256": "acdf2cb47108534173f485dbdee550247b3d620b201ace26ba14bbb6c0a11092",
+          "matches": true
+        },
+        {
+          "file": "./summary.json",
+          "sha256": "fefa2e3b876825b756d7d9fa6877c3fe3c97ff2fb63674dca8ffafaa32553905",
+          "matches": true
+        }
+      ],
+      "metadata": {
+        "kind": "validation",
+        "run_id": "6cdf03fd-1d50-45b3-b77e-1afd41691e95",
+        "dataset_id": "199c7db3-d7fd-4296-a665-ff94a2ef0e1a",
+        "variant": "async",
+        "profile": "model",
+        "rate": "5",
+        "warmup_seconds": "5",
+        "measure_seconds": "18",
+        "drain_seconds": "5",
+        "vus": "32",
+        "commit": "2e16db124373d829e84345b2acb96c9c73b656d5",
+        "started_utc": "2026-10-06T13:07:05.534782774Z",
+        "working_tree": "dirty",
+        "topic": "audit-6cdf03fd-1d50-45b3-b77e-1afd41691e95",
+        "k6_image": "grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34",
+        "docker_client": "29.1.3 docker_server=29.1.3",
+        "docker_cpus": "16 docker_memory_bytes=16426614784 kernel=6.18.33.2-microsoft-standard-WSL2",
+        "background_container": "tcc-revisao-20260907-kafka-1",
+        "container": "/tcc-entrega04-consumer-1 image=sha256:fdcb3171de2990861d06e2b211882e412e80104abe414187080c1d2d4642a434 nano_cpus=1000000000 memory_bytes=536870912",
+        "analyzer_image_id": "sha256:902523b0493a9842e2146b70e838ac1c6802a2956023a71f3159f57cab882600",
+        "measurement_start_ms": "1791292062025",
+        "k6_exit": "0",
+        "load_end_utc": "2026-10-06T13:07:44.683865739Z",
+        "generator_image": "sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34 generator_cpus=2000000000 generator_memory=1073741824",
+        "collection_end_utc": "2026-10-06T13:08:17.480583878Z",
+        "analyzer_exit": "0"
+      },
+      "summary": {
+        "kind": "validation",
+        "run_id": "6cdf03fd-1d50-45b3-b77e-1afd41691e95",
+        "dataset_id": "199c7db3-d7fd-4296-a665-ff94a2ef0e1a",
+        "variant": "async",
+        "profile": "model",
+        "rate": 5,
+        "measure_seconds": 18,
+        "instrument_valid": true,
+        "offered": 50,
+        "accepted": 50,
+        "stored_at_observation_end": 50,
+        "stored_within_measurement": 50,
+        "completed_per_second": 2.7777777777777777,
+        "http_status_counts": {
+          "202": 50
+        },
+        "http_error_fraction": 0,
+        "dropped_iterations_all_phases": 0,
+        "dlq_terminal": 0,
+        "dlq_message_with_already_stored_uuid": 1,
+        "pending_retained": 0,
+        "accepted_unreconciled": 0,
+        "stored_despite_unconfirmed_http": 0,
+        "integrity_mismatches": 0,
+        "retry_scheduled": 0,
+        "idempotent_replays": 1,
+        "http_duration_ms": {
+          "n": 50,
+          "mean": 42.86649912,
+          "median": 15.3928625,
+          "sd_sample": 46.089772403904966,
+          "p95": 88.677277,
+          "p99": 244.906563,
+          "max": 244.906563
+        },
+        "send_to_response_ms": {
+          "n": 50,
+          "mean": 43.2839291,
+          "median": 16.0739555,
+          "sd_sample": 46.125411980340274,
+          "p95": 89.150797,
+          "p99": 245.896823,
+          "max": 245.896823
+        },
+        "send_to_commit_ms": {
+          "n": 50,
+          "mean": 138.713793,
+          "median": 108.97027349999999,
+          "sd_sample": 84.87015399078737,
+          "p95": 296.661922,
+          "p99": 403.4644,
+          "max": 403.4644
+        },
+        "resources": {
+          "tcc-entrega04-async-api-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 162.8,
+              "median": 162.7,
+              "sd_sample": 0.14142135623731653,
+              "p95": 163,
+              "p99": 163,
+              "max": 163
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 0.238,
+              "median": 0.2,
+              "sd_sample": 0.12735776379946379,
+              "p95": 0.46,
+              "p99": 0.46,
+              "max": 0.46
+            }
+          },
+          "tcc-entrega04-consumer-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 150,
+              "median": 150.2,
+              "sd_sample": 0.4062019202317924,
+              "p95": 150.3,
+              "p99": 150.3,
+              "max": 150.3
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 0.9339999999999999,
+              "median": 0.72,
+              "sd_sample": 0.3768686773930675,
+              "p95": 1.47,
+              "p99": 1.47,
+              "max": 1.47
+            }
+          },
+          "tcc-entrega04-kafka-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 420.32,
+              "median": 399.7,
+              "sd_sample": 28.517222866190888,
+              "p95": 452.5,
+              "p99": 452.5,
+              "max": 452.5
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 41.898,
+              "median": 3.34,
+              "sd_sample": 54.28411526404386,
+              "p95": 103.92,
+              "p99": 103.92,
+              "max": 103.92
+            }
+          },
+          "tcc-entrega04-postgres-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 53.638,
+              "median": 53.48,
+              "sd_sample": 0.49175197000113885,
+              "p95": 54.5,
+              "p99": 54.5,
+              "max": 54.5
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 1.2479999999999998,
+              "median": 0.02,
+              "sd_sample": 2.757094485141922,
+              "p95": 6.18,
+              "p99": 6.18,
+              "max": 6.18
+            }
+          }
+        },
+        "measurement_windows_10s": [
+          {
+            "start_seconds": 0,
+            "unique_commits": 50,
+            "accepted_not_persisted_at_boundary": 0,
+            "duration_seconds": 10,
+            "offered": 50
+          },
+          {
+            "start_seconds": 10,
+            "unique_commits": 0,
+            "accepted_not_persisted_at_boundary": 0,
+            "duration_seconds": 8,
+            "offered": 0
+          }
+        ],
+        "recovery": {
+          "applicable": false
+        },
+        "issues": [],
+        "loss_interpretation": "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+      },
+      "analysis_path": "implementacao-java/.runtime/entrega04-reanalysis-v5/6cdf03fd-1d50-45b3-b77e-1afd41691e95-async/summary.json",
+      "summary_sha256": "d2b97d44c712a66a191dd3aaa54b68ad288ccdab8b58fb3c2ec35a48930225cf"
+    },
+    {
+      "run_id": "a5f30182-e7de-47d1-a13a-1a6c1047e6f4",
+      "raw_path": "implementacao-java/.runtime/entrega04/a5f30182-e7de-47d1-a13a-1a6c1047e6f4-async",
+      "classification": "valid_functional_instrument_check_not_definitive",
+      "issues": [],
+      "checksums": [
+        {
+          "file": "./analyzer-console.txt",
+          "sha256": "2d5d9207c4081e3b38e7008bdafbf359de3c174800e869ba814ecc1d62438df2",
+          "matches": true
+        },
+        {
+          "file": "./app.log",
+          "sha256": "6da141f521afcec4fcc6e056555f79d617ad0a21ab6b737c01ddf9577f402961",
+          "matches": true
+        },
+        {
+          "file": "./controller.log",
+          "sha256": "41e339b7aae8ab03a20c24a5b1027a5a7bbabcd2de8f15abf53de76a0d7b43d0",
+          "matches": true
+        },
+        {
+          "file": "./database.jsonl",
+          "sha256": "5c2e4c509755291c42a39f3414ab1a719ffed1d31802fc8dfc1ae9cf58e01099",
+          "matches": true
+        },
+        {
+          "file": "./dlq-export.log",
+          "sha256": "24174d4774f8b7855fe252481ee611405da7560ef7ec8888bedae558823aacf9",
+          "matches": true
+        },
+        {
+          "file": "./dlq.jsonl",
+          "sha256": "44ddad07d4c4bdf914a61f91fb1b196ed7a3ccb85db6ec7cadccdae137eaeac2",
+          "matches": true
+        },
+        {
+          "file": "./events.csv",
+          "sha256": "204060c7305a4f52f0ccb1ec5a9303e6fe52cad90398878bd301dba326b31604",
+          "matches": true
+        },
+        {
+          "file": "./k6-console.txt",
+          "sha256": "0763669e9e599c240c593f3572817d538b58b2e326d09abf26c3775522f89186",
+          "matches": true
+        },
+        {
+          "file": "./k6.jsonl.gz",
+          "sha256": "062721fe54fcbf2be9ad6d10a0cdf2d5ab5b9f15b03a680ca238bd9aa774f180",
+          "matches": true
+        },
+        {
+          "file": "./kafka-lag-end.txt",
+          "sha256": "595a3d6a61a0d7352f3fa56d2f16dab34a0e756ecebe9fb0aa8f018e3048d4b6",
+          "matches": true
+        },
+        {
+          "file": "./manifest.txt",
+          "sha256": "ad0113dfff25fac69523478520258c73ea4191bd2a47e86b72374bcea6a9ef80",
+          "matches": true
+        },
+        {
+          "file": "./resources-errors.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./resources.tsv",
+          "sha256": "9878448becb3a94c5e9a656c5e3bc3a1478fe1c86e0626476794d3d971a733d2",
+          "matches": true
+        },
+        {
+          "file": "./retained-export.log",
+          "sha256": "a92ab0b4d282d3c27d3fbf018bebc3c0b42000b714718f939671502d60c507c9",
+          "matches": true
+        },
+        {
+          "file": "./retained.jsonl",
+          "sha256": "a86ecc2403c1c1a1f1eadd6a29926bf09e0291c24227d63863b4cba44de6a3ef",
+          "matches": true
+        },
+        {
+          "file": "./summary.json",
+          "sha256": "6ed825645660aac7b51768fed2eecb0af7d25ef8a6550ca8a0bcb1717d008615",
+          "matches": true
+        }
+      ],
+      "metadata": {
+        "kind": "validation",
+        "run_id": "a5f30182-e7de-47d1-a13a-1a6c1047e6f4",
+        "dataset_id": "3f3507a6-a06a-4430-b853-e9a4058b0be3",
+        "variant": "async",
+        "profile": "postgres-stop",
+        "rate": "5",
+        "warmup_seconds": "5",
+        "measure_seconds": "18",
+        "drain_seconds": "5",
+        "vus": "32",
+        "commit": "2e16db124373d829e84345b2acb96c9c73b656d5",
+        "started_utc": "2026-10-06T13:09:56.369921871Z",
+        "working_tree": "dirty",
+        "topic": "audit-a5f30182-e7de-47d1-a13a-1a6c1047e6f4",
+        "k6_image": "grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34",
+        "docker_client": "29.1.3 docker_server=29.1.3",
+        "docker_cpus": "16 docker_memory_bytes=16426614784 kernel=6.18.33.2-microsoft-standard-WSL2",
+        "background_container": "tcc-revisao-20260907-kafka-1",
+        "container": "/tcc-entrega04-consumer-1 image=sha256:fdcb3171de2990861d06e2b211882e412e80104abe414187080c1d2d4642a434 nano_cpus=1000000000 memory_bytes=536870912",
+        "analyzer_image_id": "sha256:902523b0493a9842e2146b70e838ac1c6802a2956023a71f3159f57cab882600",
+        "measurement_start_ms": "1791292241397",
+        "fault_stop_command_utc": "2026-10-06T13:10:47.134333264Z",
+        "fault_seconds": "5",
+        "fault_stopped_utc": "2026-10-06T13:10:47.800973811Z",
+        "fault_restore_utc": "2026-10-06T13:10:53.621205114Z",
+        "k6_exit": "0",
+        "load_end_utc": "2026-10-06T13:10:59.932773635Z",
+        "generator_image": "sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34 generator_cpus=2000000000 generator_memory=1073741824",
+        "collection_end_utc": "2026-10-06T13:11:25.620199445Z",
+        "analyzer_exit": "0"
+      },
+      "summary": {
+        "kind": "validation",
+        "run_id": "a5f30182-e7de-47d1-a13a-1a6c1047e6f4",
+        "dataset_id": "3f3507a6-a06a-4430-b853-e9a4058b0be3",
+        "variant": "async",
+        "profile": "postgres-stop",
+        "rate": 5,
+        "measure_seconds": 18,
+        "instrument_valid": true,
+        "offered": 90,
+        "accepted": 90,
+        "stored_at_observation_end": 89,
+        "stored_within_measurement": 31,
+        "completed_per_second": 1.7222222222222223,
+        "http_status_counts": {
+          "202": 90
+        },
+        "http_error_fraction": 0,
+        "dropped_iterations_all_phases": 0,
+        "dlq_terminal": 1,
+        "dlq_message_with_already_stored_uuid": 0,
+        "pending_retained": 0,
+        "accepted_unreconciled": 0,
+        "stored_despite_unconfirmed_http": 0,
+        "integrity_mismatches": 0,
+        "retry_scheduled": 2,
+        "idempotent_replays": 0,
+        "http_duration_ms": {
+          "n": 90,
+          "mean": 7.147449444444444,
+          "median": 6.768374,
+          "sd_sample": 1.170144249072383,
+          "p95": 9.828753,
+          "p99": 12.046617,
+          "max": 12.046617
+        },
+        "send_to_response_ms": {
+          "n": 90,
+          "mean": 7.510143955555556,
+          "median": 7.187472,
+          "sd_sample": 1.205995004209843,
+          "p95": 10.146938,
+          "p99": 12.536161,
+          "max": 12.536161
+        },
+        "send_to_commit_ms": {
+          "n": 89,
+          "mean": 6314.8442549438205,
+          "median": 6760.174796,
+          "sd_sample": 5288.8244703625505,
+          "p95": 14252.008138,
+          "p99": 15025.470109,
+          "max": 15025.470109
+        },
+        "resources": {
+          "tcc-entrega04-async-api-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 159.52,
+              "median": 159.7,
+              "sd_sample": 0.8642916174532713,
+              "p95": 160.6,
+              "p99": 160.6,
+              "max": 160.6
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 6.218,
+              "median": 5.33,
+              "sd_sample": 3.0350238878796327,
+              "p95": 11.57,
+              "p99": 11.57,
+              "max": 11.57
+            }
+          },
+          "tcc-entrega04-consumer-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 151.9,
+              "median": 151.9,
+              "sd_sample": 0.2738612787525779,
+              "p95": 152.2,
+              "p99": 152.2,
+              "max": 152.2
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 2.9379999999999997,
+              "median": 0.87,
+              "sd_sample": 3.134664256343891,
+              "p95": 7.22,
+              "p99": 7.22,
+              "max": 7.22
+            }
+          },
+          "tcc-entrega04-kafka-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 402.62,
+              "median": 401.7,
+              "sd_sample": 2.0535335400231585,
+              "p95": 406.1,
+              "p99": 406.1,
+              "max": 406.1
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 14.233999999999998,
+              "median": 2.78,
+              "sd_sample": 18.450747410335442,
+              "p95": 44.26,
+              "p99": 44.26,
+              "max": 44.26
+            }
+          },
+          "tcc-entrega04-postgres-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 10.581999999999999,
+              "median": 0,
+              "sd_sample": 15.884776359772898,
+              "p95": 35.66,
+              "p99": 35.66,
+              "max": 35.66
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 0.6799999999999999,
+              "median": 0,
+              "sd_sample": 1.5038118233342894,
+              "p95": 3.37,
+              "p99": 3.37,
+              "max": 3.37
+            }
+          }
+        },
+        "measurement_windows_10s": [
+          {
+            "unique_commits": 31,
+            "start_seconds": 0,
+            "offered": 50,
+            "duration_seconds": 10,
+            "accepted_not_persisted_at_boundary": 19
+          },
+          {
+            "unique_commits": 0,
+            "start_seconds": 10,
+            "offered": 40,
+            "duration_seconds": 8,
+            "accepted_not_persisted_at_boundary": 59
+          }
+        ],
+        "recovery": {
+          "applicable": true,
+          "restore_command_completed_utc": "2026-10-06T13:10:53.621205114Z",
+          "accepted_not_persisted_at_restore": 31,
+          "first_commit_after_restore_ms": 9202.261287,
+          "all_pre_restore_accepted_persisted": false,
+          "backlog_persistence_recovery_ms": null,
+          "stable_throughput_recovery": "not_estimated: first commit and complete backlog drainage are distinct; a rolling stability criterion requires the full campaign"
+        },
+        "issues": [],
+        "loss_interpretation": "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+      },
+      "analysis_path": "implementacao-java/.runtime/entrega04-reanalysis-v5/a5f30182-e7de-47d1-a13a-1a6c1047e6f4-async/summary.json",
+      "summary_sha256": "d81804ef5ea9f55195560b3b56dbd1364312bd5a170e27897cbb1d17329e057d"
+    },
+    {
+      "run_id": "b0730237-bd62-4845-bcba-3c3cc7c572d2",
+      "raw_path": "implementacao-java/.runtime/entrega04/b0730237-bd62-4845-bcba-3c3cc7c572d2-async",
+      "classification": "valid_functional_instrument_check_not_definitive",
+      "issues": [],
+      "checksums": [
+        {
+          "file": "./analyzer-console.txt",
+          "sha256": "4282b092122cc389a1fe60b32074a767ca8504ac2ee4807fa4741022818aaf3f",
+          "matches": true
+        },
+        {
+          "file": "./app.log",
+          "sha256": "e77ad48674dfc5b43a7f5c83f669e8f5a310ccf58f23e6c35249b0a076f0d4b7",
+          "matches": true
+        },
+        {
+          "file": "./controller.log",
+          "sha256": "7b7e8dd8152b8d4023929485c1c0c2cb8ed372d2934bbda2d0c6dc4ba506062f",
+          "matches": true
+        },
+        {
+          "file": "./database.jsonl",
+          "sha256": "550a7f13238a566b50b5ce52bd2bda685130b7b075de0e1f1f7d426487a3175e",
+          "matches": true
+        },
+        {
+          "file": "./dlq-export.log",
+          "sha256": "791dc3b27d9b57dc115e247a26d41e40c844c0b2ee9ea10257cd97dbd70c4519",
+          "matches": true
+        },
+        {
+          "file": "./dlq.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./events.csv",
+          "sha256": "ae481a4b5d2e477b8ee5f679629b929e6ce898a79472995109dd34e79b95dfbd",
+          "matches": true
+        },
+        {
+          "file": "./k6-console.txt",
+          "sha256": "c9fb0b3a44babd96eafef4a978e4c2a0dc0d6070f7f8f4558f2be3aca365b212",
+          "matches": true
+        },
+        {
+          "file": "./k6.jsonl.gz",
+          "sha256": "3388f9b8099f5e6d4642c7e81af5cabf244d9c1d061cb83d28446a4c52487166",
+          "matches": true
+        },
+        {
+          "file": "./kafka-lag-end.txt",
+          "sha256": "5193ef49f5e9d852fef67fdd571ecf26b22a18a637861672975929764a116217",
+          "matches": true
+        },
+        {
+          "file": "./manifest.txt",
+          "sha256": "a7d9fbec8756ecc04ae78caf06a6c215c09ddd63e9c4abd2fc22a0d395afbb6a",
+          "matches": true
+        },
+        {
+          "file": "./resources-errors.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./resources.tsv",
+          "sha256": "97d22b049c2f9b1fd085ec104e177a4b1715eff370ccc9e2ee1f15522bda8483",
+          "matches": true
+        },
+        {
+          "file": "./retained-export.log",
+          "sha256": "13417e253a0297ff20bb275c0ce1f68ab0628ac64147b3a659cf4632d2562a5a",
+          "matches": true
+        },
+        {
+          "file": "./retained.jsonl",
+          "sha256": "5861c6f857571327f5e893f612313a20cd57d563d7ab1bf0fa9a319a50d56bf5",
+          "matches": true
+        },
+        {
+          "file": "./summary.json",
+          "sha256": "6b3f11873a91f24a177e6c7d500f25fbe4b93545d9d90310fb68ac00cbe24e4a",
+          "matches": true
+        }
+      ],
+      "metadata": {
+        "kind": "validation",
+        "run_id": "b0730237-bd62-4845-bcba-3c3cc7c572d2",
+        "dataset_id": "8a28f21d-09c1-4f7f-978e-8ac5d26f8ece",
+        "variant": "async",
+        "profile": "burst",
+        "rate": "5",
+        "warmup_seconds": "5",
+        "measure_seconds": "18",
+        "drain_seconds": "5",
+        "vus": "32",
+        "commit": "2e16db124373d829e84345b2acb96c9c73b656d5",
+        "started_utc": "2026-10-06T13:12:59.372046927Z",
+        "working_tree": "dirty",
+        "topic": "audit-b0730237-bd62-4845-bcba-3c3cc7c572d2",
+        "k6_image": "grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34",
+        "docker_client": "29.1.3 docker_server=29.1.3",
+        "docker_cpus": "16 docker_memory_bytes=16426614784 kernel=6.18.33.2-microsoft-standard-WSL2",
+        "background_container": "tcc-revisao-20260907-kafka-1",
+        "container": "/tcc-entrega04-consumer-1 image=sha256:fdcb3171de2990861d06e2b211882e412e80104abe414187080c1d2d4642a434 nano_cpus=1000000000 memory_bytes=536870912",
+        "analyzer_image_id": "sha256:902523b0493a9842e2146b70e838ac1c6802a2956023a71f3159f57cab882600",
+        "measurement_start_ms": "1791292426027",
+        "k6_exit": "0",
+        "load_end_utc": "2026-10-06T13:14:04.508818031Z",
+        "generator_image": "sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34 generator_cpus=2000000000 generator_memory=1073741824",
+        "collection_end_utc": "2026-10-06T13:14:32.949737778Z",
+        "analyzer_exit": "0"
+      },
+      "summary": {
+        "kind": "validation",
+        "run_id": "b0730237-bd62-4845-bcba-3c3cc7c572d2",
+        "dataset_id": "8a28f21d-09c1-4f7f-978e-8ac5d26f8ece",
+        "variant": "async",
+        "profile": "burst",
+        "rate": 5,
+        "measure_seconds": 18,
+        "instrument_valid": true,
+        "offered": 119,
+        "accepted": 119,
+        "stored_at_observation_end": 119,
+        "stored_within_measurement": 119,
+        "completed_per_second": 6.611111111111111,
+        "http_status_counts": {
+          "202": 119
+        },
+        "http_error_fraction": 0,
+        "dropped_iterations_all_phases": 0,
+        "dlq_terminal": 0,
+        "dlq_message_with_already_stored_uuid": 0,
+        "pending_retained": 0,
+        "accepted_unreconciled": 0,
+        "stored_despite_unconfirmed_http": 0,
+        "integrity_mismatches": 0,
+        "retry_scheduled": 0,
+        "idempotent_replays": 0,
+        "http_duration_ms": {
+          "n": 119,
+          "mean": 8.717909630252102,
+          "median": 6.331298,
+          "sd_sample": 12.181207476110822,
+          "p95": 9.93958,
+          "p99": 73.790181,
+          "max": 74.098032
+        },
+        "send_to_response_ms": {
+          "n": 119,
+          "mean": 9.064392613445378,
+          "median": 6.637944,
+          "sd_sample": 12.177633577412905,
+          "p95": 10.374163,
+          "p99": 74.092416,
+          "max": 74.339902
+        },
+        "send_to_commit_ms": {
+          "n": 119,
+          "mean": 12.469703042016807,
+          "median": 9.93712,
+          "sd_sample": 12.242192827034525,
+          "p95": 17.15418,
+          "p99": 77.197574,
+          "max": 77.713887
+        },
+        "resources": {
+          "tcc-entrega04-async-api-1": {
+            "cpu_percent": {
+              "n": 6,
+              "mean": 6.673333333333333,
+              "median": 7.205,
+              "sd_sample": 4.467942106458707,
+              "p95": 12.78,
+              "p99": 12.78,
+              "max": 12.78
+            },
+            "memory_mib": {
+              "n": 6,
+              "mean": 159.86666666666667,
+              "median": 160.05,
+              "sd_sample": 1.275408431313935,
+              "p95": 161.3,
+              "p99": 161.3,
+              "max": 161.3
+            }
+          },
+          "tcc-entrega04-consumer-1": {
+            "cpu_percent": {
+              "n": 6,
+              "mean": 5.581666666666666,
+              "median": 6.324999999999999,
+              "sd_sample": 3.070839733145751,
+              "p95": 8.92,
+              "p99": 8.92,
+              "max": 8.92
+            },
+            "memory_mib": {
+              "n": 6,
+              "mean": 156.91666666666666,
+              "median": 156.85,
+              "sd_sample": 1.2576432986608974,
+              "p95": 158.6,
+              "p99": 158.6,
+              "max": 158.6
+            }
+          },
+          "tcc-entrega04-kafka-1": {
+            "cpu_percent": {
+              "n": 6,
+              "mean": 19.636666666666667,
+              "median": 3.6550000000000002,
+              "sd_sample": 40.269427443988654,
+              "p95": 101.81,
+              "p99": 101.81,
+              "max": 101.81
+            },
+            "memory_mib": {
+              "n": 6,
+              "mean": 416.7833333333333,
+              "median": 410.85,
+              "sd_sample": 14.913807919732188,
+              "p95": 447.2,
+              "p99": 447.2,
+              "max": 447.2
+            }
+          },
+          "tcc-entrega04-postgres-1": {
+            "cpu_percent": {
+              "n": 6,
+              "mean": 0.9199999999999999,
+              "median": 0.55,
+              "sd_sample": 1.106273022359309,
+              "p95": 3.16,
+              "p99": 3.16,
+              "max": 3.16
+            },
+            "memory_mib": {
+              "n": 6,
+              "mean": 35.901666666666664,
+              "median": 35.715,
+              "sd_sample": 0.5979102496752042,
+              "p95": 36.65,
+              "p99": 36.65,
+              "max": 36.65
+            }
+          }
+        },
+        "measurement_windows_10s": [
+          {
+            "offered": 67,
+            "duration_seconds": 10,
+            "accepted_not_persisted_at_boundary": 0,
+            "unique_commits": 67,
+            "start_seconds": 0
+          },
+          {
+            "offered": 52,
+            "duration_seconds": 8,
+            "accepted_not_persisted_at_boundary": 0,
+            "unique_commits": 52,
+            "start_seconds": 10
+          }
+        ],
+        "recovery": {
+          "applicable": false
+        },
+        "issues": [],
+        "loss_interpretation": "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+      },
+      "analysis_path": "implementacao-java/.runtime/entrega04-reanalysis-v5/b0730237-bd62-4845-bcba-3c3cc7c572d2-async/summary.json",
+      "summary_sha256": "b2c3542f800eb1025e15e19b78679ccf677d57862cb63217ba83fbe56e9f3fa9"
+    },
+    {
+      "run_id": "beb235fc-d9bc-4ed2-a259-2e1b55be3cc9",
+      "raw_path": "implementacao-java/.runtime/entrega04/beb235fc-d9bc-4ed2-a259-2e1b55be3cc9-sync",
+      "classification": "valid_functional_instrument_check_not_definitive",
+      "issues": [],
+      "checksums": [
+        {
+          "file": "./analyzer-console.txt",
+          "sha256": "994176ac6580507ed6d4d6f10682ffe67f6170f37708069cf3c486fd01263fbb",
+          "matches": true
+        },
+        {
+          "file": "./app.log",
+          "sha256": "0d5d45656b008de05dd536e5a2f29a5b9175bcade3ed12bd78f69b9fbb302dc2",
+          "matches": true
+        },
+        {
+          "file": "./contract-console.txt",
+          "sha256": "b88f6433640a6d720ab1eeaad70c17d14fb232ff944944f263a7dcdf4d51bae1",
+          "matches": true
+        },
+        {
+          "file": "./controller.log",
+          "sha256": "a73f23e35c011aecdd86ca1bd4f75c219cf9198875202ef566f4d2825b194b67",
+          "matches": true
+        },
+        {
+          "file": "./database.jsonl",
+          "sha256": "d45e51a3174e759fcf12f9817c278bf1eaea0751d11c5519e91d4dacc3ba7b3a",
+          "matches": true
+        },
+        {
+          "file": "./dlq-export.log",
+          "sha256": "c988954afc30eacf2b58a10bd2fd95f109304a369148c5b550c40ee8856c2c49",
+          "matches": true
+        },
+        {
+          "file": "./dlq.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./events.csv",
+          "sha256": "367cb6ddd5bf68b6d4c46cb7cccf63bc740b7a1135b2abad77c16c10b4353a72",
+          "matches": true
+        },
+        {
+          "file": "./k6-console.txt",
+          "sha256": "35e9683cdc6c63921b5d879292624124ab857aab6c844db4dc8e13a8e0d7a0e1",
+          "matches": true
+        },
+        {
+          "file": "./k6.jsonl.gz",
+          "sha256": "7176a6140928edd96db15fbaceb0ad7f2cec15783ee29ac21bff63cae323bcb4",
+          "matches": true
+        },
+        {
+          "file": "./kafka-lag-end.txt",
+          "sha256": "2f23a1fd348f880a42e416326913f4738fb3f53816516a5b98ca674ee995de77",
+          "matches": true
+        },
+        {
+          "file": "./manifest.txt",
+          "sha256": "ee6f7dd7d2e7dcfd95f49d78a9097c66166362e8671f8391a63aae064a580881",
+          "matches": true
+        },
+        {
+          "file": "./resources-errors.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./resources.tsv",
+          "sha256": "9d44a0c9c23f08252eaac9fdf305ffb162047d83777bdbef1b8b142f4e8de28a",
+          "matches": true
+        },
+        {
+          "file": "./retained-export.log",
+          "sha256": "6717565aa28879dbe6df8f3a0204a5b1e359c7708c7855963fe8969fe6a8817b",
+          "matches": true
+        },
+        {
+          "file": "./retained.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./summary.json",
+          "sha256": "75951393c32bf4d7ce04b7d4e152b9fcf53b49af02b1c8b39582991a21d8fad2",
+          "matches": true
+        }
+      ],
+      "metadata": {
+        "kind": "validation",
+        "run_id": "beb235fc-d9bc-4ed2-a259-2e1b55be3cc9",
+        "dataset_id": "6a22d13a-2fa8-476a-bef8-6ff1d4625826",
+        "variant": "sync",
+        "profile": "model",
+        "rate": "5",
+        "warmup_seconds": "5",
+        "measure_seconds": "18",
+        "drain_seconds": "5",
+        "vus": "32",
+        "commit": "2e16db124373d829e84345b2acb96c9c73b656d5",
+        "started_utc": "2026-10-06T13:00:02.412959529Z",
+        "working_tree": "dirty",
+        "topic": "audit-beb235fc-d9bc-4ed2-a259-2e1b55be3cc9",
+        "k6_image": "grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34",
+        "docker_client": "29.1.3 docker_server=29.1.3",
+        "docker_cpus": "16 docker_memory_bytes=16426614784 kernel=6.18.33.2-microsoft-standard-WSL2",
+        "background_container": "tcc-revisao-20260907-kafka-1",
+        "container": "/tcc-entrega04-sync-api-1 image=sha256:e24c8bdc5b4b61b3dbeb1d4e273c9cdd6a9ec205d31f4c5a40881826902f9b82 nano_cpus=1000000000 memory_bytes=536870912",
+        "analyzer_image_id": "sha256:82597bc2c6c999003850495e095c1e59a7de0c8fb0fe135198f8280bac75ca58",
+        "measurement_start_ms": "1791291633650",
+        "k6_exit": "0",
+        "load_end_utc": "2026-10-06T13:00:34.912947036Z",
+        "generator_image": "sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34 generator_cpus=2000000000 generator_memory=1073741824",
+        "collection_end_utc": "2026-10-06T13:01:02.356455259Z",
+        "analyzer_exit": "0"
+      },
+      "summary": {
+        "kind": "validation",
+        "run_id": "beb235fc-d9bc-4ed2-a259-2e1b55be3cc9",
+        "dataset_id": "6a22d13a-2fa8-476a-bef8-6ff1d4625826",
+        "variant": "sync",
+        "profile": "model",
+        "rate": 5,
+        "measure_seconds": 18,
+        "instrument_valid": true,
+        "offered": 50,
+        "accepted": 50,
+        "stored_at_observation_end": 50,
+        "stored_within_measurement": 50,
+        "completed_per_second": 2.7777777777777777,
+        "http_status_counts": {
+          "201": 50
+        },
+        "http_error_fraction": 0,
+        "dropped_iterations_all_phases": 0,
+        "dlq_terminal": 0,
+        "dlq_message_with_already_stored_uuid": 0,
+        "pending_retained": 0,
+        "accepted_unreconciled": 0,
+        "stored_despite_unconfirmed_http": 0,
+        "integrity_mismatches": 0,
+        "retry_scheduled": 0,
+        "idempotent_replays": 1,
+        "http_duration_ms": {
+          "n": 50,
+          "mean": 13.22893124,
+          "median": 7.671029,
+          "sd_sample": 17.721707545574226,
+          "p95": 40.959396,
+          "p99": 110.722685,
+          "max": 110.722685
+        },
+        "send_to_response_ms": {
+          "n": 50,
+          "mean": 13.477105739999999,
+          "median": 7.8934265,
+          "sd_sample": 17.780701049115322,
+          "p95": 41.242224,
+          "p99": 111.499397,
+          "max": 111.499397
+        },
+        "send_to_commit_ms": {
+          "n": 50,
+          "mean": 9.82925608,
+          "median": 5.9725459999999995,
+          "sd_sample": 11.806150653827522,
+          "p95": 38.94245,
+          "p99": 60.039057,
+          "max": 60.039057
+        },
+        "resources": {
+          "tcc-entrega04-kafka-1": {
+            "cpu_percent": {
+              "n": 5,
+              "mean": 28.498,
+              "median": 2.86,
+              "sd_sample": 42.6356168009799,
+              "p95": 99.44,
+              "p99": 99.44,
+              "max": 99.44
+            },
+            "memory_mib": {
+              "n": 5,
+              "mean": 383.5,
+              "median": 369.7,
+              "sd_sample": 36.62205619568622,
+              "p95": 429.9,
+              "p99": 429.9,
+              "max": 429.9
+            }
+          },
+          "tcc-entrega04-postgres-1": {
+            "cpu_percent": {
+              "n": 5,
+              "mean": 0.8320000000000001,
+              "median": 0.11,
+              "sd_sample": 1.7052184610776415,
+              "p95": 3.88,
+              "p99": 3.88,
+              "max": 3.88
+            },
+            "memory_mib": {
+              "n": 5,
+              "mean": 55.14,
+              "median": 54.64,
+              "sd_sample": 1.6635353918687752,
+              "p95": 58,
+              "p99": 58,
+              "max": 58
+            }
+          },
+          "tcc-entrega04-sync-api-1": {
+            "cpu_percent": {
+              "n": 5,
+              "mean": 0.152,
+              "median": 0.15,
+              "sd_sample": 0.022803508501982758,
+              "p95": 0.19,
+              "p99": 0.19,
+              "max": 0.19
+            },
+            "memory_mib": {
+              "n": 5,
+              "mean": 167.18,
+              "median": 167.1,
+              "sd_sample": 0.13038404810405754,
+              "p95": 167.4,
+              "p99": 167.4,
+              "max": 167.4
+            }
+          }
+        },
+        "measurement_windows_10s": [
+          {
+            "offered": 50,
+            "start_seconds": 0,
+            "unique_commits": 50,
+            "accepted_not_persisted_at_boundary": 0,
+            "duration_seconds": 10
+          },
+          {
+            "offered": 0,
+            "start_seconds": 10,
+            "unique_commits": 0,
+            "accepted_not_persisted_at_boundary": 0,
+            "duration_seconds": 8
+          }
+        ],
+        "recovery": {
+          "applicable": false
+        },
+        "issues": [],
+        "loss_interpretation": "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+      },
+      "analysis_path": "implementacao-java/.runtime/entrega04-reanalysis-v5/beb235fc-d9bc-4ed2-a259-2e1b55be3cc9-sync/summary.json",
+      "summary_sha256": "fd7a8701cfca349c1e8e169d94f76d9003320d2e85b3e30e952bb8f12a1d2c06"
+    },
+    {
+      "run_id": "e71d7147-04f8-41bc-b44c-30b6857b41cb",
+      "raw_path": "implementacao-java/.runtime/entrega04/e71d7147-04f8-41bc-b44c-30b6857b41cb-sync",
+      "classification": "valid_functional_instrument_check_not_definitive",
+      "issues": [],
+      "checksums": [
+        {
+          "file": "./analyzer-console.txt",
+          "sha256": "3e1367132126201556e32e0e70a86b407bed867aa530481c7afe0fbc9d5d163e",
+          "matches": true
+        },
+        {
+          "file": "./app.log",
+          "sha256": "eedf72dd5ddd7f605f4003d3ce3fb0853dd1635b69d5e262a1f48b32fef4f03c",
+          "matches": true
+        },
+        {
+          "file": "./contract-console.txt",
+          "sha256": "1644af271990a1594abcf0d14aad52e7775ce95c5ee206e777eae429eda1a09a",
+          "matches": true
+        },
+        {
+          "file": "./controller.log",
+          "sha256": "8ef4279b63443243c246209d502a369aad4968f3c29fcdd822efe533ea812f1e",
+          "matches": true
+        },
+        {
+          "file": "./database.jsonl",
+          "sha256": "bf50f6dffcbfbd29dcab57413288ef726abd6d18845fe1fcb202c5fb5e537742",
+          "matches": true
+        },
+        {
+          "file": "./dlq-export.log",
+          "sha256": "7fb2211f00c68d4e264f06465815c989fa5893fdacea2f3e0529d2d7da1d728d",
+          "matches": true
+        },
+        {
+          "file": "./dlq.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./events.csv",
+          "sha256": "9b0fa58b433250198ecda9f4cfde78d45b03783342c40cc31bedea3597b594dc",
+          "matches": true
+        },
+        {
+          "file": "./k6-console.txt",
+          "sha256": "e0fa49f93fe73b22731e7a9453dfaecd0c1cac55467bc12e4e820cb15a52e476",
+          "matches": true
+        },
+        {
+          "file": "./k6.jsonl.gz",
+          "sha256": "625ffbfbe1b35ae9f9e18efd8a2631d02163161da30bac49fabc180d31279e56",
+          "matches": true
+        },
+        {
+          "file": "./kafka-lag-end.txt",
+          "sha256": "365321db4a3a855048c32207e7ef7c27318a3f8fae3be0fa7ee6d29f497055ff",
+          "matches": true
+        },
+        {
+          "file": "./manifest.txt",
+          "sha256": "7a4d1f2164351e2bcd879664f6caa38cee2837f217bdd311fadc1f468538b6ea",
+          "matches": true
+        },
+        {
+          "file": "./resources-errors.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./resources.tsv",
+          "sha256": "a0b52fbe27de658df1c07c308ee06fdbb2ab181c91f70eb30832d475025e8c62",
+          "matches": true
+        },
+        {
+          "file": "./retained-export.log",
+          "sha256": "174d671baa2fb2aa3b074f514bf3e42f6e63582e925cf35113ab7646fd3442c6",
+          "matches": true
+        },
+        {
+          "file": "./retained.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./summary.json",
+          "sha256": "50d9fd5ce71847e708ea9e24729fe1137b7e75eb36d11bb6a3136321858f3992",
+          "matches": true
+        }
+      ],
+      "metadata": {
+        "kind": "validation",
+        "run_id": "e71d7147-04f8-41bc-b44c-30b6857b41cb",
+        "dataset_id": "199c7db3-d7fd-4296-a665-ff94a2ef0e1a",
+        "variant": "sync",
+        "profile": "model",
+        "rate": "5",
+        "warmup_seconds": "5",
+        "measure_seconds": "18",
+        "drain_seconds": "5",
+        "vus": "32",
+        "commit": "2e16db124373d829e84345b2acb96c9c73b656d5",
+        "started_utc": "2026-10-06T13:05:54.294855812Z",
+        "working_tree": "dirty",
+        "topic": "audit-e71d7147-04f8-41bc-b44c-30b6857b41cb",
+        "k6_image": "grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34",
+        "docker_client": "29.1.3 docker_server=29.1.3",
+        "docker_cpus": "16 docker_memory_bytes=16426614784 kernel=6.18.33.2-microsoft-standard-WSL2",
+        "background_container": "tcc-revisao-20260907-kafka-1",
+        "container": "/tcc-entrega04-sync-api-1 image=sha256:e24c8bdc5b4b61b3dbeb1d4e273c9cdd6a9ec205d31f4c5a40881826902f9b82 nano_cpus=1000000000 memory_bytes=536870912",
+        "analyzer_image_id": "sha256:902523b0493a9842e2146b70e838ac1c6802a2956023a71f3159f57cab882600",
+        "measurement_start_ms": "1791291988027",
+        "k6_exit": "0",
+        "load_end_utc": "2026-10-06T13:06:29.757998133Z",
+        "generator_image": "sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34 generator_cpus=2000000000 generator_memory=1073741824",
+        "collection_end_utc": "2026-10-06T13:07:03.505194256Z",
+        "analyzer_exit": "0"
+      },
+      "summary": {
+        "kind": "validation",
+        "run_id": "e71d7147-04f8-41bc-b44c-30b6857b41cb",
+        "dataset_id": "199c7db3-d7fd-4296-a665-ff94a2ef0e1a",
+        "variant": "sync",
+        "profile": "model",
+        "rate": 5,
+        "measure_seconds": 18,
+        "instrument_valid": true,
+        "offered": 50,
+        "accepted": 50,
+        "stored_at_observation_end": 50,
+        "stored_within_measurement": 50,
+        "completed_per_second": 2.7777777777777777,
+        "http_status_counts": {
+          "201": 50
+        },
+        "http_error_fraction": 0,
+        "dropped_iterations_all_phases": 0,
+        "dlq_terminal": 0,
+        "dlq_message_with_already_stored_uuid": 0,
+        "pending_retained": 0,
+        "accepted_unreconciled": 0,
+        "stored_despite_unconfirmed_http": 0,
+        "integrity_mismatches": 0,
+        "retry_scheduled": 0,
+        "idempotent_replays": 1,
+        "http_duration_ms": {
+          "n": 50,
+          "mean": 23.85176086,
+          "median": 10.5006895,
+          "sd_sample": 24.348679071521772,
+          "p95": 65.651385,
+          "p99": 98.932138,
+          "max": 98.932138
+        },
+        "send_to_response_ms": {
+          "n": 50,
+          "mean": 24.17933502,
+          "median": 10.7695025,
+          "sd_sample": 24.405019337309167,
+          "p95": 66.000729,
+          "p99": 100.017864,
+          "max": 100.017864
+        },
+        "send_to_commit_ms": {
+          "n": 50,
+          "mean": 20.20944002,
+          "median": 7.9616825,
+          "sd_sample": 23.037609186707023,
+          "p95": 64.04297,
+          "p99": 81.609616,
+          "max": 81.609616
+        },
+        "resources": {
+          "tcc-entrega04-kafka-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 422.18,
+              "median": 399,
+              "sd_sample": 32.94604680382761,
+              "p95": 461,
+              "p99": 461,
+              "max": 461
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 41.129999999999995,
+              "median": 1.58,
+              "sd_sample": 54.53793587953251,
+              "p95": 102.75,
+              "p99": 102.75,
+              "max": 102.75
+            }
+          },
+          "tcc-entrega04-postgres-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 53.95,
+              "median": 54.16,
+              "sd_sample": 0.5665244919683502,
+              "p95": 54.44,
+              "p99": 54.44,
+              "max": 54.44
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 0.758,
+              "median": 0.01,
+              "sd_sample": 1.6670692847029487,
+              "p95": 3.74,
+              "p99": 3.74,
+              "max": 3.74
+            }
+          },
+          "tcc-entrega04-sync-api-1": {
+            "memory_mib": {
+              "n": 5,
+              "mean": 172.48,
+              "median": 172.4,
+              "sd_sample": 0.29495762407505505,
+              "p95": 172.9,
+              "p99": 172.9,
+              "max": 172.9
+            },
+            "cpu_percent": {
+              "n": 5,
+              "mean": 0.198,
+              "median": 0.2,
+              "sd_sample": 0.03563705936241092,
+              "p95": 0.25,
+              "p99": 0.25,
+              "max": 0.25
+            }
+          }
+        },
+        "measurement_windows_10s": [
+          {
+            "duration_seconds": 10,
+            "accepted_not_persisted_at_boundary": 0,
+            "unique_commits": 50,
+            "start_seconds": 0,
+            "offered": 50
+          },
+          {
+            "duration_seconds": 8,
+            "accepted_not_persisted_at_boundary": 0,
+            "unique_commits": 0,
+            "start_seconds": 10,
+            "offered": 0
+          }
+        ],
+        "recovery": {
+          "applicable": false
+        },
+        "issues": [],
+        "loss_interpretation": "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+      },
+      "analysis_path": "implementacao-java/.runtime/entrega04-reanalysis-v5/e71d7147-04f8-41bc-b44c-30b6857b41cb-sync/summary.json",
+      "summary_sha256": "3abd9937a3889162d87a09e22ff9a15d22bb03029573a9c8f583b0ec224318a3"
+    },
+    {
+      "run_id": "e95859a7-6eae-4f96-bad4-6448322bc749",
+      "raw_path": "implementacao-java/.runtime/entrega04/e95859a7-6eae-4f96-bad4-6448322bc749-async",
+      "classification": "invalid_instrument_collection",
+      "issues": [],
+      "checksums": [
+        {
+          "file": "./analyzer-console.txt",
+          "sha256": "6bb707fb3a50e349b5feed749989ddb0c976c35c4149f64e7f97ffc102a0bbbe",
+          "matches": true
+        },
+        {
+          "file": "./app.log",
+          "sha256": "aaaab8af964b2814a8e83b5f8f74c787a374c08cb80facd4671065c0e63e0249",
+          "matches": true
+        },
+        {
+          "file": "./contract-console.txt",
+          "sha256": "b69d50cd66762b163dc8ca58183299d9dc47178b741713a3c4bc81bae538016d",
+          "matches": true
+        },
+        {
+          "file": "./controller.log",
+          "sha256": "43ae95b438cf4b9647ff0a5d023c40afa010ae9b83b5839eb650d7734e98129e",
+          "matches": true
+        },
+        {
+          "file": "./database.jsonl",
+          "sha256": "3f29b80fb1bf39f36aaf658522f2f9cff50e45c9ca670ce1d1b1512849b44bb7",
+          "matches": true
+        },
+        {
+          "file": "./dlq-export.log",
+          "sha256": "45d5798c6f5b1c3ca1ed06f68e3372d748f78bbb4e22f3767d655772fa362060",
+          "matches": true
+        },
+        {
+          "file": "./dlq.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./events.csv",
+          "sha256": "a47ae77ff0011d5f0809fa31b2b9be2116026f15cfc0cadcc27d2440454c0863",
+          "matches": true
+        },
+        {
+          "file": "./k6-console.txt",
+          "sha256": "474944fe97dc5074811bd30bb6c3c11c805d62456c7cf56f25d1becd6ed94273",
+          "matches": true
+        },
+        {
+          "file": "./k6.jsonl.gz",
+          "sha256": "b3cb36da089bcf0305df51dc7d44cc99200875acdc37b7f845c2dec0033282c1",
+          "matches": true
+        },
+        {
+          "file": "./kafka-lag-end.txt",
+          "sha256": "6097d7fc77bfe1bcb79ac3d3e8ad6dea036351fd0c49e875038b8d9a5c193206",
+          "matches": true
+        },
+        {
+          "file": "./manifest.txt",
+          "sha256": "f966f25d875a135feb70794e5707dd5eb51738ff173f9141b9675971a390c0d5",
+          "matches": true
+        },
+        {
+          "file": "./resources-errors.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./resources.tsv",
+          "sha256": "e8a0a07c99f48249e1b0269ac785e835aa1729ff6d6db6ccbdfdfbf4da25bfc3",
+          "matches": true
+        },
+        {
+          "file": "./retained-export.log",
+          "sha256": "eeb44271d85c896ba08581d5e6e5c97e641b9e9c3e8fdd056deb58ae59715512",
+          "matches": true
+        },
+        {
+          "file": "./retained.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./summary.json",
+          "sha256": "3ba6edf498cb80264208fd19b6b2143fd1cd2a5d56b6b1c469ab7b5aa32f0d03",
+          "matches": true
+        }
+      ],
+      "metadata": {
+        "kind": "validation",
+        "run_id": "e95859a7-6eae-4f96-bad4-6448322bc749",
+        "dataset_id": "6a22d13a-2fa8-476a-bef8-6ff1d4625826",
+        "variant": "async",
+        "profile": "model",
+        "rate": "5",
+        "warmup_seconds": "5",
+        "measure_seconds": "18",
+        "drain_seconds": "5",
+        "vus": "32",
+        "commit": "2e16db124373d829e84345b2acb96c9c73b656d5",
+        "started_utc": "2026-10-06T13:01:03.923059070Z",
+        "working_tree": "dirty",
+        "topic": "audit-e95859a7-6eae-4f96-bad4-6448322bc749",
+        "k6_image": "grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34",
+        "docker_client": "29.1.3 docker_server=29.1.3",
+        "docker_cpus": "16 docker_memory_bytes=16426614784 kernel=6.18.33.2-microsoft-standard-WSL2",
+        "background_container": "tcc-revisao-20260907-kafka-1",
+        "container": "/tcc-entrega04-consumer-1 image=sha256:fdcb3171de2990861d06e2b211882e412e80104abe414187080c1d2d4642a434 nano_cpus=1000000000 memory_bytes=536870912",
+        "analyzer_image_id": "sha256:82597bc2c6c999003850495e095c1e59a7de0c8fb0fe135198f8280bac75ca58",
+        "measurement_start_ms": "1791291697033",
+        "k6_exit": "0",
+        "load_end_utc": "2026-10-06T13:01:39.110298083Z",
+        "generator_image": "sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34 generator_cpus=2000000000 generator_memory=1073741824",
+        "collection_end_utc": "2026-10-06T13:02:12.285539607Z",
+        "analyzer_exit": "2"
+      },
+      "summary": {
+        "kind": "validation",
+        "run_id": "e95859a7-6eae-4f96-bad4-6448322bc749",
+        "dataset_id": "6a22d13a-2fa8-476a-bef8-6ff1d4625826",
+        "variant": "async",
+        "profile": "model",
+        "rate": 5,
+        "measure_seconds": 18,
+        "instrument_valid": false,
+        "offered": 50,
+        "accepted": 50,
+        "stored_at_observation_end": 50,
+        "stored_within_measurement": 50,
+        "completed_per_second": 2.7777777777777777,
+        "http_status_counts": {
+          "202": 50
+        },
+        "http_error_fraction": 0,
+        "dropped_iterations_all_phases": 0,
+        "dlq_terminal": 0,
+        "dlq_message_with_already_stored_uuid": 0,
+        "pending_retained": 0,
+        "accepted_unreconciled": 0,
+        "stored_despite_unconfirmed_http": 0,
+        "integrity_mismatches": 0,
+        "retry_scheduled": 0,
+        "idempotent_replays": 1,
+        "http_duration_ms": {
+          "n": 50,
+          "mean": 29.254512839999997,
+          "median": 12.970243,
+          "sd_sample": 32.042651001486924,
+          "p95": 72.05762,
+          "p99": 188.493281,
+          "max": 188.493281
+        },
+        "send_to_response_ms": {
+          "n": 50,
+          "mean": 29.6418705,
+          "median": 13.3589935,
+          "sd_sample": 32.11092620441766,
+          "p95": 72.380252,
+          "p99": 189.578724,
+          "max": 189.578724
+        },
+        "send_to_commit_ms": {
+          "n": 50,
+          "mean": 62.93975842,
+          "median": 61.9848755,
+          "sd_sample": 33.27156717595445,
+          "p95": 115.028748,
+          "p99": 229.005011,
+          "max": 229.005011
+        },
+        "resources": {
+          "tcc-entrega04-async-api-1": {
+            "cpu_percent": {
+              "n": 5,
+              "mean": 0.8760000000000001,
+              "median": 0.34,
+              "sd_sample": 1.2858771325441634,
+              "p95": 3.16,
+              "p99": 3.16,
+              "max": 3.16
+            },
+            "memory_mib": {
+              "n": 5,
+              "mean": 170.56,
+              "median": 170.6,
+              "sd_sample": 0.1516575088810224,
+              "p95": 170.7,
+              "p99": 170.7,
+              "max": 170.7
+            }
+          },
+          "tcc-entrega04-consumer-1": {
+            "cpu_percent": {
+              "n": 5,
+              "mean": 3.3379999999999996,
+              "median": 1.53,
+              "sd_sample": 4.814329652194582,
+              "p95": 11.92,
+              "p99": 11.92,
+              "max": 11.92
+            },
+            "memory_mib": {
+              "n": 5,
+              "mean": 155.1,
+              "median": 154.9,
+              "sd_sample": 0.6204836822995442,
+              "p95": 155.9,
+              "p99": 155.9,
+              "max": 155.9
+            }
+          },
+          "tcc-entrega04-kafka-1": {
+            "cpu_percent": {
+              "n": 5,
+              "mean": 42.374,
+              "median": 49.21,
+              "sd_sample": 41.066887878192084,
+              "p95": 98.53,
+              "p99": 98.53,
+              "max": 98.53
+            },
+            "memory_mib": {
+              "n": 5,
+              "mean": 398.93999999999994,
+              "median": 374,
+              "sd_sample": 43.009103687475275,
+              "p95": 472.4,
+              "p99": 472.4,
+              "max": 472.4
+            }
+          },
+          "tcc-entrega04-postgres-1": {
+            "cpu_percent": {
+              "n": 5,
+              "mean": 0.8059999999999998,
+              "median": 0.02,
+              "sd_sample": 1.7632583474919379,
+              "p95": 3.96,
+              "p99": 3.96,
+              "max": 3.96
+            },
+            "memory_mib": {
+              "n": 5,
+              "mean": 53.668000000000006,
+              "median": 53.63,
+              "sd_sample": 0.5705436004373374,
+              "p95": 54.59,
+              "p99": 54.59,
+              "max": 54.59
+            }
+          }
+        },
+        "measurement_windows_10s": [
+          {
+            "unique_commits": 50,
+            "accepted_not_persisted_at_boundary": 0,
+            "duration_seconds": 10,
+            "offered": 50,
+            "start_seconds": 0
+          },
+          {
+            "unique_commits": 0,
+            "accepted_not_persisted_at_boundary": 0,
+            "duration_seconds": 8,
+            "offered": 0,
+            "start_seconds": 10
+          }
+        ],
+        "recovery": {
+          "applicable": false
+        },
+        "issues": [
+          "6a22d13a-2fa8-476a-bef8-000000000000:dlq_evidence_mismatch"
+        ],
+        "loss_interpretation": "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+      },
+      "analysis_path": "implementacao-java/.runtime/entrega04-reanalysis-v5/e95859a7-6eae-4f96-bad4-6448322bc749-async/summary.json",
+      "summary_sha256": "fed4a1378390a938c70d8ddaeddee26f1edbe913c868e4a5ac10d41f7e762ff1"
+    },
+    {
+      "run_id": "f53dad57-5b76-425a-8bad-44add2111a9f",
+      "raw_path": "implementacao-java/.runtime/entrega04/f53dad57-5b76-425a-8bad-44add2111a9f-sync",
+      "classification": "valid_functional_instrument_check_not_definitive",
+      "issues": [],
+      "checksums": [
+        {
+          "file": "./analyzer-console.txt",
+          "sha256": "ad6c2320ebd9b2e0974428baddf9db80a166977a2c292b3f6dda2a5ed9a836a9",
+          "matches": true
+        },
+        {
+          "file": "./app.log",
+          "sha256": "65f8e2694f01fdae161936b2b88882dd00ca1b9b4b9e6818efd76037856aa188",
+          "matches": true
+        },
+        {
+          "file": "./controller.log",
+          "sha256": "bedaa0995a50ec87515fa43e10152b4e111eea0b4f1585da7eb2b50854ced0e5",
+          "matches": true
+        },
+        {
+          "file": "./database.jsonl",
+          "sha256": "8a5831a81883d572422e3534f42bf3626bcdb40caa6e0f985ae50422ba66d47f",
+          "matches": true
+        },
+        {
+          "file": "./dlq-export.log",
+          "sha256": "bc0b74b148e88e1193e71e929cb90f553c21c2ffb5db2724a33d61a65f464de5",
+          "matches": true
+        },
+        {
+          "file": "./dlq.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./events.csv",
+          "sha256": "28f28de39d2fd7679c2543f8c8de001dc40ad15398e5055fd69d7ee6096bc908",
+          "matches": true
+        },
+        {
+          "file": "./k6-console.txt",
+          "sha256": "de50943a304f51258ec1bd931f98930d835ea4afd2bda84959e205989b65a91d",
+          "matches": true
+        },
+        {
+          "file": "./k6.jsonl.gz",
+          "sha256": "cdb5fda86ff259fc8e5d96c3425f3719ebb143123d2d7a44404841ebe7af19ba",
+          "matches": true
+        },
+        {
+          "file": "./kafka-lag-end.txt",
+          "sha256": "8c8c0750fd8a5f043dfd0f0b4fd8521a24e778f7ff169826c4ca90529b9ce21a",
+          "matches": true
+        },
+        {
+          "file": "./manifest.txt",
+          "sha256": "695de91c6c200db313e2a0b8e7d21e9604dc8bfeca3e14a4d236b0c788ffd58f",
+          "matches": true
+        },
+        {
+          "file": "./resources-errors.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./resources.tsv",
+          "sha256": "7ba4d140aa5b7f167a3daafd57feeebe6294bc89f8f69914e5dc9d0d838136bd",
+          "matches": true
+        },
+        {
+          "file": "./retained-export.log",
+          "sha256": "370e4418c4ed2925c7f6cc60e96d5f604865411c550d35212a3aa9545ed006a2",
+          "matches": true
+        },
+        {
+          "file": "./retained.jsonl",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "file": "./summary.json",
+          "sha256": "2a6a19e6a62c576dc35afdec27b0578818c5152d1e9b7f873bae16827ddae82c",
+          "matches": true
+        }
+      ],
+      "metadata": {
+        "kind": "validation",
+        "run_id": "f53dad57-5b76-425a-8bad-44add2111a9f",
+        "dataset_id": "3f3507a6-a06a-4430-b853-e9a4058b0be3",
+        "variant": "sync",
+        "profile": "postgres-stop",
+        "rate": "5",
+        "warmup_seconds": "5",
+        "measure_seconds": "18",
+        "drain_seconds": "5",
+        "vus": "32",
+        "commit": "2e16db124373d829e84345b2acb96c9c73b656d5",
+        "started_utc": "2026-10-06T13:08:19.215372242Z",
+        "working_tree": "dirty",
+        "topic": "audit-f53dad57-5b76-425a-8bad-44add2111a9f",
+        "k6_image": "grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34",
+        "docker_client": "29.1.3 docker_server=29.1.3",
+        "docker_cpus": "16 docker_memory_bytes=16426614784 kernel=6.18.33.2-microsoft-standard-WSL2",
+        "background_container": "tcc-revisao-20260907-kafka-1",
+        "container": "/tcc-entrega04-sync-api-1 image=sha256:e24c8bdc5b4b61b3dbeb1d4e273c9cdd6a9ec205d31f4c5a40881826902f9b82 nano_cpus=1000000000 memory_bytes=536870912",
+        "analyzer_image_id": "sha256:902523b0493a9842e2146b70e838ac1c6802a2956023a71f3159f57cab882600",
+        "measurement_start_ms": "1791292146977",
+        "fault_stop_command_utc": "2026-10-06T13:09:12.622205816Z",
+        "fault_seconds": "5",
+        "fault_stopped_utc": "2026-10-06T13:09:13.391848177Z",
+        "fault_restore_utc": "2026-10-06T13:09:19.204303151Z",
+        "k6_exit": "0",
+        "load_end_utc": "2026-10-06T13:09:28.926931381Z",
+        "generator_image": "sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34 generator_cpus=2000000000 generator_memory=1073741824",
+        "collection_end_utc": "2026-10-06T13:09:54.651964259Z",
+        "analyzer_exit": "0"
+      },
+      "summary": {
+        "kind": "validation",
+        "run_id": "f53dad57-5b76-425a-8bad-44add2111a9f",
+        "dataset_id": "3f3507a6-a06a-4430-b853-e9a4058b0be3",
+        "variant": "sync",
+        "profile": "postgres-stop",
+        "rate": 5,
+        "measure_seconds": 18,
+        "instrument_valid": true,
+        "offered": 91,
+        "accepted": 39,
+        "stored_at_observation_end": 39,
+        "stored_within_measurement": 31,
+        "completed_per_second": 1.7222222222222223,
+        "http_status_counts": {
+          "201": 39,
+          "503": 52
+        },
+        "http_error_fraction": 0.5714285714285714,
+        "dropped_iterations_all_phases": 0,
+        "dlq_terminal": 0,
+        "dlq_message_with_already_stored_uuid": 0,
+        "pending_retained": 0,
+        "accepted_unreconciled": 0,
+        "stored_despite_unconfirmed_http": 0,
+        "integrity_mismatches": 0,
+        "retry_scheduled": 0,
+        "idempotent_replays": 0,
+        "http_duration_ms": {
+          "n": 91,
+          "mean": 3174.07818356044,
+          "median": 5004.438751,
+          "sd_sample": 2358.760782010241,
+          "p95": 5005.901933,
+          "p99": 5012.513431,
+          "max": 5012.513431
+        },
+        "send_to_response_ms": {
+          "n": 91,
+          "mean": 3174.57898878022,
+          "median": 5004.95456,
+          "sd_sample": 2358.7854809781024,
+          "p95": 5006.366862,
+          "p99": 5012.7865,
+          "max": 5012.7865
+        },
+        "send_to_commit_ms": {
+          "n": 39,
+          "mean": 858.763130025641,
+          "median": 7.944744,
+          "sd_sample": 1709.2313246238966,
+          "p95": 4645.399633,
+          "p99": 4841.600293,
+          "max": 4841.600293
+        },
+        "resources": {
+          "tcc-entrega04-kafka-1": {
+            "memory_mib": {
+              "n": 6,
+              "mean": 409.2166666666667,
+              "median": 399.75,
+              "sd_sample": 23.213911059247792,
+              "p95": 456.6,
+              "p99": 456.6,
+              "max": 456.6
+            },
+            "cpu_percent": {
+              "n": 6,
+              "mean": 17.66,
+              "median": 1.46,
+              "sd_sample": 39.72221141880195,
+              "p95": 98.74,
+              "p99": 98.74,
+              "max": 98.74
+            }
+          },
+          "tcc-entrega04-postgres-1": {
+            "memory_mib": {
+              "n": 6,
+              "mean": 15.283333333333331,
+              "median": 9.07,
+              "sd_sample": 21.235576438294924,
+              "p95": 54.41,
+              "p99": 54.41,
+              "max": 54.41
+            },
+            "cpu_percent": {
+              "n": 6,
+              "mean": 0.6666666666666666,
+              "median": 0.025,
+              "sd_sample": 1.584192749215406,
+              "p95": 3.9,
+              "p99": 3.9,
+              "max": 3.9
+            }
+          },
+          "tcc-entrega04-sync-api-1": {
+            "memory_mib": {
+              "n": 6,
+              "mean": 170.35,
+              "median": 170.64999999999998,
+              "sd_sample": 2.5633961847517823,
+              "p95": 173.2,
+              "p99": 173.2,
+              "max": 173.2
+            },
+            "cpu_percent": {
+              "n": 6,
+              "mean": 5.623333333333332,
+              "median": 5.6,
+              "sd_sample": 2.5958248528486405,
+              "p95": 9.6,
+              "p99": 9.6,
+              "max": 9.6
+            }
+          }
+        },
+        "measurement_windows_10s": [
+          {
+            "duration_seconds": 10,
+            "accepted_not_persisted_at_boundary": 0,
+            "unique_commits": 31,
+            "start_seconds": 0,
+            "offered": 50
+          },
+          {
+            "duration_seconds": 8,
+            "accepted_not_persisted_at_boundary": 0,
+            "unique_commits": 0,
+            "start_seconds": 10,
+            "offered": 40
+          }
+        ],
+        "recovery": {
+          "applicable": true,
+          "restore_command_completed_utc": "2026-10-06T13:09:19.204303151Z",
+          "accepted_not_persisted_at_restore": 0,
+          "first_commit_after_restore_ms": 9216.096301,
+          "all_pre_restore_accepted_persisted": null,
+          "backlog_persistence_recovery_ms": null,
+          "stable_throughput_recovery": "not_estimated: first commit and complete backlog drainage are distinct; a rolling stability criterion requires the full campaign"
+        },
+        "issues": [],
+        "loss_interpretation": "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+      },
+      "analysis_path": "implementacao-java/.runtime/entrega04-reanalysis-v5/f53dad57-5b76-425a-8bad-44add2111a9f-sync/summary.json",
+      "summary_sha256": "83c4192b12e93c17072623e62492d657e6a4bcb42eb2c5fadf5ac8990268f844"
+    }
+  ]
+}

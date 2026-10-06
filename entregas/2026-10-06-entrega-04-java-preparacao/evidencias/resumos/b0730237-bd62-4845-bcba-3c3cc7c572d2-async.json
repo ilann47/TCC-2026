@@ -1,0 +1,155 @@
+{
+  "kind" : "validation",
+  "run_id" : "b0730237-bd62-4845-bcba-3c3cc7c572d2",
+  "dataset_id" : "8a28f21d-09c1-4f7f-978e-8ac5d26f8ece",
+  "variant" : "async",
+  "profile" : "burst",
+  "rate" : 5,
+  "measure_seconds" : 18,
+  "instrument_valid" : true,
+  "offered" : 119,
+  "accepted" : 119,
+  "stored_at_observation_end" : 119,
+  "stored_within_measurement" : 119,
+  "completed_per_second" : 6.611111111111111,
+  "http_status_counts" : {
+    "202" : 119
+  },
+  "http_error_fraction" : 0.0,
+  "dropped_iterations_all_phases" : 0.0,
+  "dlq_terminal" : 0,
+  "dlq_message_with_already_stored_uuid" : 0,
+  "pending_retained" : 0,
+  "accepted_unreconciled" : 0,
+  "stored_despite_unconfirmed_http" : 0,
+  "integrity_mismatches" : 0,
+  "retry_scheduled" : 0,
+  "idempotent_replays" : 0,
+  "http_duration_ms" : {
+    "n" : 119,
+    "mean" : 8.717909630252102,
+    "median" : 6.331298,
+    "sd_sample" : 12.181207476110822,
+    "p95" : 9.93958,
+    "p99" : 73.790181,
+    "max" : 74.098032
+  },
+  "send_to_response_ms" : {
+    "n" : 119,
+    "mean" : 9.064392613445378,
+    "median" : 6.637944,
+    "sd_sample" : 12.177633577412905,
+    "p95" : 10.374163,
+    "p99" : 74.092416,
+    "max" : 74.339902
+  },
+  "send_to_commit_ms" : {
+    "n" : 119,
+    "mean" : 12.469703042016807,
+    "median" : 9.93712,
+    "sd_sample" : 12.242192827034525,
+    "p95" : 17.15418,
+    "p99" : 77.197574,
+    "max" : 77.713887
+  },
+  "resources" : {
+    "tcc-entrega04-async-api-1" : {
+      "cpu_percent" : {
+        "n" : 6,
+        "mean" : 6.673333333333333,
+        "median" : 7.205,
+        "sd_sample" : 4.467942106458707,
+        "p95" : 12.78,
+        "p99" : 12.78,
+        "max" : 12.78
+      },
+      "memory_mib" : {
+        "n" : 6,
+        "mean" : 159.86666666666667,
+        "median" : 160.05,
+        "sd_sample" : 1.275408431313935,
+        "p95" : 161.3,
+        "p99" : 161.3,
+        "max" : 161.3
+      }
+    },
+    "tcc-entrega04-consumer-1" : {
+      "cpu_percent" : {
+        "n" : 6,
+        "mean" : 5.581666666666666,
+        "median" : 6.324999999999999,
+        "sd_sample" : 3.070839733145751,
+        "p95" : 8.92,
+        "p99" : 8.92,
+        "max" : 8.92
+      },
+      "memory_mib" : {
+        "n" : 6,
+        "mean" : 156.91666666666666,
+        "median" : 156.85,
+        "sd_sample" : 1.2576432986608974,
+        "p95" : 158.6,
+        "p99" : 158.6,
+        "max" : 158.6
+      }
+    },
+    "tcc-entrega04-kafka-1" : {
+      "cpu_percent" : {
+        "n" : 6,
+        "mean" : 19.636666666666667,
+        "median" : 3.6550000000000002,
+        "sd_sample" : 40.269427443988654,
+        "p95" : 101.81,
+        "p99" : 101.81,
+        "max" : 101.81
+      },
+      "memory_mib" : {
+        "n" : 6,
+        "mean" : 416.7833333333333,
+        "median" : 410.85,
+        "sd_sample" : 14.913807919732188,
+        "p95" : 447.2,
+        "p99" : 447.2,
+        "max" : 447.2
+      }
+    },
+    "tcc-entrega04-postgres-1" : {
+      "cpu_percent" : {
+        "n" : 6,
+        "mean" : 0.9199999999999999,
+        "median" : 0.55,
+        "sd_sample" : 1.106273022359309,
+        "p95" : 3.16,
+        "p99" : 3.16,
+        "max" : 3.16
+      },
+      "memory_mib" : {
+        "n" : 6,
+        "mean" : 35.901666666666664,
+        "median" : 35.715,
+        "sd_sample" : 0.5979102496752042,
+        "p95" : 36.65,
+        "p99" : 36.65,
+        "max" : 36.65
+      }
+    }
+  },
+  "measurement_windows_10s" : [ {
+    "offered" : 67,
+    "duration_seconds" : 10,
+    "accepted_not_persisted_at_boundary" : 0,
+    "unique_commits" : 67,
+    "start_seconds" : 0
+  }, {
+    "offered" : 52,
+    "duration_seconds" : 8,
+    "accepted_not_persisted_at_boundary" : 0,
+    "unique_commits" : 52,
+    "start_seconds" : 10
+  } ],
+  "recovery" : {
+    "applicable" : false
+  },
+  "issues" : [ ],
+  "loss_interpretation" : "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+}

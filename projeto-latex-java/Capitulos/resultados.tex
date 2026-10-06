@@ -1,7 +1,65 @@
-% Arquivo reservado à análise da coleta experimental definitiva.
-% Não incluído no PDF enquanto não existirem as repetições previstas no método.
-% As evidências de validação do software são documentadas na seção 4.6.
-% O exemplo de mineração de tweets do modelo institucional foi removido.
+\chapter{Análise dos resultados}
+\label{cap:resultados}
+
+Este capítulo distingue evidências de validação funcional, calibração dos instrumentos e resultados comparativos. A primeira etapa demonstra os comportamentos observados do protótipo e a rastreabilidade da coleta, mas não substitui as repetições previstas no método. A resposta às hipóteses de desempenho e resiliência depende de uma campanha experimental completa, com parâmetros congelados e análise entre execuções independentes. Nesta versão, as evidências disponíveis são identificadas pelo seu escopo, sem extrapolar o comportamento local para REST ou Kafka em geral.
+
+\section{Ferramentas de carga e piloto}
+
+Foram examinadas as documentações oficiais do Apache JMeter e do Grafana k6. O Quadro~\ref{qua:ferramentas} registra a comparação funcional utilizada na escolha do instrumento. Não foi executado um benchmark entre os geradores e, portanto, a escolha não afirma que k6 tenha melhor desempenho que JMeter.
+
+\begin{quadro}[htbp]
+\centering
+\caption{Comparação dos instrumentos de geração de carga}
+\label{qua:ferramentas}
+\small
+\begin{tabular}{|p{0.19\textwidth}|p{0.35\textwidth}|p{0.35\textwidth}|}
+\hline
+\textbf{Critério} & \textbf{Apache JMeter} & \textbf{Grafana k6} \\ \hline
+Plano & Plano de teste JMX, interface gráfica e propriedades parametrizáveis. & Funções e cenários definidos em JavaScript. \\ \hline
+Execução & Modo de linha de comando recomendado para carga; listeners gráficos aumentam o consumo. & Linha de comando e execução em contêiner. \\ \hline
+Chegada aberta & Open Model Thread Group, classificado na documentação como experimental. & Executores de taxa constante e variável, independentes da duração das respostas. \\ \hline
+Dados de saída & JTL/CSV; recomenda-se limitar os dados coletados. & JSON por linha, comprimível, com tags de correlação. \\ \hline
+\end{tabular}
+\fonte{Elaborado pelo autor com base nas documentações oficiais das ferramentas, consultadas em 6 out. 2026.}
+\end{quadro}
+
+As orientações de execução em linha de comando e redução de listeners constam das boas práticas do JMeter\footnote{\url{https://jmeter.apache.org/usermanual/best-practices.html}}. A existência de um modelo aberto também no JMeter\footnote{\url{https://jmeter.apache.org/usermanual/component_reference.html}, seção Open Model Thread Group.} evita atribuir essa capacidade exclusivamente ao k6. No k6, o executor de chegada constante inicia iterações segundo uma taxa programada, desde que existam usuários virtuais disponíveis\footnote{\url{https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/constant-arrival-rate/}}. A saída JSON permite preservar amostras e metadados por evento\footnote{\url{https://grafana.com/docs/k6/latest/results-output/real-time/json/}}. Essas fontes são documentação técnica dos instrumentos; não substituem os artigos científicos discutidos na revisão bibliográfica.
+
+O k6 foi escolhido pela integração com o protocolo já implementado: scripts versionados permitem gerar os UUIDs e os conteúdos sintéticos, separar aquecimento e medição, registrar a fase de cada amostra e enviar o identificador da execução no cabeçalho HTTP. A imagem utilizada é a versão 2.3.0, fixada por digest. O analisador Java cruza os dados do gerador com os marcos de transação e os registros exportados do PostgreSQL. A exportação por evento e a instrumentação também consomem recursos, razão pela qual precisam permanecer constantes nas comparações e ser reconhecidas como limitação.
+
+\subsection{Validação inicial dos instrumentos}
+
+Em 5 de outubro de 2026, foram realizadas duas execuções curtas válidas de conferência, à taxa de 2 eventos por segundo durante 10 segundos. A variante síncrona registrou 21 eventos e a assíncrona, 20. Em cada execução, todos os eventos observados foram associados a respostas esperadas, marcos de confirmação e registros com conteúdo e hash correspondentes. A diferença de uma iteração nos limites da execução reforça a necessidade de informar a carga efetiva, além da programada. Esses ensaios não usaram o mesmo conjunto entre as variantes e não estimam a carga de referência.
+
+Cinco tentativas anteriores foram preservadas como inválidas por falha de conciliação dos logs do ambiente Docker, embora as linhas tivessem sido encontradas no banco. O problema foi investigado antes de aceitar novas coletas. Não se interpretou ausência de marco como perda de registro. O histórico de tentativas e seus UUIDs está preservado no relatório técnico do piloto e nas evidências locais.
+
+O intervalo nativo de resposta HTTP do k6 é separado do intervalo instrumentado entre envio e retorno. A conclusão da persistência é observada pelo marco \texttt{commit\_completed}, emitido após o retorno da transação. O campo \texttt{persisted\_at}, preenchido no INSERT, não é utilizado como substituto desse marco. Uma resposta 202 confirma publicação no Kafka e não gravação no PostgreSQL.
+
+\section{Modelo comum de registros: objetivo a}
+\label{sec:resultado-modelo}
+\input{Capitulos/resultados-modelo}
+
+\section{Variante síncrona: objetivo b}
+A implementação síncrona recebe o evento pela API REST e conclui a transação antes de devolver a resposta de sucesso. A validação funcional pode conferir o processamento normal, a repetição idempotente e a indisponibilidade do banco. A caracterização quantitativa sob carga baixa, crescente e durante falhas exige as repetições da campanha definitiva; não se infere essa caracterização a partir de ensaios curtos.
+
+\section{Variante assíncrona: objetivo c}
+O aceite e a persistência são etapas distintas. Com Kafka disponível, a API pode confirmar a publicação enquanto o consumidor está indisponível. A interrupção do consumidor difere da interrupção do PostgreSQL: no segundo caso, o consumidor ativo pode esgotar suas tentativas e enviar eventos à DLQ. A retomada do banco não reprocessa automaticamente essa fila. A análise deverá informar tanto o tempo até o aceite quanto o tempo até a confirmação de gravação e o destino dos eventos que não foram persistidos.
+
+\section{Execução dos cenários: objetivo d}
+\input{Capitulos/resultados-validacao}
+
+\section{Métricas comparativas: objetivo e}
+Ainda não existem as dez repetições por combinação de variante e cenário previstas no método. Por esse motivo, não são apresentadas tabelas de desempenho como se os cenários definitivos já tivessem sido executados. O analisador passou a calcular distribuições por execução, throughput concluído dentro da janela de medição, categorias de resposta, destinos dos eventos e recursos por contêiner. Salvar um evento durante a drenagem não aumenta o throughput da janela anterior.
+
+A campanha deverá agregar resultados por repetição e apresentar dispersão, carga efetiva e quantidade de observações. O número de eventos não representa o número de repetições independentes. Recuperação deve separar o primeiro commit após a retomada, a conclusão do backlog e a retomada de throughput estável. Caso existam eventos na DLQ, não cabe declarar recuperação completa da persistência somente porque o lag do grupo chegou a zero.
+
+\section{Vantagens, desvantagens e hipóteses: objetivo f}
+As hipóteses comparativas permanecem inconclusivas na ausência da campanha completa. O sucesso dos testes funcionais demonstra apenas os comportamentos examinados no protótipo. A menor quantidade de componentes no caminho síncrono não mede, por si só, custo de operação; tampouco uma resposta 202 mais rápida demonstra conclusão mais rápida do trabalho. As recomendações entre as abordagens serão delimitadas pelas condições efetivamente medidas, inclusive se os resultados contrariarem as expectativas iniciais.
+
+\section{Limitações das evidências disponíveis}
+O protótipo e o gerador compartilham um computador Windows com Docker em WSL. Há um único broker, uma partição e fator de replicação um; o aceite do broker não constitui teste de tolerância à perda da máquina. Os dados são sintéticos e possuem payload reduzido. A telemetria adiciona custo e as leituras de CPU e memória são amostras do contêiner, não consumo global do computador nem custo financeiro de manutenção.
+
+Os intervalos entre processos dependem de relógios de parede. Intervalos negativos são detectáveis, mas a ausência deles não elimina a possibilidade de desvio. Além disso, componentes concorrentes e o estado da virtualização podem influenciar os ensaios. Essas restrições impedem generalizar o resultado local para todas as aplicações REST, todas as configurações Kafka ou ambientes de produção.
 
 
 
