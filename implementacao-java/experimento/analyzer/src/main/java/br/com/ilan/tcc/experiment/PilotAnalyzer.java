@@ -29,6 +29,15 @@ public final class PilotAnalyzer {
     private PilotAnalyzer() {}
 
     public static void main(String[] args) throws IOException {
+        if (args.length > 0 && args[0].equals("model")) {
+            try { ModelComparison.main(java.util.Arrays.copyOfRange(args, 1, args.length)); }
+            catch (Exception e) { throw new IOException("model comparison failed", e); }
+            return;
+        }
+        if (args.length > 0 && args[0].equals("campaign")) {
+            CampaignAnalyzer.main(java.util.Arrays.copyOfRange(args, 1, args.length));
+            return;
+        }
         if (args.length != 6) {
             throw new IllegalArgumentException("Usage: <run UUID> <sync|async> <k6.jsonl> <app.log> <database.jsonl> <output dir>");
         }

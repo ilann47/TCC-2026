@@ -101,6 +101,8 @@ As variáveis principais são `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNA
 
 O [piloto com k6 e analisador Java](experimento/README.md) permite conferir separadamente resposta HTTP e conclusão da persistência, conciliando os eventos com logs e banco. No WSL/Linux, com o Compose saudável, execute `bash experimento/pilot.sh sync` e depois `bash experimento/pilot.sh async`. As evidências ficam em `.runtime/pilot/`, sem apagar dados existentes. É uma validação curta da instrumentação; não substitui a calibração e a campanha experimental e não produz conclusões para os capítulos 5 e 6.
 
+A [preparação da Entrega 04](experimento/PROTOCOLO-ENTREGA04.md) acrescenta o projeto experimental isolado, carga determinística comum, perfis de rajada/falha, analisador de destinos e comparação de 50 registros. Consulte os [comandos e limites](experimento/ENTREGA04.md). O ambiente interativo e seu banco não são reinicializados por esses ensaios. A campanha definitiva ainda depende de calibração, critérios completos e protocolo congelado; não existe conclusão comparativa pronta.
+
 ## Escopo da pesquisa e limitações
 
 A configuração de Compose usa uma partição e uma réplica Kafka em ambiente local, cargas sintéticas e limites de recursos explícitos. Ela serve à comparação controlada, não a uma implantação de produção. O cenário C4 previsto interrompe o **PostgreSQL em ambas as variantes**. Nenhum número de latência, throughput ou taxa de erro deve ser tratado como conclusão antes de o protocolo experimental estar congelado e executado. Consultar [paridade](docs/paridade.md) e [especificação](docs/especificacao/README.md).

@@ -1,0 +1,23 @@
+# Experimental project only; never apply this override to the interactive stack.
+services:
+  postgres:
+    ports: !reset []
+  kafka:
+    ports: !reset []
+  sync-api:
+    image: tcc-java-2026-sync-api:latest
+    ports: !reset []
+    restart: "no"
+  async-api:
+    image: tcc-java-2026-async-api:latest
+    ports: !reset []
+    restart: "no"
+    environment:
+      KAFKA_TOPIC: ${EXPERIMENT_TOPIC:?Experimental topic required}
+  consumer:
+    image: tcc-java-2026-consumer:latest
+    restart: "no"
+    environment:
+      KAFKA_TOPIC: ${EXPERIMENT_TOPIC:?Experimental topic required}
+      KAFKA_DLQ_TOPIC: ${EXPERIMENT_TOPIC:?Experimental topic required}-dlq
+      KAFKA_GROUP_ID: ${EXPERIMENT_TOPIC:?Experimental topic required}-group

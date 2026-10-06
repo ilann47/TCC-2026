@@ -26,9 +26,13 @@ jobs:
       - name: Testes do analisador do piloto
         working-directory: implementacao-java
         run: ./mvnw -B -f experimento/analyzer/pom.xml verify
-      - name: Sintaxe do executor do piloto
+      - name: Sintaxe dos executores experimentais
         working-directory: implementacao-java
-        run: bash -n experimento/pilot.sh
+        run: |
+          bash -n experimento/pilot.sh
+          bash -n experimento/run.sh
+          bash -n experimento/validate.sh
+          bash -n experimento/calibrate.sh
 
   integration-smoke:
     runs-on: ubuntu-latest
