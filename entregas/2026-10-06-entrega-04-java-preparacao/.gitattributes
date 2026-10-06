@@ -1,0 +1,8 @@
+# Keep checksums reproducible when this snapshot is cloned on Windows.
+.gitattributes text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.mjs text eol=lf
+SHA256SUMS text eol=lf
+*.pdf binary
+*.pptx binary
