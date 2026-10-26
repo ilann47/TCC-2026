@@ -35,6 +35,7 @@ public final class CampaignAnalyzer {
     static Map<String, Object> analyze(Path dir, Path output) throws IOException {
         Properties meta = new Properties();
         try (var r = Files.newBufferedReader(dir.resolve("manifest.txt"))) { meta.load(r); }
+        if("control".equals(meta.getProperty("telemetry"))) return ControlAnalyzer.analyze(dir,meta);
         String run = meta.getProperty("run_id"), variant = meta.getProperty("variant");
         UUID.fromString(run);
         String dataset = meta.getProperty("dataset_id");
@@ -163,8 +164,13 @@ public final class CampaignAnalyzer {
         out.put("retry_scheduled", retries); out.put("idempotent_replays", replays);
         out.put("http_duration_ms", stats(http)); out.put("send_to_response_ms", stats(response));
         out.put("send_to_commit_ms", stats(completed));
-        out.put("resources", resources(dir.resolve("resources.tsv"), start, end));
+        Map<String,Object> resourceSummary=resources(dir.resolve("resources.tsv"), start, end);
+        out.put("resources", resourceSummary);
         out.put("measurement_windows_10s", windows(events, start, duration, expected));
+        if("2".equals(meta.getProperty("instrumentation_version"))) {
+            out.put("instrumentation",Instrumentation.inspect(dir,output,meta,events,start,duration,expected,resourceSummary,issues));
+            out.put("instrument_valid",issues.isEmpty());
+        }
         out.put("recovery", recovery(meta, events)); out.put("issues", issues);
         out.put("loss_interpretation", "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss.");
         return out;
@@ -209,7 +215,7 @@ public final class CampaignAnalyzer {
         catch (java.security.NoSuchAlgorithmException x) { throw new IllegalStateException(x); }
     }
 
-    private static boolean matches(Event e, String dataset) throws IOException {
+    static boolean matches(Event e, String dataset) throws IOException {
         if (e.occurred == null) return false;
         JsonNode r = e.row;
         return r.path("event_type").asText().equals("created") && r.path("entity_type").asText().equals("experiment")
@@ -225,10 +231,11 @@ public final class CampaignAnalyzer {
         if (restored == null) { out.put("applicable", false); return out; }
         Instant at = Instant.parse(restored);
         out.put("applicable", true); out.put("restore_command_completed_utc", restored);
-        List<Event> before = events.values().stream().filter(e -> e.phase.equals("measure") && e.sent != null
-            && e.sent.isBefore(at) && (e.commit == null || e.commit.isAfter(at)) && e.status == 202 && e.idMatches).toList();
+        int expected=meta.getProperty("variant").equals("sync")?201:202;
+        List<Event> before = events.values().stream().filter(e -> e.phase.equals("measure") && e.response != null
+            && !e.response.isAfter(at) && (e.commit == null || e.commit.isAfter(at)) && e.status == expected && e.idMatches).toList();
         out.put("accepted_not_persisted_at_restore", before.size());
-        var first = events.values().stream().filter(e -> e.commit != null && e.commit.isAfter(at)).map(e -> e.commit).min(Instant::compareTo);
+        var first = events.values().stream().filter(e -> e.phase.equals("measure") && e.commit != null && e.commit.isAfter(at)).map(e -> e.commit).min(Instant::compareTo);
         out.put("first_commit_after_restore_ms", first.map(t -> Duration.between(at,t).toNanos()/1e6).orElse(null));
         boolean all = !before.isEmpty() && before.stream().allMatch(e -> e.row != null && e.commit != null);
         out.put("all_pre_restore_accepted_persisted", before.isEmpty() ? null : all);

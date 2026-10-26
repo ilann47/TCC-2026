@@ -4,6 +4,7 @@ import { Counter } from 'k6/metrics';
 
 const sent = new Counter('experiment_sent');
 const responded = new Counter('experiment_response');
+const succeeded = new Counter('experiment_success');
 const run = __ENV.RUN_ID;
 const dataset = __ENV.DATASET_ID;
 const variant = __ENV.VARIANT;
@@ -14,7 +15,7 @@ const vus = Number(__ENV.VUS);
 const scenario = __ENV.PROFILE || 'steady';
 const executor = (duration, startTime) => ({
   executor: 'constant-arrival-rate', rate, timeUnit: '1s', duration,
-  startTime, preAllocatedVUs: vus, maxVUs: vus, gracefulStop: '12s',
+  startTime, preAllocatedVUs: startTime==='0s'?Math.min(vus,32):vus, maxVUs: startTime==='0s'?Math.min(vus,32):vus, gracefulStop: '12s',
 });
 const measurement = scenario === 'burst'
   ? { executor: 'ramping-arrival-rate', startRate: rate, timeUnit: '1s',
@@ -29,6 +30,13 @@ const measurement = scenario === 'burst'
   : executor(`${seconds}s`, `${warm + 12}s`);
 export const options = {
   tags: { run_id: run, variant },
+  summaryTrendStats: ['avg','med','p(95)','p(99)','max'],
+  thresholds: {
+    'http_req_duration{phase:measure}': ['max>=0'],
+    'experiment_sent{phase:measure}': ['count>0'],
+    'experiment_response{phase:measure}': ['count>0'],
+    'experiment_success{phase:measure}': ['count>=0'],
+  },
   scenarios: scenario === 'model'
     ? { measure: { executor: 'shared-iterations', vus: 1, iterations: 50, maxDuration: '60s', gracefulStop: '12s' } }
     : { warmup: executor(`${warm}s`, '0s'), measure: measurement },
@@ -53,7 +61,7 @@ export default function () {
   const id = `${prefix.slice(0, 8)}-${prefix.slice(8, 12)}-${prefix.slice(12, 16)}-${prefix.slice(16, 20)}-${i.toString(16).padStart(12, '0')}`;
   // Pair content is deterministic, independent of variant, wall clock and run ID.
   const occurred = new Date(Date.UTC(2026, 9, 6) + i).toISOString();
-  const tags = { event_id: id, phase, iteration: String(i), occurred_at: occurred };
+  const tags = __ENV.TELEMETRY==='control' ? {phase} : { event_id: id, phase, iteration: String(i), occurred_at: occurred };
   if (phase === 'measure' && exec.scenario.iterationInTest === 0) {
     console.log(`MEASUREMENT_START=${exec.scenario.startTime}`);
   }
@@ -68,4 +76,9 @@ export default function () {
   let matches = false;
   try { matches = response.json('event_id') === id; } catch (_) { /* recorded below */ }
   responded.add(1, { ...tags, http_status: String(response.status), id_matches: String(matches) });
+  succeeded.add(response.status===(variant==='sync'?201:202) && matches ? 1 : 0,{phase});
+}
+
+export function handleSummary(data) {
+  return { '/output/k6-summary.json': JSON.stringify(data), stdout: JSON.stringify({kind:'client_summary',run_id:run,telemetry:__ENV.TELEMETRY||'full'})+'\n' };
 }

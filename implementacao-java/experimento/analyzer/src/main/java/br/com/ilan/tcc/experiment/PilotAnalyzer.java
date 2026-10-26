@@ -29,6 +29,21 @@ public final class PilotAnalyzer {
     private PilotAnalyzer() {}
 
     public static void main(String[] args) throws IOException {
+        if (args.length > 0 && args[0].equals("protocol")) {
+            try { ProtocolGuard.main(java.util.Arrays.copyOfRange(args, 1, args.length)); }
+            catch (Exception e) { throw new IOException("frozen protocol mismatch", e); }
+            return;
+        }
+        if (args.length > 0 && args[0].equals("assess")) {
+            try { CalibrationAssessment.main(java.util.Arrays.copyOfRange(args, 1, args.length)); }
+            catch (Exception e) { throw new IOException("calibration assessment failed", e); }
+            return;
+        }
+        if (args.length > 0 && args[0].equals("observe")) {
+            try { LiveObserver.main(java.util.Arrays.copyOfRange(args, 1, args.length)); }
+            catch (Exception e) { throw new IOException("live observer failed", e); }
+            return;
+        }
         if (args.length > 0 && args[0].equals("model")) {
             try { ModelComparison.main(java.util.Arrays.copyOfRange(args, 1, args.length)); }
             catch (Exception e) { throw new IOException("model comparison failed", e); }
