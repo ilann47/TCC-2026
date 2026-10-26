@@ -96,6 +96,8 @@ else apps=(async-api consumer); target=http://async-api:8081/audit; fi
 "${dc[@]}" up -d --no-build --force-recreate "${apps[@]}" >> "$out/controller.log" 2>&1
 pg=$("${dc[@]}" ps -q postgres)
 [[ $(docker inspect -f '{{index .Config.Labels "com.docker.compose.project"}}' "$pg") == "$project" ]] || exit 1
+export OBSERVER_POSTGRES_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$pg")
+printf 'observer_postgres_address=%s\n' "$OBSERVER_POSTGRES_HOST" >> "$out/manifest.txt"
 # Only generated records may be reset; no deletion of a user record is permitted.
 for ((i=0;i<120;i++)); do
   exists=$("${dc[@]}" exec -T postgres psql -X -U audit -d auditdb -Atc "SELECT to_regclass('public.audit_records') IS NOT NULL" 2>/dev/null)

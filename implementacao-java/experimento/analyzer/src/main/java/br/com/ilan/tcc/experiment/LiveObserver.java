@@ -15,6 +15,8 @@ public final class LiveObserver {
         if (args.length != 1) throw new IllegalArgumentException("observe <output directory>");
         Path out = Path.of(args[0]);
         String run = env("RUN_ID"), dataset = env("DATASET_ID"), variant = env("VARIANT");
+        String databaseHost=env("OBSERVER_POSTGRES_HOST");
+        if(!databaseHost.matches("[0-9]{1,3}(\\.[0-9]{1,3}){3}"))throw new IllegalArgumentException("observer requires the captured experimental PostgreSQL IPv4 address");
         UUID.fromString(run); UUID.fromString(dataset);
         if (!Set.of("sync","async").contains(variant)) throw new IllegalArgumentException("variant");
         String topic = "audit-"+run;
@@ -35,7 +37,7 @@ public final class LiveObserver {
                 point.put("variant",variant);
                 try {
                     if (db == null || db.isClosed()) {
-                        db = DriverManager.getConnection("jdbc:postgresql://postgres:5432/auditdb?connectTimeout=1&socketTimeout=1", "audit", env("POSTGRES_PASSWORD"));
+                        db = DriverManager.getConnection("jdbc:postgresql://"+databaseHost+":5432/auditdb?connectTimeout=1&socketTimeout=1&loginTimeout=2", "audit", env("POSTGRES_PASSWORD"));
                         db.setReadOnly(true); db.setAutoCommit(true);
                     }
                     try (var sql = db.prepareStatement("SELECT count(*), count(*) FILTER (WHERE substring(entity_id from 2)::bigint < 1000000000), clock_timestamp() FROM audit_records WHERE source=?")) {

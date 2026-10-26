@@ -9,6 +9,7 @@ services:
       RUN_ID: ${EXPERIMENT_RUN_ID:-unused}
       DATASET_ID: ${EXPERIMENT_DATASET_ID:-unused}
       VARIANT: ${EXPERIMENT_VARIANT:-sync}
+      OBSERVER_POSTGRES_HOST: ${OBSERVER_POSTGRES_HOST:-127.0.0.1}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Local database password required}
     volumes:
       - ${EXPERIMENT_OUTPUT:-./.runtime}:/evidence

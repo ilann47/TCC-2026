@@ -167,11 +167,14 @@ public final class CampaignAnalyzer {
         Map<String,Object> resourceSummary=resources(dir.resolve("resources.tsv"), start, end);
         out.put("resources", resourceSummary);
         out.put("measurement_windows_10s", windows(events, start, duration, expected));
+        Map<String,Object> recoverySummary=recovery(meta,events);
         if("2".equals(meta.getProperty("instrumentation_version"))) {
-            out.put("instrumentation",Instrumentation.inspect(dir,output,meta,events,start,duration,expected,resourceSummary,issues));
+            var instrumentation=Instrumentation.inspect(dir,output,meta,events,start,duration,expected,resourceSummary,issues);
+            out.put("instrumentation",instrumentation);
+            if(instrumentation.containsKey("stable_recovery"))recoverySummary.put("stable_throughput_recovery",instrumentation.get("stable_recovery"));
             out.put("instrument_valid",issues.isEmpty());
         }
-        out.put("recovery", recovery(meta, events)); out.put("issues", issues);
+        out.put("recovery", recoverySummary); out.put("issues", issues);
         out.put("loss_interpretation", "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss.");
         return out;
     }
