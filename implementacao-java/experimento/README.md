@@ -1,91 +1,61 @@
-# Piloto de instrumentação — k6 + analisador Java
+# Instrumentação e execução dos experimentos
 
-Este material prepara a coleta solicitada pela orientadora. É um **piloto curto de conferência dos instrumentos**, não uma execução dos cenários definitivos C1–C5, nem uma comparação suficiente para confirmar as hipóteses do TCC. Os capítulos 5 e 6 dependem da campanha experimental posterior.
+A instrumentação foi validada e a referência comum foi calibrada em **48 eventos/s** em 26/10/2026. Consulte o [relatório de calibração](calibracao/2026-10-26-529e0349/README.md), o [protocolo](PROTOCOLO-ENTREGA04.md) e a [configuração congelada](FROZEN-PROTOCOL.json). **As 130 execuções definitivas ainda não foram iniciadas.** Calibração não constitui resultado final do TCC nem permite confirmar suas hipóteses.
 
-A primeira validação real, suas tentativas inválidas e o diagnóstico do ambiente estão no [relatório de 05/10/2026](PILOTO-2026-10-05.md).
+## O que é medido
 
-## Executar
-
-No WSL/Linux, dentro de `implementacao-java`, com Docker e Compose disponíveis:
-
-```bash
-docker compose up -d
-bash experimento/pilot.sh sync
-bash experimento/pilot.sh async
-```
-
-Mantenha o Docker em execução e use a mesma sessão de terminal. Aguarde as dependências ficarem saudáveis. O script exige os cinco serviços em execução, verifica a saúde de PostgreSQL/Kafka e o k6 consulta a saúde das APIs antes de enviar os eventos. Não precisa de k6, Maven ou Java instalados no WSL: o gerador e o analisador executam em contêineres. A primeira execução pode levar mais tempo para baixar dependências e compilar/testar o analisador.
-
-Por padrão, cada execução usa **2 eventos/s por 10 s**, quatro usuários virtuais disponíveis e uma espera de cinco segundos para observar a persistência. Isso é uma carga conservadora para validar a coleta, **não a carga de referência do experimento**. Exemplo de ajuste, ainda limitado a um piloto:
-
-```bash
-RATE=5 DURATION=15s VUS=8 DRAIN_SECONDS=10 bash experimento/pilot.sh async
-```
-
-Limites: `RATE=1..20`, `DURATION=1s..60s`, `VUS=1..50`, `DRAIN_SECONDS=1..30`. Um `RUN_ID` UUID novo é gerado automaticamente. É possível fornecê-lo, mas **não reutilize um UUID**, nem mesmo entre variantes. O script recusa sobrescrever uma pasta existente. Ele não apaga tabelas, mensagens ou volumes. Os registros do piloto permanecem no PostgreSQL com `source=k6-pilot-<RUN_ID>`; a amostra sintética fica isolada por identificador, **não por instância física de banco**. Isso não substitui a estratégia de isolamento/reset que será definida para a campanha final.
-
-## O que foi implementado
-
-- `pilot.js`: carga com taxa de chegada constante, evento e requisição identificados por UUID; `X-Run-ID` permite correlacionar os marcos do protótipo. A resposta é validada por status e pelo `event_id` devolvido.
-- `pilot.sh`: verifica o ambiente, compila/testa o analisador, executa o k6, observa uma janela de drenagem, exporta os logs e somente os registros desta execução, coleta amostras brutas de CPU/memória e executa a conciliação.
-- `analyzer/`: ferramenta independente em Java 21. Cruza os dados do cliente, `commit_completed` e o banco; verifica campos, payload inteiro e SHA-256 esperado por um encoder independente e específico do conjunto sintético do piloto. Não depende do codec de produção.
-
-O executor `constant-arrival-rate` inicia iterações a uma taxa definida, independentemente da duração das respostas. Não há `sleep` no corpo da iteração. Usuários virtuais insuficientes podem causar `dropped_iterations`; qualquer ocorrência invalida a conferência deste piloto. Fundamentação: [executor na documentação do k6](https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/constant-arrival-rate/).
-
-## Arquivos de cada execução
-
-Os dados locais ficam em `.runtime/pilot/<RUN_ID>-<sync|async>/`, fora do Git:
-
-| Arquivo | Conteúdo |
+| Medida | Evidência e interpretação |
 |---|---|
-| `manifest.txt` | Parâmetros, horários, commit, estado do checkout, imagens e limites dos contêineres; sem exportar senhas. |
-| `k6.jsonl` | Amostras brutas do gerador, com as tags de correlação. |
-| `k6-console.txt` | Saída e diagnóstico do k6. |
-| `app.log` | Marcos JSON das duas APIs e do consumidor filtrados pelo UUID da execução, sem depender de filtro de horário do daemon. |
-| `database.jsonl` | Eventos persistidos cujo `source` corresponde ao UUID desta execução. |
-| `resources.csv` | Amostras brutas de `docker stats` para os cinco serviços. O horário é o início de cada lote, não o instante exato de cada leitura. |
-| `resources-errors.log` | Falhas do coletor de recursos, se ocorrerem. |
-| `events.csv` | Uma linha por evento com os intervalos e evidências de conclusão. |
-| `summary.json` | Contagens, distribuição dos intervalos, inconsistências e `instrument_valid`. |
-| `analyzer-console.txt` | Saída do analisador. |
-| `SHA256SUMS` | Checksums para conferir alterações posteriores nos arquivos coletados. |
+| Tempo HTTP | `http_req_duration` do k6, somente `phase=measure`; não inclui todos os custos anteriores de conexão/bloqueio. |
+| Envio → retorno | Marcadores instrumentados do cliente, incluindo a chamada e a conferência da resposta. Não é idêntico ao tempo HTTP nativo. |
+| Envio → persistência | Envio no cliente até `commit_completed`, emitido após o retorno da transação; não é o instante físico de fsync nem o valor de `persisted_at`. |
+| Throughput concluído | UUIDs únicos com commit dentro da janela de medição / duração dessa janela. Registros concluídos na drenagem são informados separadamente. |
+| Pendências no tempo | Série de aceites ainda sem commit, calculada pelos marcadores, e contagens de registros visíveis no banco. Não mede diretamente requisições HTTP em voo. |
+| Lag Kafka | Diferença entre fim do tópico e offset confirmado pelo grupo, aproximadamente a cada segundo; específico da variante assíncrona. |
+| CPU e memória | Amostras Docker por contêiner, inclusive gerador e observador, em lotes de aproximadamente três segundos. CPU também normalizada pela quota atribuída. |
+| Recuperação | Primeiro commit, conclusão do backlog anterior e recuperação operacional sustentada são medidas separadas. A última exige três janelas consecutivas de dez segundos com entrada ativa. |
 
-Para verificar os checksums, execute `sha256sum -c SHA256SUMS` dentro da pasta da execução. Eles detectam alterações, mas não constituem assinatura digital nem garantia de autenticidade. Preserve também a versão do código: um piloto com checkout modificado é marcado como `working_tree=dirty` e não deve entrar na campanha definitiva.
+HTTP `201` significa persistência concluída na síncrona. HTTP `202` significa publicação confirmada pelo Kafka na assíncrona, **não** persistência no PostgreSQL. A conciliação verifica cada UUID, conteúdo completo e SHA-256 por encoder independente do código de produção.
 
-## Como interpretar os tempos
+O gerador recebe 2 CPUs/2 GiB; o observador, 0,25 CPU/256 MiB. A calibração verificou a folga dos dois e comparou coleta reduzida/completa em dois blocos por variante. Os critérios são margens de engenharia predefinidas, não limites universais nem prova de overhead zero.
 
-| Campo no resumo | Início → fim | Significado |
-|---|---|---|
-| `http_duration_ms` | Intervalo nativo `http_req_duration` do k6 | Tempo do envio/espera/recebimento HTTP; não inclui todas as etapas anteriores de conexão/bloqueio. |
-| `send_to_response_ms` | Amostra `pilot_sent` → amostra `pilot_response` | Intervalo instrumentado que inclui a chamada HTTP e a conferência da resposta. Não é idêntico ao tempo nativo do k6. |
-| `send_to_commit_ms` | Amostra `pilot_sent` → marco `commit_completed` | Intervalo até o código observar o retorno da transação de persistência. Não usa `persisted_at`. |
+## Antes da campanha
 
-O marco `commit_completed` é emitido **após** o retorno da transação. Inclui a pequena demora até emitir o log; não é uma instrumentação interna do instante físico de fsync. A resposta `201` da variante síncrona vem após a persistência; `202` da assíncrona confirma a publicação no Kafka, não a gravação no banco. Os três tempos permanecem separados na análise.
+Use WSL/Linux, Docker e Compose >=2.24.4. Não é necessário instalar k6 ou Java no WSL: gerador e analisador executam em contêineres. Preserve as imagens medidas; reconstrução de imagens ou mudança relevante de ambiente exige revisar/recalibrar o protocolo. O analisador recusa IDs de imagem, código instrumentador ou parâmetros diferentes dos congelados.
 
-O resumo exibido no console do k6 inclui também as requisições de saúde de `setup()`. Para os tempos dos eventos, use `summary.json`/`events.csv`: o analisador exclui explicitamente as amostras com `phase=readiness`.
+Dentro de `implementacao-java`, confira o plano sem gerar carga:
 
-Média e percentis p50/p95/p99 são calculados por execução. Os percentis usam **nearest rank** (índice `ceil(n × p)`, iniciado em 1); não se mistura a amostra das duas variantes. Com aproximadamente vinte eventos, os percentis superiores são instáveis e podem coincidir com o máximo. Não os use como evidência de superioridade arquitetural.
+```bash
+bash experimento/campaign.sh --check experimento/calibracao/2026-10-26-529e0349/plan.csv
+```
 
-Fontes para os instrumentos: [saída JSON do k6](https://grafana.com/docs/k6/latest/results-output/real-time/json/), [tags de métricas](https://grafana.com/docs/k6/latest/using-k6/tags-and-groups/), [identificador de iteração](https://grafana.com/docs/k6/latest/javascript-api/k6-execution/) e [métricas personalizadas](https://grafana.com/docs/k6/latest/javascript-api/k6-metrics/).
+Para iniciar a campanha, em uma janela reservada sem outros trabalhos pesados:
 
-## Critérios deste piloto
+```bash
+docker compose -p tcc-java-2026 stop
+bash experimento/campaign.sh experimento/calibracao/2026-10-26-529e0349/plan.csv
+```
 
-`instrument_valid=true` significa que, para os eventos observados:
+O primeiro comando para somente o ambiente interativo deste TCC, sem apagar dados. O executor não encerra projetos alheios; registra os contêineres concorrentes. Não execute dois ensaios simultâneos e não edite scripts enquanto estiverem em execução. O plano tem dez blocos/130 execuções: somente aquecimento e medição somam 13 horas, antes de inicialização, exportação e drenagem.
 
-1. há evidência de envio, retorno e duração HTTP, sem marcador repetido;
-2. todas as respostas têm o status esperado (`201` ou `202`) e o identificador correto;
-3. cada evento tem um único marco `commit_completed` com `status=persisted` e um registro correspondente;
-4. os campos, o payload e o hash persistidos coincidem com o conteúdo sintético esperado;
-5. não há envio à DLQ, intervalo negativo ou iteração descartada pelo gerador.
+O projeto experimental `tcc-entrega04` não publica portas e tem volumes próprios. Somente suas linhas sintéticas são reinicializadas, após a exportação anterior. Tópicos/grupos são novos a cada execução, mas o broker e os volumes permanecem: não se trata de reinicialização física de caches ou da máquina.
 
-Um `false` ou código de saída não zero exige investigação. **Ausência após cinco segundos não prova perda**, e múltiplos marcos de commit não provam múltiplas linhas: podem indicar reentrega idempotente. O critério aqui é deliberadamente estrito para uma execução normal com UUIDs novos. Não é o critério definitivo para cenários com falhas, retransmissão ou recuperação. A PK já impede duas linhas com o mesmo `event_id`; este piloto não é um teste de reenvio idempotente nem de equivalência usando exatamente o mesmo conjunto nas duas versões.
+## Evidências e validade
 
-## Limitações e o que ainda falta
+Os dados brutos ficam em `.runtime/entrega04/<run_id>-<variante>/`, fora do Git. Cada pasta contém manifesto, dados k6 comprimidos, logs de marcos, exportações de banco/tópico/DLQ, `observation.jsonl`, `timeline.csv`, recursos, `summary.json`, `events.csv` e `SHA256SUMS`. A confirmação de cobertura temporal inclui observador e gerador. Falha de consulta durante a interrupção planejada é registrada, não convertida em zero saudável.
 
-- Os intervalos entre processos usam relógios de parede. Intervalos negativos são detectados, mas desvios positivos podem passar despercebidos. A sincronização/estabilidade temporal precisa ser verificada antes da campanha final.
-- Tags por evento aumentam a cardinalidade; exportação JSON, logs e `docker stats` acrescentam custo. O coletor de recursos amostra aproximadamente a cada três segundos, dependendo do tempo do comando, e não mede o gerador ou o overhead global do Docker/Windows. CPU/memória permanecem **dados brutos**, sem agregação ou interpretação de custo nesta etapa.
-- O gerador roda na mesma máquina do sistema. A campanha final precisa registrar a configuração do computador, aquecimento, estado de fundo, contenção e limitações de generalização.
-- Faltam a comparação documentada entre JMeter e k6, a calibração da carga de referência, os critérios e parâmetros congelados, repetições, regras de descarte, experimento do mesmo modelo nas duas versões, testes de idempotência, falhas e recuperação, e cálculo de throughput/erros/recuperação conforme o protocolo final.
-- **Não alterar capítulos de resultados/conclusão nem entregas históricas com estes números.**
+`instrument_valid=true` indica consistência da coleta, não aprovação da hipótese ou ausência de falhas do sistema. HTTP 503, DLQ, pendências e drops em sobrecarga podem ser resultados válidos, mas precisam de interpretação. Drops são iterações que o gerador não iniciou, não registros enviados e perdidos. DLQ é não persistência terminal, não desaparecimento nem recuperação automática. Um HTTP não confirmado pode coexistir com um registro salvo.
 
-O k6 é fixado em `2.3.0` com digest da imagem; o manifesto registra o ID efetivo do analisador e das aplicações. Para testar somente o analisador no PowerShell: `./mvnw.cmd -f experimento/analyzer/pom.xml verify`. O Dockerfile executa os mesmos testes no JDK 21 antes de empacotar a ferramenta.
+Os percentis do analisador usam nearest rank por execução. A comparação de interferência usa o mesmo percentil nativo do k6 nos dois modos. Não misture os estimadores nem transforme eventos individuais em repetições experimentais independentes. A agregação e discussão entre repetições dependem da campanha posterior.
+
+O Docker exibiu CPU/memória zero para contêineres parados. As médias em falhas misturam períodos ativos e indisponíveis; não demonstram economia, energia, custo operacional ou eficiência. Relógios de parede e amostragem também limitam a precisão dos intervalos. Os resultados valem apenas para o ambiente observado.
+
+Para conferir os arquivos brutos: `sha256sum -c SHA256SUMS` na pasta da execução. Os checksums detectam alterações; não são assinatura digital. Consulte os [comandos detalhados](ENTREGA04.md), inclusive encerramento sem remover volumes. Após os testes, `docker compose -p tcc-java-2026 up -d` retoma o ambiente interativo.
+
+## Validações e histórico
+
+O analisador passou em 46 testes no JDK 21; a aplicação mantém sua suíte e smoke REST/Kafka/PostgreSQL no CI. Para executar os testes do analisador: `./mvnw -B -f experimento/analyzer/pom.xml verify` no WSL ou `./mvnw.cmd -f experimento/analyzer/pom.xml verify` no PowerShell.
+
+O [piloto inicial de 05/10/2026](PILOTO-2026-10-05.md) e os scripts `pilot.sh`/`pilot.js` são históricos de validação curta. Seus dados ficam em `.runtime/pilot/`; não definem a carga atual nem devem ser somados às repetições definitivas. Entregas acadêmicas históricas não foram reescritas.
+
+Fontes dos instrumentos: [k6 — modelo de chegada e VUs](https://grafana.com/docs/k6/latest/using-k6/scenarios/concepts/arrival-rate-vu-allocation/), [Docker stats](https://docs.docker.com/reference/cli/docker/container/stats/) e [Kafka Admin](https://kafka.apache.org/39/javadoc/org/apache/kafka/clients/admin/Admin.html). São documentação técnica, não novos artigos científicos do referencial teórico.

@@ -35,6 +35,10 @@ jobs:
           bash -n experimento/calibrate.sh
           bash -n experimento/calibration-session.sh
           bash -n experimento/campaign.sh
+          node --check experimento/finalize-calibration.mjs
+          node experimento/verify-frozen.mjs
+          plan_folder=$(awk -F '"' '$2 == "report" {print $4}' experimento/FROZEN-PROTOCOL.json)
+          bash experimento/campaign.sh --check "$plan_folder/plan.csv"
 
   integration-smoke:
     runs-on: ubuntu-latest

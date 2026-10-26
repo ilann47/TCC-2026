@@ -1,0 +1,15 @@
+{
+  "collected_local_date": "2026-10-26",
+  "cpu_model": "AMD Ryzen 7 5825U with Radeon Graphics",
+  "logical_cpus_visible_to_wsl": 16,
+  "cores_per_socket_reported": 8,
+  "threads_per_core_reported": 2,
+  "architecture": "x86_64",
+  "hypervisor_vendor": "Microsoft",
+  "docker_memory_bytes": 16426618880,
+  "kernel": "6.18.33.2-microsoft-standard-WSL2",
+  "docker_version": "29.1.3",
+  "compose_version": "2.40.3+ds1-0ubuntu1",
+  "evidence": "Read-only lscpu in WSL during this session; Docker info/version and Compose version preserved in every run manifest.",
+  "limitations": "This is the virtualized environment observed, not a complete inventory of physical RAM or Windows processes. Temperature, dynamic CPU frequency and Windows background work were not controlled."
+}

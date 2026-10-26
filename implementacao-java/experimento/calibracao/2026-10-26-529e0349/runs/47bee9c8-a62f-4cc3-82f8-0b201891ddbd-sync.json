@@ -1,0 +1,22 @@
+{
+  "kind" : "calibration_reduced_telemetry_control_not_definitive",
+  "run_id" : "47bee9c8-a62f-4cc3-82f8-0b201891ddbd",
+  "variant" : "sync",
+  "rate" : 48,
+  "measure_seconds" : 60,
+  "offered" : 2881,
+  "accepted" : 2881,
+  "stored_at_observation_end" : 2881,
+  "database_content_matches" : 2881,
+  "dropped_iterations_all_phases" : 0,
+  "http_duration_ms" : {
+    "avg" : 4.534510974661578,
+    "med" : 4.328714,
+    "p(95)" : 5.986092,
+    "p(99)" : 7.442618599999986,
+    "max" : 20.857908
+  },
+  "instrument_valid" : true,
+  "issues" : [ ],
+  "limitation" : "No detailed client event stream, live observer or resource sampler. Aggregate HTTP and deterministic DB comparison only. Not definitive evidence or per-event end-to-end latency."
+}
