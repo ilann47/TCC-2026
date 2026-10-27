@@ -11,6 +11,69 @@ if (TCC_DEMO_RATE=11;validate_settings) >/dev/null 2>&1;then exit 1;fi
 if (TCC_DEMO_SECONDS=31;validate_settings) >/dev/null 2>&1;then exit 1;fi
 if (TCC_DEMO_RATE='1+1';validate_settings) >/dev/null 2>&1;then exit 1;fi
 ok 'invalid or unbounded settings rejected'
+if (TCC_DEMO_DASHBOARD=maybe;validate_settings) >/dev/null 2>&1;then exit 1;fi
+for invalid_port in 0 80 65536 05665 '5665:80' '1+5665';do
+  if (TCC_DEMO_DASHBOARD_PORT=$invalid_port;validate_settings) >/dev/null 2>&1;then exit 1;fi
+done
+(TCC_DEMO_DASHBOARD_PORT=5666;validate_settings)
+ok 'dashboard settings reject invalid or nonlocal port syntax'
+(
+  dashboard_options
+  [[ ${TCC_DEMO_DASHBOARD_ARGS[0]} == --publish && ${TCC_DEMO_DASHBOARD_ARGS[1]} == '127.0.0.1:5665:5665' ]]
+  [[ " ${TCC_DEMO_DASHBOARD_ARGS[*]} " == *' K6_WEB_DASHBOARD=true '* ]]
+  [[ " ${TCC_DEMO_DASHBOARD_ARGS[*]} " == *' K6_WEB_DASHBOARD_HOST=0.0.0.0 '* ]]
+  [[ " ${TCC_DEMO_DASHBOARD_ARGS[*]} " == *' K6_WEB_DASHBOARD_PERIOD=1s '* ]]
+  [[ " ${TCC_DEMO_DASHBOARD_ARGS[*]} " == *' K6_WEB_DASHBOARD_EXPORT=/output/painel-k6.html '* ]]
+)
+ok 'dashboard binds only the host loopback and exports an offline report'
+(
+  TCC_DEMO_DASHBOARD=0;dashboard_options
+  [[ ${#TCC_DEMO_DASHBOARD_ARGS[@]} == 2 && ${TCC_DEMO_DASHBOARD_ARGS[1]} == K6_WEB_DASHBOARD=false ]]
+  dashboard_port_available
+)
+ok 'disabled dashboard does not publish any port'
+(
+  docker() { printf 'existing-demo\n'; }
+  if no_demo_load >/dev/null 2>&1;then exit 1;fi
+)
+ok 'another demo load or waiting dashboard blocks concurrent load'
+(
+  docker() { return 1; }
+  if no_demo_load >/dev/null 2>&1;then exit 1;fi
+)
+ok 'Docker failure does not bypass concurrent demo guard'
+(
+  docker() { return 0; }
+  no_demo_load
+)
+ok 'no active demo permits the next bounded load'
+(
+  TCC_DEMO_APP=$(mktemp -d)
+  no_experiment() { return 0; }
+  run_k6_locked() { return 7; }
+  if run_k6 sync;then exit 1;else [[ $? == 7 ]];fi
+  run_k6_locked() { return 0; }
+  run_k6 async
+)
+ok 'demo lock is released even when the load fails'
+(
+  TCC_DEMO_APP=$(mktemp -d)
+  mkdir -p "$TCC_DEMO_APP/.runtime/demonstracao"
+  exec {held_lock}>"$TCC_DEMO_APP/.runtime/demonstracao/k6.lock"
+  flock -n "$held_lock"
+  no_experiment() { return 0; }
+  run_k6_locked() { echo 'unexpected concurrent load' >&2;exit 1; }
+  if run_k6 sync >/dev/null 2>&1;then exit 1;fi
+  flock -u "$held_lock"
+  exec {held_lock}>&-
+)
+ok 'exclusive demo lock prevents a second load'
+(
+  no_experiment() { return 0; }
+  no_demo_load() { return 1; }
+  if compare_menu >/dev/null 2>&1;then exit 1;fi
+)
+ok 'comparison menu refuses to start while a demo dashboard or load is active'
 
 (
   docker() { printf 'active-experiment\n'; }

@@ -111,7 +111,7 @@ Abra o Windows Terminal/PowerShell e cole o comando abaixo. Ele entra no WSL e a
 wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java -- bash demo/apresentacao.sh
 ```
 
-Esse é o caminho desta máquina; ajuste o argumento de `--cd` se o clone estiver em outra pasta. Os arquivos continuam no Windows, acessíveis em `/mnt/c/` no WSL. O Docker precisa estar acessível no WSL utilizado. Neste projeto, **k6 e Java rodam em contêineres**: não é preciso abrir um aplicativo k6 nem instalá-lo no Windows para usar esse menu. Docker com Compose, `curl`, Python 3 e as imagens Java devem estar preparados antes da banca.
+Esse é o caminho desta máquina; ajuste o argumento de `--cd` se o clone estiver em outra pasta. Os arquivos continuam no Windows, acessíveis em `/mnt/c/` no WSL. O Docker precisa estar acessível no WSL utilizado. Neste projeto, **k6 e Java rodam em contêineres**: não é preciso instalar k6 no Windows. As opções 9/10 disponibilizam seu painel web no navegador. Docker com Compose, `curl`, Python 3, `flock` e as imagens Java devem estar preparados antes da banca.
 
 Se você já estiver em um terminal Ubuntu/WSL, entre em `implementacao-java` e execute `bash demo/apresentacao.sh`. Não execute esse script Bash diretamente no PowerShell ou Git Bash; no PowerShell, use a chamada `wsl` acima.
 
@@ -127,10 +127,26 @@ Se você já estiver em um terminal Ubuntu/WSL, entre em `implementacao-java` e 
 | Assíncrona normal | **4**, **7**, **5** | POST 202 e consulta 200 após o consumidor processar. |
 | Consumidor parado | **6**, **4**, **5**, **8** | Enviar um evento novo após a parada: POST 202, consulta 404 e eventual lag Kafka. |
 | Retomada | **7**, **5** | Conferir se o mesmo UUID aparece no banco; o menu aguarda até 60 s. |
-| k6 síncrono e assíncrono | **9**, depois **10** | Consumidor retomado; cada carga usa, por padrão, 5 eventos/s durante 20 s. |
+| k6 síncrono e assíncrono | **9**, depois **10** | Consumidor retomado; cada carga usa 5 eventos/s durante 20 s por padrão. Abra o painel em `localhost:5665`; após cada teste, feche sua aba para continuar. |
 | Recursos e encerramento | **11**, depois **0** | Ver amostra de CPU/memória/logs e sair. Sair não desliga os cinco serviços. |
 
 O 201 síncrono confirma a transação; o 202 assíncrono confirma somente a publicação no Kafka. O resumo curto do k6 mede HTTP, não o tempo de conclusão da persistência assíncrona. Uma consulta não confirmada, erro ou teste reprovado deve ser explicado como tal. Essa demonstração não substitui os resultados da campanha definitiva de 65 tentativas.
+
+### Painel web do k6 na demonstração
+
+As opções **9** e **10** habilitam por padrão o [painel local do k6](http://localhost:5665). Abra-o durante a carga para ver os gráficos. A porta é publicada somente em `127.0.0.1`, sem Grafana Cloud ou outro serviço externo. O painel existe enquanto esse k6 está em execução, não é um serviço permanente.
+
+Para abrir o menu e iniciar imediatamente uma carga síncrona de demonstração pelo PowerShell, use:
+
+```powershell
+wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java -- bash demo/apresentacao.sh --dashboard-sync
+```
+
+Esse comando **envia eventos sintéticos** (5/s por 20 s, por padrão). Para a variante assíncrona, substitua o último argumento por `--dashboard-async`. Se o menu já estava aberto antes desta atualização, saia com **0** e reabra para carregar a nova versão.
+
+Ao terminar a carga, o k6 pode manter o processo/painel aguardando enquanto houver abas conectadas. **Feche todas as abas desse painel para encerrar o k6 e voltar ao menu.** Isso não prolonga a geração de eventos além da duração configurada. O relatório offline `painel-k6.html` fica na subpasta `k6-<UUID>-<variante>` da sessão em `.runtime/demonstracao/` após o encerramento. A opção 14 continua sendo o relatório de comparação, distinto desse HTML nativo do k6.
+
+O painel mede HTTP e inclui a consulta de saúde inicial; `resumo.json` e o resumo textual filtram apenas os eventos de demonstração. Ele não mede envio até commit nem CPU/memória dos serviços. O gerador e seus limites permanecem restritos à demonstração. A campanha congelada, seus resultados e o comparador da opção 13 não foram modificados para incluir o painel. Veja [opções de configuração, porta ocupada e detalhes](demo/README.md#painel-web-do-k6).
 
 Para apenas verificar a prontidão pelo PowerShell, **sem enviar eventos, iniciar/parar contêineres ou baixar imagens**, use:
 

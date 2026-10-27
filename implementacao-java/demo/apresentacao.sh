@@ -6,6 +6,9 @@ TCC_DEMO_PROJECT=tcc-java-2026
 TCC_DEMO_K6='grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34'
 TCC_DEMO_RATE=${TCC_DEMO_RATE:-5}
 TCC_DEMO_SECONDS=${TCC_DEMO_SECONDS:-20}
+TCC_DEMO_DASHBOARD=${TCC_DEMO_DASHBOARD:-1}
+TCC_DEMO_DASHBOARD_PORT=${TCC_DEMO_DASHBOARD_PORT:-5665}
+TCC_DEMO_DASHBOARD_ARGS=()
 TCC_DEMO_SESSION=''
 TCC_DEMO_OUTPUT=''
 TCC_DEMO_LAST_ID=''
@@ -26,11 +29,51 @@ validate_settings() {
     ((TCC_DEMO_RATE<=10 && TCC_DEMO_SECONDS<=30)) || {
       demo_error 'Limites: TCC_DEMO_RATE=1..10 e TCC_DEMO_SECONDS=1..30.'; return 1;
     }
+  [[ $TCC_DEMO_DASHBOARD == 0 || $TCC_DEMO_DASHBOARD == 1 ]] || {
+    demo_error 'TCC_DEMO_DASHBOARD deve ser 0 ou 1.'; return 1;
+  }
+  [[ $TCC_DEMO_DASHBOARD_PORT =~ ^[1-9][0-9]{3,4}$ ]] &&
+    ((TCC_DEMO_DASHBOARD_PORT>=1024 && TCC_DEMO_DASHBOARD_PORT<=65535)) || {
+      demo_error 'TCC_DEMO_DASHBOARD_PORT deve ser uma porta de 1024 a 65535.'; return 1;
+    }
+}
+
+dashboard_options() {
+  TCC_DEMO_DASHBOARD_ARGS=()
+  if [[ $TCC_DEMO_DASHBOARD == 1 ]];then
+    TCC_DEMO_DASHBOARD_ARGS=(--publish "127.0.0.1:$TCC_DEMO_DASHBOARD_PORT:5665"
+      -e K6_WEB_DASHBOARD=true -e K6_WEB_DASHBOARD_HOST=0.0.0.0 -e K6_WEB_DASHBOARD_PORT=5665
+      -e K6_WEB_DASHBOARD_PERIOD=1s -e K6_WEB_DASHBOARD_OPEN=false
+      -e K6_WEB_DASHBOARD_EXPORT=/output/painel-k6.html)
+  else
+    TCC_DEMO_DASHBOARD_ARGS=(-e K6_WEB_DASHBOARD=false)
+  fi
+}
+
+dashboard_port_available() {
+  [[ $TCC_DEMO_DASHBOARD == 1 ]] || return 0
+  python3 - "$TCC_DEMO_DASHBOARD_PORT" <<'PY'
+import socket
+import sys
+with socket.socket() as listener:
+    listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    try:
+        listener.bind(('127.0.0.1', int(sys.argv[1])))
+    except OSError:
+        print('Porta do painel ocupada. Feche a aba/carga anterior ou escolha outra TCC_DEMO_DASHBOARD_PORT.', file=sys.stderr)
+        raise SystemExit(1)
+PY
+}
+
+no_demo_load() {
+  local ids
+  ids=$(docker ps -q --filter label=tcc.demo.session) || return 1
+  [[ -z $ids ]] || { demo_error 'Outra carga de demonstração ou painel ainda está ativo. Aguarde ou feche sua aba antes de iniciar outra carga.';return 1; }
 }
 
 dependencies() {
   local command
-  for command in docker curl python3; do
+  for command in docker curl python3 flock; do
     command -v "$command" >/dev/null || { demo_error "Falta $command. Prepare o WSL antes da apresentação."; return 1; }
   done
   [[ -r /proc/sys/kernel/random/uuid ]] || { demo_error 'Execute com Bash no WSL/Linux, não no PowerShell/Git Bash.'; return 1; }
@@ -224,9 +267,27 @@ show_lag() {
 }
 
 run_k6() {
+  local lock_fd code
+  no_experiment || return 1
+  command -v flock >/dev/null || { demo_error 'Falta flock no WSL. Prepare o ambiente antes da apresentação.';return 1; }
+  mkdir -p "$TCC_DEMO_APP/.runtime/demonstracao" || return 1
+  exec {lock_fd}>"$TCC_DEMO_APP/.runtime/demonstracao/k6.lock" || return 1
+  if ! flock -n "$lock_fd";then
+    demo_error 'Outro k6 de demonstração está ativo. Aguarde seu encerramento.'
+    exec {lock_fd}>&-
+    return 1
+  fi
+  run_k6_locked "$@";code=$?
+  flock -u "$lock_fd"
+  exec {lock_fd}>&-
+  return "$code"
+}
+
+run_k6_locked() {
   local variant=$1 seconds=${2:-$TCC_DEMO_SECONDS} rate=${3:-$TCC_DEMO_RATE} target network id run folder code
   local pipeline_status=()
-  no_experiment && refresh_addresses && ensure_k6 && session || return 1
+  validate_settings && no_experiment && no_demo_load && dashboard_port_available || return 1
+  refresh_addresses && ensure_k6 && session || return 1
   [[ $variant == sync || $variant == async ]] || return 1
   [[ $seconds =~ ^[1-9][0-9]?$ && $rate =~ ^[1-9][0-9]?$ ]] && ((seconds<=30 && rate<=10)) || return 1
   id=$(owned_service "$variant-api") || return 1
@@ -241,8 +302,15 @@ run_k6() {
   TCC_DEMO_LOAD="tcc-demo-load-$run"
   printf '\nFALA: k6 enviará %s eventos/s por %s s. Oito VUs disponíveis sustentam a taxa, não são concorrência fixa.\n' "$rate" "$seconds"
   printf 'Esta demonstração mede HTTP; não mede latência até commit nem substitui a campanha.\n'
+  dashboard_options
+  if [[ $TCC_DEMO_DASHBOARD == 1 ]];then
+    printf 'Painel k6: http://localhost:%s (abra no navegador do Windows durante o teste).\n' "$TCC_DEMO_DASHBOARD_PORT"
+    printf 'A carga é limitada à duração acima. Depois, feche a aba do painel para o k6 encerrar e voltar ao menu.\n'
+    printf 'HTML do painel, após encerrar: %s/painel-k6.html\n' "$folder"
+  fi
   docker run --rm --name "$TCC_DEMO_LOAD" --label "tcc.demo.session=$TCC_DEMO_SESSION" \
     --network "$network" --cpus 2 --memory 2g --user "$(id -u):$(id -g)" \
+    "${TCC_DEMO_DASHBOARD_ARGS[@]}" \
     --mount "type=bind,src=$TCC_DEMO_APP/demo,dst=/scripts,readonly" \
     --mount "type=bind,src=$folder,dst=/output" \
     -e "RUN_ID=$run" -e "VARIANT=$variant" -e "TARGET_URL=$target" \
@@ -252,6 +320,7 @@ run_k6() {
   code=${pipeline_status[0]}
   TCC_DEMO_LOAD=''
   printf 'k6_exit=%s\nrun_id=%s\nvariant=%s\nrate=%s\nseconds=%s\n' "$code" "$run" "$variant" "$rate" "$seconds" > "$folder/manifest.txt"
+  printf 'dashboard_enabled=%s\ndashboard_port=%s\n' "$TCC_DEMO_DASHBOARD" "$TCC_DEMO_DASHBOARD_PORT" >> "$folder/manifest.txt"
   printf 'Arquivos: %s\n' "$folder"
   ((${pipeline_status[1]:-1}==0)) || { demo_error 'Falha ao preservar o console do k6.';return 1; }
   ((code==0)) || { demo_error "k6 terminou com código $code; não apresente a execução como aprovada.";return 1; }
@@ -277,7 +346,8 @@ talktrack() {
   printf '3. Opção 4, depois 7 e 5: 202 confirma Kafka; consumidor grava posteriormente.\n'
   printf '4. Opção 6, depois 4, 5 e 8: Kafka aceita, mas o novo UUID ainda não está no banco.\n'
   printf '5. Opção 7, depois 5 e 8: retomar, verificar o UUID e observar o lag.\n'
-  printf '6. Opções 9 e 10: executar cargas curtas; explicar média/p95 HTTP e erros.\n'
+  printf '6. Opções 9 e 10: executar cargas curtas e abrir o painel em localhost:%s; explicar HTTP e erros.\n' "$TCC_DEMO_DASHBOARD_PORT"
+  printf '   Após a carga, feche a aba do painel para voltar ao menu. O HTML fica na pasta da sessão.\n'
   printf '7. Opção 11: mostrar uma amostra de recursos e marcos. Não inferir eficiência de contêiner parado.\n'
   printf '8. Opção 13: comparar com persistência/recursos medidos em projeto isolado; execute antes da banca.\n'
   printf '9. Opção 14: mostrar a última tabela pronta sem executar carga; abrir o HTML no navegador.\n'
@@ -288,8 +358,8 @@ talktrack() {
 
 compare_menu() {
   local choice scenario
-  no_experiment || return 1
-  printf '\nComparação isolada (não são as 130 execuções):\n'
+  no_experiment && no_demo_load || return 1
+  printf '\nComparação isolada (não reinicia a campanha de 65 tentativas):\n'
   printf '1 Carga normal — duas execuções curtas (preparação/coleta acrescentam minutos)\n'
   printf '2 PostgreSQL interrompido por 5 s — 90 s medidos por versão\n'
   printf '3 Consumidor interrompido por 5 s — somente assíncrona, 90 s medidos\n'
@@ -333,23 +403,29 @@ smoke() {
 }
 
 usage() {
-  printf 'Uso no WSL/Linux: bash demo/apresentacao.sh [--check|--smoke|--help]\n'
+  printf 'Uso no WSL/Linux: bash demo/apresentacao.sh [--check|--smoke|--dashboard-sync|--dashboard-async|--help]\n'
   printf 'Sem argumento: menu interativo. --check: somente leitura. --smoke: validação curta com escrita/pausa.\n'
+  printf '%s\n' '--dashboard-sync/--dashboard-async: abrir menu interativo e iniciar uma carga curta nessa variante, com painel.'
+  printf 'Painel das opções 9/10: localhost:%s. Feche a aba após o teste para voltar ao menu.\n' "$TCC_DEMO_DASHBOARD_PORT"
+  printf 'TCC_DEMO_DASHBOARD=0 desativa o painel. A porta local pode ser ajustada com TCC_DEMO_DASHBOARD_PORT.\n'
   printf 'Não executa campaign.sh nem recompila imagens. Comparação 13 reinicia somente a tabela experimental isolada.\n'
 }
 
 main() {
   local choice mode=${1:-menu}
   if [[ $mode == --help ]];then usage;return 0;fi
-  [[ $mode == menu || $mode == --check || $mode == --smoke ]] || { usage;return 1; }
+  [[ $mode == menu || $mode == --check || $mode == --smoke || $mode == --dashboard-sync || $mode == --dashboard-async ]] || { usage;return 1; }
+  [[ $mode != --dashboard-sync && $mode != --dashboard-async ]] || TCC_DEMO_DASHBOARD=1
   validate_settings && dependencies && no_experiment || return 1
   if [[ $mode == --check ]];then check_ready;return $?;fi
-  if [[ $mode == menu && ! -t 0 ]];then demo_error 'O menu precisa de terminal interativo. Use --check ou --smoke para validação.';return 1;fi
+  if [[ $mode != --smoke && ! -t 0 ]];then demo_error 'O menu precisa de terminal interativo. Use --check ou --smoke para validação.';return 1;fi
   trap cleanup EXIT
   trap 'exit 130' INT
   trap 'exit 143' TERM
   if [[ $mode == --smoke ]];then smoke;return $?;fi
   session || return 1
+  if [[ $mode == --dashboard-sync ]];then run_k6 sync || demo_error 'Demonstração k6 não aprovada.'
+  elif [[ $mode == --dashboard-async ]];then run_k6 async || demo_error 'Demonstração k6 não aprovada.';fi
   while true;do
     printf '\n=== TCC: DEMONSTRAÇÃO LOCAL (não executa a campanha) ===\n'
     [[ -z $TCC_DEMO_LAST_ID ]] || printf 'Último evento: %s (%s)\n' "$TCC_DEMO_LAST_ID" "$TCC_DEMO_LAST_VARIANT"
@@ -357,6 +433,7 @@ main() {
     printf ' 3 Enviar evento síncrono (201)\n 4 Enviar evento assíncrono (202)\n 5 Consultar último evento no PostgreSQL\n'
     printf ' 6 Pausar consumidor\n 7 Retomar consumidor e aguardar último evento assíncrono\n 8 Ver offsets/lag no Kafka\n'
     printf ' 9 k6 síncrono (%s/s por %s s)\n10 k6 assíncrono (%s/s por %s s)\n' "$TCC_DEMO_RATE" "$TCC_DEMO_SECONDS" "$TCC_DEMO_RATE" "$TCC_DEMO_SECONDS"
+    if [[ $TCC_DEMO_DASHBOARD == 1 ]];then printf '   Painel no navegador: http://localhost:%s; feche a aba após o teste para continuar.\n' "$TCC_DEMO_DASHBOARD_PORT";fi
     printf '11 Ver recursos e logs recentes\n12 Mostrar roteiro e falas\n13 Comparar síncrono × assíncrono lado a lado\n14 Mostrar última comparação pronta (sem carga)\n 0 Sair\n'
     IFS= read -r -p 'Escolha: ' choice || return 0
     case $choice in

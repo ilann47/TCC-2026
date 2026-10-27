@@ -16,7 +16,7 @@ Abra o Windows Terminal/PowerShell e cole:
 wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java -- bash demo/apresentacao.sh
 ```
 
-A chamada abre o menu no terminal atual, mas o Bash e os comandos Docker executam pelo WSL. Os arquivos continuam na pasta do Windows, montada em `/mnt/c/`. Neste projeto, Java e k6 executam em contêineres. **O k6 mostra o teste no terminal; não há uma janela k6 para abrir neste roteiro.** O Swagger abre separadamente no navegador do Windows.
+A chamada abre o menu no terminal atual, mas o Bash e os comandos Docker executam pelo WSL. Os arquivos continuam na pasta do Windows, montada em `/mnt/c/`. Neste projeto, Java e k6 executam em contêineres. O k6 mostra o teste no terminal e, nas opções 9/10, oferece um [painel web local](http://localhost:5665) durante a execução. O Swagger abre separadamente no navegador do Windows.
 
 ### Já dentro do Ubuntu/WSL
 
@@ -31,7 +31,7 @@ Se o repositório estiver em outra pasta, ajuste o caminho depois de `--cd` no P
 
 ### Preparar antes da banca
 
-Pré-requisitos: Docker com Compose, `curl`, Python 3 e as imagens Java já preparadas. Python usa apenas a biblioteca padrão para criar/formatar JSON e verificar UUID/status; não é outra implementação do sistema. Java e k6 executam em contêineres. O menu informa qualquer pré-requisito ausente; não instala pacotes no sistema.
+Pré-requisitos: Docker com Compose, `curl`, Python 3, `flock` e as imagens Java já preparadas. Python usa apenas a biblioteca padrão para criar/formatar JSON, verificar UUID/status e conferir a porta local; não é outra implementação do sistema. `flock` impede cargas de demonstração concorrentes. Java e k6 executam em contêineres. O menu informa qualquer pré-requisito ausente; não instala pacotes no sistema.
 
 **Antes da banca**, use a opção **1**. Ela inicia o projeto `tcc-java-2026` sem recompilar, aguarda a saúde das APIs e baixa a imagem fixada do k6 se estiver ausente. Isso pode exigir internet; não deixe downloads/builds para os dez minutos de apresentação. Se faltarem imagens Java, siga a preparação do [README da implementação](../README.md). Não reconstrua as imagens medidas da campanha congelada apenas para demonstrar.
 
@@ -75,8 +75,8 @@ A opção **2** mostra os serviços, os fluxos e o endereço real do Swagger. O 
 | 6 | Pausar somente o consumidor. Kafka, APIs e banco permanecem ativos. |
 | 7 | Retomar consumidor; se o último evento for assíncrono, aguardar sua persistência por até 60 s. |
 | 8 | Consultar offsets/lag do grupo `audit-persistence-java`. |
-| 9 | k6 na síncrona, por padrão 5 eventos/s durante 20 s. |
-| 10 | k6 na assíncrona, com a mesma carga curta. |
+| 9 | k6 na síncrona, por padrão 5 eventos/s durante 20 s, com painel em `localhost:5665`. |
+| 10 | k6 na assíncrona, com a mesma carga curta e painel. |
 | 11 | Amostra de CPU/memória dos cinco serviços e logs recentes. |
 | 12 | Exibir o roteiro e falas dentro do terminal. |
 | 13 | Comparar lado a lado: carga normal, falha do PostgreSQL ou parada do consumidor. Coleta persistência, recursos e destinos em ambiente isolado. |
@@ -95,7 +95,7 @@ Comece com **1** para preparar e **2** para conferir os serviços. Depois siga e
 | Assíncrona normal | **4**, **7**, **5** | 202 e consulta 200 após processamento. |
 | Consumidor parado | **6**, **4**, **5**, **8** | Novo evento com 202, ainda ausente do banco (404), e eventual lag. |
 | Retomada | **7**, **5** | O mesmo evento passa a ser encontrado no banco, se a persistência for confirmada. |
-| Carga curta | **9**, **10** | k6 nas duas APIs, com consumidor retomado, 5 eventos/s por 20 s em cada teste. |
+| Carga curta | **9**, **10** | k6 nas duas APIs, com consumidor retomado, 5 eventos/s por 20 s em cada teste. Abra o painel e, após cada carga, feche sua aba para continuar. |
 | Recursos e saída | **11**, **0** | Amostra de recursos/logs e encerramento do menu, mantendo os serviços. |
 
 Deixe comparações completas prontas **antes da banca** com **13**, cenário **1**. Use **14** durante a apresentação para ver a última tabela e abrir seu HTML sem repetir a carga. Confira o cenário/UUID exibidos. Veja a seção 8 para os tempos e o isolamento desses ensaios.
@@ -140,6 +140,8 @@ Não substitua esta demonstração por parar o PostgreSQL e prometer que tudo se
 
 Com o consumidor retomado, use **9** e depois **10**. Cada opção usa um UUID de execução novo e cria eventos sintéticos novos. O padrão é 5 eventos/s por 20 s, com oito usuários virtuais disponíveis. Esse número de VUs não significa oito requisições simultâneas constantes.
 
+Abra [http://localhost:5665](http://localhost:5665) enquanto o teste estiver em andamento. Após a carga, feche as abas desse painel para o k6 encerrar e retornar ao menu. Se o menu já estava aberto antes da atualização que habilitou o painel, saia com **0** e reabra o script.
+
 > “Antes eu enviava um evento por vez. Agora o k6 envia seguindo uma taxa programada. O resumo mostra quantos eventos foram enviados, respostas inválidas, iterações não iniciadas e os tempos HTTP.”
 
 O resumo mostra média, mediana, p95 e p99 **apenas do HTTP dos eventos**, excluindo as consultas iniciais de prontidão. p95 é o percentil 95, não a média nem uma promessa de prazo. O teste valida código HTTP, UUID e status do corpo. Uma resposta inválida ou iteração não iniciada faz o teste falhar; não basta o comando terminar para afirmar sucesso.
@@ -147,6 +149,30 @@ O resumo mostra média, mediana, p95 e p99 **apenas do HTTP dos eventos**, exclu
 > “Estes tempos são de resposta HTTP. Na síncrona, a resposta sucede a persistência. Na assíncrona, confirma o Kafka. No experimento científico, medimos a conclusão da persistência separadamente com o analisador Java.”
 
 Essa carga curta não compara capacidade máxima, não inclui aquecimento científico e não confirma hipóteses do TCC. Os tempos dependem da máquina, do estado das aplicações e dos demais processos. Não use o menor p95 da demonstração para declarar uma arquitetura vencedora.
+
+### Painel web do k6
+
+O painel nativo está habilitado por padrão **somente nas cargas 9/10**. O script usa a imagem k6 já fixada, configura `K6_WEB_DASHBOARD=true`, atualiza os gráficos a cada segundo e publica a porta do contêiner apenas em `127.0.0.1:5665`. Não instala Grafana, não usa Grafana Cloud e não altera `experimento/run.sh`, a carga congelada ou o comparador 13.
+
+1. Escolha **9** ou **10** no menu e aguarde o endereço do painel aparecer.
+2. Abra [http://localhost:5665](http://localhost:5665) no navegador do Windows.
+3. Observe as requisições, tempos HTTP, erros e VUs da carga curta. O painel é para acompanhar o teste, não inicia cargas nem envia eventos pelo navegador.
+4. Ao terminar o tempo de geração de eventos, feche **todas as abas desse painel**. O k6 aguarda conexões abertas antes de encerrar; isso não significa que esteja continuando a gerar a carga.
+5. Depois do encerramento, confira o resumo no terminal e o relatório `.runtime/demonstracao/<sessão>/k6-<UUID>-<variante>/painel-k6.html`. Esse HTML pode ser aberto offline, sem deixar o servidor do painel ativo. A opção 14 mostra outro relatório: a comparação completa da opção 13.
+
+O painel mostra as métricas HTTP nativas e inclui o GET inicial de prontidão. Nosso `resumo.json` e o resumo textual continuam filtrando `phase=demo`, somente os eventos. Nem o painel nem o teste curto medem o instante de commit assíncrono ou os recursos dos serviços. O período de 1 s permite gráficos no teste padrão de 20 s; testes de até três períodos podem não apresentar gráficos no HTML.
+
+Para abrir o menu já iniciando uma demonstração síncrona, **com escrita sintética**, pelo PowerShell:
+
+```powershell
+wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java -- bash demo/apresentacao.sh --dashboard-sync
+```
+
+Para iniciar pela assíncrona, use `--dashboard-async` em vez de `--dashboard-sync`. Esses modos exigem terminal interativo e, depois do encerramento do k6, deixam o menu disponível. Não iniciam a campanha científica nem fazem build. Serviços e imagem devem estar prontos; use a opção 1 antes se necessário.
+
+Se precisar apenas da saída do terminal, inicie o menu no WSL com `TCC_DEMO_DASHBOARD=0 bash demo/apresentacao.sh`. Para uma porta alternativa escolhida por você, use `TCC_DEMO_DASHBOARD_PORT=5666 bash demo/apresentacao.sh`. Os limites de taxa e duração não mudam. Porta ocupada, outra carga ou painel ainda ativo causam recusa; o script não encerra processos alheios para liberar a porta. Ctrl+C pode interromper o fechamento dos arquivos, portanto prefira terminar a carga e fechar a aba.
+
+Fonte técnica: [painel web nativo do k6 e exportação HTML](https://grafana.com/docs/k6/latest/results-output/web-dashboard/).
 
 ### G. Mostrar observabilidade e encerrar
 
@@ -177,6 +203,9 @@ Arquivos locais das opções 1..12 em `.runtime/demonstracao/<sessão>/`, fora d
 | Falta `curl` ou Python 3 | Prepare o WSL antes da banca. Não há bibliotecas Python externas para instalar. |
 | Imagens Java ausentes | Prepare a implementação pelo README antes da apresentação; o menu deliberadamente não faz build. |
 | k6 precisa baixar imagem | Use a opção 1 com internet antes da banca; depois a imagem fica local. |
+| Painel em `localhost:5665` não abre | Ele só existe enquanto o k6 das opções 9/10 está ativo. Confira o endereço impresso e se o menu foi reaberto após a atualização. |
+| k6 terminou a carga, mas não voltou ao menu | Feche todas as abas do painel para liberar a conexão. A geração de eventos permanece limitada à duração configurada. |
+| Porta ocupada ou outra carga/painel ativo | Aguarde a carga anterior, feche suas abas ou escolha outra porta de demonstração. Não pare processos desconhecidos. |
 | 404 mesmo após retomar | Confira UUID, inicialização do consumidor, logs, lag e eventual DLQ. O menu não converte falta de evidência em perda comprovada. |
 | 202 com consumidor parado | É o comportamento esperado: confirma Kafka, não gravação. |
 | Projeto experimental ativo | Aguarde o responsável encerrar o ensaio. O menu não o interrompe nem roda em paralelo. |
