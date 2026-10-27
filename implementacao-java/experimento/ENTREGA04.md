@@ -1,8 +1,8 @@
 # Instrumentos para a Entrega 04
 
-Leia primeiro o [protocolo](PROTOCOLO-ENTREGA04.md), a [calibração original](calibracao/2026-10-26-529e0349/README.md) e o [acompanhamento da revisão reduzida](campanhas/2026-10-27-reduzida65-r2/ACOMPANHAMENTO.md). Referência comum: **48 eventos/s**. Foi autorizada a redução para **65 execuções**, cinco repetições e 180 s medidos; o novo piloto precisa passar antes do congelamento V2 e de qualquer definitivo. O texto/apresentação históricos não são uma entrega final.
+Leia primeiro o [protocolo](PROTOCOLO-ENTREGA04.md), a [calibração original](calibracao/2026-10-26-529e0349/README.md) e o [relatório do piloto R2](campanhas/2026-10-27-reduzida65-r2/README.md). Referência comum: **48 eventos/s**. A redução para **65 execuções**, cinco repetições e 180 s medidos foi validada nos nove casos em 27/10/2026 e congelada como `ready_for_definitive_runs`. Piloto aprovado não significa campanha concluída; o texto/apresentação históricos não são uma entrega final.
 
-Para o fluxo reduzido, use `python3 experimento/reduced_campaign.py status` e siga o acompanhamento. **Os comandos abaixo para a V1 são preservados como referência histórica; o executor não iniciará o plano antigo de 130 após a autorização da redução.** Para conferir a integridade do candidato R2, sem carga e sem autorizar definitivos: `bash experimento/campaign.sh --check experimento/campanhas/2026-10-27-reduzida65-r2/plan.csv`. O estado `pilot_pending` é explícito; executar de fato continua proibido até o congelamento aprovado.
+Para o fluxo reduzido, use `python3 experimento/reduced_campaign.py status` e siga o [acompanhamento](campanhas/2026-10-27-reduzida65-r2/ACOMPANHAMENTO.md). Os comandos de campanha abaixo apontam à R2. O plano antigo de 130 permanece apenas como histórico e não será iniciado. `policy.json` preserva o candidato predeclarado com `status=pilot_pending`; a autorização efetiva está no `FROZEN-PROTOCOL.json` ativo, acompanhado do catálogo aprovado.
 
 ## Antes de executar
 
@@ -40,20 +40,21 @@ docker run --rm --network none \
 
 Substitua os dois UUIDs pelos ensaios pareados com o mesmo `dataset_id`. O comparador exige exatamente 50 linhas e igualdade de conteúdo/hash, excluindo apenas `persisted_at`.
 
-## Calibração e campanha congelada
+## Campanha R2 congelada
 
 ```bash
-bash experimento/campaign.sh --check experimento/calibracao/2026-10-26-529e0349/plan.csv
+bash experimento/campaign.sh --check experimento/campanhas/2026-10-27-reduzida65-r2/plan.csv
 ```
 
-Esse comando verifica hashes do plano/Compose sem gerar carga ou alterar serviços. Exige checkout limpo. Para iniciar de fato, reserve uma janela longa e pare somente o ambiente interativo deste TCC:
+Esse comando verifica hashes e a matriz sem gerar carga ou alterar serviços. Exige checkout limpo. Para iniciar uma única vez, reserve uma janela longa, sem outra medição ativa:
 
 ```bash
-docker compose -p tcc-java-2026 stop
-bash experimento/campaign.sh experimento/calibracao/2026-10-26-529e0349/plan.csv
+python3 experimento/check_reduced_plan.py experimento/campanhas/2026-10-27-reduzida65-r2/plan.csv --require-unused
+python3 experimento/reduced_campaign.py launch-campaign
+python3 experimento/reduced_campaign.py status
 ```
 
-Não pare projetos alheios. Não execute os dois modos ao mesmo tempo. O plano possui 10 blocos/130 execuções, com 60 s de aquecimento, 12 s entre fases, 300 s de medição e 90 s de drenagem. Somente aquecimento + medição somam 13 h. Níveis: 12/24/36/48 eventos/s; rajada 48→96→48; falhas a 12/s por 40 s. VUs: 128 nas cargas normais e 176 nas falhas.
+O controlador registra e para somente os contêineres interativos deste TCC que estavam ativos, retomando-os ao fim ou em saída tratável. Não pare projetos alheios nem execute duas medições. A R2 possui 5 blocos/65 execuções: 60 s de aquecimento, 12 s entre fases, 180 s de medição e 90 s de drenagem. Os tempos configurados somam 6 h 10 min 30 s, sem preparação/exportação/análise. Níveis: 12/24/36/48 eventos/s; rajada 48→96→48; falhas a 12/s por 40 s. VUs: 128 nas cargas normais e 176 nas falhas. Mantenha Docker/WSL/computador ativos e sem suspensão. O processo é independente do terminal, mas não sobrevive ao desligamento do WSL ou da máquina.
 
 O executor recusa mudanças de código instrumentador, imagens e parâmetros congelados antes de reinicializar o banco experimental. Falhas de coleta ou falta de folga do gerador/observador interrompem a campanha para investigação. Não reinicie cegamente o mesmo plano após falha: pastas existentes nunca são sobrescritas; preserve a tentativa e documente qualquer substituição.
 
@@ -67,7 +68,7 @@ node experimento/finalize-calibration.mjs . 529e0349-d5b4-4001-a862-a0755cd69b72
 
 Sem `--finalize`, apenas examina a sessão local. Com essa opção, verifica checksums e cria relatório/plano/protocolo **somente se ainda não existirem**, nunca sobrescrevendo um protocolo anterior. Outra calibração exige uma revisão explícita do congelamento, não a edição retroativa dos números históricos. Node não é necessário para iniciar a campanha Bash/Docker já congelada.
 
-Verificação adicional opcional: `node experimento/verify-frozen.mjs`. Confere hashes do código/arquivos publicados, os 130 UUIDs, o conteúdo compartilhado dos pares, dez repetições por condição e primeira variante balanceada em 5/5. Verifica também que as pastas planejadas ainda não existem localmente. A contagem de arquivos brutos conferidos é a registrada no congelamento, não uma nova verificação dos brutos ausentes em um clone do Git.
+Verificação adicional: `node experimento/verify-frozen.mjs`. Para a R2, confere código/arquivos publicados, catálogo e resumos dos nove pilotos, 65 UUIDs, pares, cinco repetições por condição e primeira variante em 3/2 ou 2/3 por condição (15/15 globalmente). Use `--require-unused` somente antes do primeiro definitivo para recusar qualquer pasta planejada já presente. Sem essa opção, a leitura pode acompanhar uma campanha iniciada. A contagem de arquivos brutos auditados pertence ao congelamento; um clone sem `.runtime` não verifica novamente esses brutos.
 
 ## Ensaio individual
 

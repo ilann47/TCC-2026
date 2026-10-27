@@ -1,6 +1,6 @@
 # Instrumentação e execução dos experimentos
 
-A instrumentação foi validada e a referência comum foi calibrada em **48 eventos/s** em 26/10/2026. Consulte o [relatório de calibração](calibracao/2026-10-26-529e0349/README.md), o [protocolo](PROTOCOLO-ENTREGA04.md) e a [configuração congelada](FROZEN-PROTOCOL.json). **As 130 execuções definitivas ainda não foram iniciadas.** Calibração não constitui resultado final do TCC nem permite confirmar suas hipóteses.
+A instrumentação foi validada e a referência comum foi calibrada em **48 eventos/s** em 26/10/2026. Em 27/10/2026, as [nove validações da R2](campanhas/2026-10-27-reduzida65-r2/README.md) passaram e a [configuração ativa](FROZEN-PROTOCOL.json) foi congelada para **65 execuções**, com cinco repetições e 180 s medidos. Consulte o [relatório de calibração](calibracao/2026-10-26-529e0349/README.md) e o [protocolo](PROTOCOLO-ENTREGA04.md). A V1 de 130 execuções foi arquivada sem ser executada. A aprovação do piloto libera a campanha, mas não constitui resultado final nem confirmação das hipóteses.
 
 ## O que é medido
 
@@ -26,17 +26,19 @@ Use WSL/Linux, Docker e Compose >=2.24.4. Não é necessário instalar k6 ou Jav
 Dentro de `implementacao-java`, confira o plano sem gerar carga:
 
 ```bash
-bash experimento/campaign.sh --check experimento/calibracao/2026-10-26-529e0349/plan.csv
+bash experimento/campaign.sh --check experimento/campanhas/2026-10-27-reduzida65-r2/plan.csv
 ```
 
 Para iniciar a campanha, em uma janela reservada sem outros trabalhos pesados:
 
 ```bash
-docker compose -p tcc-java-2026 stop
-bash experimento/campaign.sh experimento/calibracao/2026-10-26-529e0349/plan.csv
+python3 experimento/check_reduced_plan.py experimento/campanhas/2026-10-27-reduzida65-r2/plan.csv --require-unused
+python3 experimento/reduced_campaign.py launch-campaign
+# Leitura do progresso, inclusive em outro terminal:
+python3 experimento/reduced_campaign.py status
 ```
 
-O primeiro comando para somente o ambiente interativo deste TCC, sem apagar dados. O executor não encerra projetos alheios; registra os contêineres concorrentes. Não execute dois ensaios simultâneos e não edite scripts enquanto estiverem em execução. O plano tem dez blocos/130 execuções: somente aquecimento e medição somam 13 horas, antes de inicialização, exportação e drenagem.
+O preflight não gera carga e recusa UUID definitivo já usado. `launch-campaign` só aceita o estado `pilot_complete`, checkout limpo e protocolo pronto; não use o comando para reiniciar uma campanha em andamento. O controlador para somente os contêineres interativos deste TCC que estavam ativos, sem apagar dados, e os retoma ao terminar ou em saída tratável. Registra contêineres concorrentes, mas não encerra projetos alheios. Não execute dois ensaios simultâneos, o menu de demonstração, recompilações ou edições rastreadas durante a campanha. O plano possui cinco blocos/65 execuções; os tempos configurados de aquecimento, intervalo, medição e drenagem somam 6 h 10 min 30 s, além de preparação, exportação e análise. Docker, WSL e computador precisam permanecer ativos, sem suspensão.
 
 O projeto experimental `tcc-entrega04` não publica portas e tem volumes próprios. Somente suas linhas sintéticas são reinicializadas, após a exportação anterior. Tópicos/grupos são novos a cada execução, mas o broker e os volumes permanecem: não se trata de reinicialização física de caches ou da máquina.
 

@@ -1,0 +1,122 @@
+{
+  "kind": "reduced_protocol_validation_not_definitive",
+  "ready": true,
+  "generated_utc": "2026-10-27T04:47:28.780772+00:00",
+  "records": [
+    {
+      "run_id": "20570d07-e554-41f1-94b9-c04296a42c22",
+      "variant": "sync",
+      "profile": "model",
+      "block": 1,
+      "rate": 5,
+      "raw_path": ".runtime/entrega04/20570d07-e554-41f1-94b9-c04296a42c22-sync",
+      "summary_sha256": "734249a95949a1c26831ccf153040279a593e3f7d17305fb284875824e6d3ec0",
+      "raw_files_verified": 23,
+      "started_utc": "2026-10-27T03:38:41.994901123Z",
+      "collection_end_utc": "2026-10-27T03:40:09.122606907Z"
+    },
+    {
+      "run_id": "30996e42-0a17-470a-b1df-418a448c5296",
+      "variant": "async",
+      "profile": "model",
+      "block": 1,
+      "rate": 5,
+      "raw_path": ".runtime/entrega04/30996e42-0a17-470a-b1df-418a448c5296-async",
+      "summary_sha256": "ad191ece9a59c3147aab7a064055c756e674af16e31293914f8a78ca42d59f54",
+      "raw_files_verified": 23,
+      "started_utc": "2026-10-27T03:40:13.738131490Z",
+      "collection_end_utc": "2026-10-27T03:41:30.064314698Z"
+    },
+    {
+      "run_id": "0f1448d9-8b48-485f-9224-60ae26b7e0ce",
+      "variant": "async",
+      "profile": "steady",
+      "block": 1,
+      "rate": 48,
+      "raw_path": ".runtime/entrega04/0f1448d9-8b48-485f-9224-60ae26b7e0ce-async",
+      "summary_sha256": "4b8bb5b65b4971820fa1c1fe08a3349264d4ddaffeb256f41224d68b148c410e",
+      "raw_files_verified": 22,
+      "started_utc": "2026-10-27T03:43:46.531566280Z",
+      "collection_end_utc": "2026-10-27T03:50:56.040796482Z"
+    },
+    {
+      "run_id": "8563955e-51fe-42a2-9a3a-8c70badf1071",
+      "variant": "sync",
+      "profile": "steady",
+      "block": 1,
+      "rate": 48,
+      "raw_path": ".runtime/entrega04/8563955e-51fe-42a2-9a3a-8c70badf1071-sync",
+      "summary_sha256": "ba0112b1efd507e13dac7727dbb3248cffbf7f24a3d9f67b914f9754f8586874",
+      "raw_files_verified": 22,
+      "started_utc": "2026-10-27T03:51:05.964662948Z",
+      "collection_end_utc": "2026-10-27T03:57:43.354240026Z"
+    },
+    {
+      "run_id": "a3c19f44-6693-4927-ae9b-358954560697",
+      "variant": "sync",
+      "profile": "burst",
+      "block": 1,
+      "rate": 48,
+      "raw_path": ".runtime/entrega04/a3c19f44-6693-4927-ae9b-358954560697-sync",
+      "summary_sha256": "48f4c30630d2d4e6ddc6e6f299380dbda8a36a30d9aed987a9344b738cfda87f",
+      "raw_files_verified": 22,
+      "started_utc": "2026-10-27T03:57:52.355404088Z",
+      "collection_end_utc": "2026-10-27T04:04:28.868196446Z"
+    },
+    {
+      "run_id": "d170e95f-d10b-41a7-82fe-7aba2916398b",
+      "variant": "async",
+      "profile": "burst",
+      "block": 1,
+      "rate": 48,
+      "raw_path": ".runtime/entrega04/d170e95f-d10b-41a7-82fe-7aba2916398b-async",
+      "summary_sha256": "4f3822b03261664ce01eafcefd7064c1a34ad4cd9ed29678798ec30a579e303a",
+      "raw_files_verified": 22,
+      "started_utc": "2026-10-27T04:04:37.079273999Z",
+      "collection_end_utc": "2026-10-27T04:11:29.491116501Z"
+    },
+    {
+      "run_id": "4843c1e1-5f98-4f62-b067-3341391f27f4",
+      "variant": "async",
+      "profile": "postgres-stop",
+      "block": 1,
+      "rate": 12,
+      "raw_path": ".runtime/entrega04/4843c1e1-5f98-4f62-b067-3341391f27f4-async",
+      "summary_sha256": "bcf022e4f1a39f0eb78c7546e2b998349fe30037009ab1b046b2dbdfbc6d78c6",
+      "raw_files_verified": 22,
+      "started_utc": "2026-10-27T04:11:38.701391656Z",
+      "collection_end_utc": "2026-10-27T04:18:26.270244960Z"
+    },
+    {
+      "run_id": "d5424922-efac-4e65-a098-a0ec875edffc",
+      "variant": "sync",
+      "profile": "postgres-stop",
+      "block": 1,
+      "rate": 12,
+      "raw_path": ".runtime/entrega04/d5424922-efac-4e65-a098-a0ec875edffc-sync",
+      "summary_sha256": "b96bdb93d18699a58ee31415a243155dd6e01dfee34b1f69eac7a472a3225438",
+      "raw_files_verified": 22,
+      "started_utc": "2026-10-27T04:18:34.190692445Z",
+      "collection_end_utc": "2026-10-27T04:25:10.314680463Z"
+    },
+    {
+      "run_id": "531b34c7-961f-4eba-aeee-cb99c35ef68b",
+      "variant": "async",
+      "profile": "consumer-stop",
+      "block": 1,
+      "rate": 12,
+      "raw_path": ".runtime/entrega04/531b34c7-961f-4eba-aeee-cb99c35ef68b-async",
+      "summary_sha256": "72cf9f4ed7e6b838630a6881fcecb9fa001155c02e59a968b04cc7d032e5c897",
+      "raw_files_verified": 22,
+      "started_utc": "2026-10-27T04:25:15.980665178Z",
+      "collection_end_utc": "2026-10-27T04:31:58.810476071Z"
+    }
+  ],
+  "model": {
+    "sync_records": 50,
+    "async_records": 50,
+    "excluded_field": "persisted_at",
+    "same_ids_fields_payload_hash": true,
+    "kind": "functional_model_equivalence_not_performance"
+  }
+}

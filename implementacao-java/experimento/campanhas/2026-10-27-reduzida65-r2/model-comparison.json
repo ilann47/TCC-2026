@@ -1,0 +1,7 @@
+{
+  "sync_records": 50,
+  "async_records": 50,
+  "excluded_field": "persisted_at",
+  "same_ids_fields_payload_hash": true,
+  "kind": "functional_model_equivalence_not_performance"
+}

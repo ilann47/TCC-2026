@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "status": "pilot_pending",
+  "status": "ready_for_definitive_runs",
   "client_date": "2026-10-27",
   "reference_rate": 48,
   "scope": "common stable local reference, not maximum capacity, calibration runs are not definitive repetitions",
@@ -44,7 +44,7 @@
   "protocol_revision": "2026-10-27-v2-r2-reduzida65",
   "previous_protocol": "experimento/protocolos/2026-10-26-v1-130/FROZEN-PROTOCOL.json",
   "calibration_report": "experimento/calibracao/2026-10-26-529e0349",
-  "pilot_plan": "pilot-plan.csv",
+  "pilot_plan": "pilot-plan.json",
   "rationale": "Alteração autorizada antes de qualquer execução definitiva: preservar 13 condições e todas as métricas; 5 repetições e 180 s são compromisso de tempo, não prova de poder estatístico ou precisão universal.",
   "analysis_policy": "Five runs per condition: report all per-run values, mean/median/sample SD/min/max and paired differences; no event-level pseudoreplication or claims of statistical superiority. Inconclusive findings remain inconclusive; no optional extra runs until a desired hypothesis wins.",
   "pilot_gate": {
@@ -62,5 +62,17 @@
   "diagnostic_causality_limit": "Sondas pesadas contaminam a leitura de recursos e disputam quota; a correlação não prova sozinha que causaram o pico de 21 pendências. R2 testa essa alteração de configuração, sem prometer aprovação nem repetir até passar.",
   "plan_sha256": "4091d5891657c6d0d80614d4133fd776e80d93d1b342148978c6fad7022a8148",
   "reduced_policy_sha256": "95d30475e16bcff2ebcd92f1257aa12e0e4d1aa7f64c9f72eaa6511a3f409499",
-  "controller_sha256": "dd5e0f73fc3f4e47775a701130514a617f3984db2dbdf7bcf2071ccf8bfebd0e"
+  "pilot_catalog_sha256": "dbc639ea72331bda885eac31ee66898a5c291a9b25088b40b762b82179169dae",
+  "controller_sha256": "dd5e0f73fc3f4e47775a701130514a617f3984db2dbdf7bcf2071ccf8bfebd0e",
+  "pilot_validation_run_ids": [
+    "20570d07-e554-41f1-94b9-c04296a42c22",
+    "30996e42-0a17-470a-b1df-418a448c5296",
+    "0f1448d9-8b48-485f-9224-60ae26b7e0ce",
+    "8563955e-51fe-42a2-9a3a-8c70badf1071",
+    "a3c19f44-6693-4927-ae9b-358954560697",
+    "d170e95f-d10b-41a7-82fe-7aba2916398b",
+    "4843c1e1-5f98-4f62-b067-3341391f27f4",
+    "d5424922-efac-4e65-a098-a0ec875edffc",
+    "531b34c7-961f-4eba-aeee-cb99c35ef68b"
+  ]
 }
