@@ -51,6 +51,8 @@ No Linux/macOS: `./mvnw verify`. Os testes atuais cobrem um vetor de referência
 
 O arquivo `.env` versionado contém apenas uma **senha pública de desenvolvimento local** e as portas padrão. Não a reutilize em outros sistemas nem use este ambiente com dados reais. No WSL/Linux, dentro de `implementacao-java`:
 
+Os comandos com `--build` abaixo servem para preparar um ambiente novo. **Se as imagens já estão prontas neste computador, use a opção 1 do [menu de demonstração](#demonstração-com-menu-para-a-apresentação)**, que inicia os serviços sem recompilar. Não reconstrua as imagens usadas na campanha congelada apenas para apresentar o protótipo.
+
 ```bash
 docker compose up --build -d
 docker compose ps
@@ -101,13 +103,50 @@ As variáveis principais são `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNA
 
 ## Demonstração com menu para a apresentação
 
-Leia também o [guia completo das métricas e falas](demo/METRICAS-E-FALAS.md): definições de cada linha da comparação, exemplo demonstrativo, cuidados de interpretação e roteiro para a banca.
+### Abrir pelo PowerShell no Windows
 
-No WSL/Linux, dentro desta pasta, execute `bash demo/apresentacao.sh`. O menu inicia/confere os serviços, envia eventos nas duas variantes, guarda o UUID, consulta a persistência, pausa/retoma o consumidor, mostra lag Kafka, roda k6 por 20 segundos e exibe falas sugeridas. Leia o [passo a passo da demonstração](demo/README.md) antes da banca.
+Abra o Windows Terminal/PowerShell e cole o comando abaixo. Ele entra no WSL e abre o menu Bash no terminal atual:
 
-As opções **13** (comparar) e **14** (reapresentar a última comparação sem carga) mostram tabela síncrona/assíncrona e geram HTML offline com HTTP, persistência, vazão, erros, destinos, CPU/memória, fila e recuperação quando aplicável. Há modos de carga normal, interrupção de PostgreSQL nas duas variantes e parada de consumidor apenas na assíncrona. Execute a coleta antes da banca; preparação/exportação acrescentam minutos.
+```powershell
+wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java -- bash demo/apresentacao.sh
+```
 
-O menu não recompila imagens nem inicia a campanha definitiva. Não apaga dados do projeto principal. A comparação reinicia somente a tabela experimental isolada, preserva exportações e para seu ambiente ao terminar. Relatórios ficam em `.runtime/demonstracao/` e evidências em `.runtime/entrega04/`, identificados como demonstração/validação, nunca como resultados definitivos. Se houver ensaio isolado ativo, as ações de demonstração são recusadas. Para uma conferência somente de leitura: `bash demo/apresentacao.sh --check`.
+Esse é o caminho desta máquina; ajuste o argumento de `--cd` se o clone estiver em outra pasta. Os arquivos continuam no Windows, acessíveis em `/mnt/c/` no WSL. O Docker precisa estar acessível no WSL utilizado. Neste projeto, **k6 e Java rodam em contêineres**: não é preciso abrir um aplicativo k6 nem instalá-lo no Windows para usar esse menu. Docker com Compose, `curl`, Python 3 e as imagens Java devem estar preparados antes da banca.
+
+Se você já estiver em um terminal Ubuntu/WSL, entre em `implementacao-java` e execute `bash demo/apresentacao.sh`. Não execute esse script Bash diretamente no PowerShell ou Git Bash; no PowerShell, use a chamada `wsl` acima.
+
+### Preparar e demonstrar
+
+1. No menu, escolha **1**. Ela inicia/confere `sync-api`, `async-api`, PostgreSQL, Kafka e consumidor sem build, aguarda a saúde das APIs e obtém a imagem fixada do k6 se estiver ausente. Prepare isso com internet antes da banca, não durante a apresentação.
+2. Escolha **2** para conferir os serviços e o endereço real do Swagger. Abra o navegador do Windows no [Swagger local](http://localhost:18002/swagger-ui/index.html), porta padrão. O seletor superior alterna entre **Síncrona (PostgreSQL)** e **Assíncrona (Kafka)**.
+3. Siga a sequência abaixo. Após cada ação, pressione **Enter** para voltar ao menu. O menu guarda o último UUID da sessão para consultar o mesmo evento.
+
+| Etapa | Opções, nesta ordem | O que conferir |
+|---|---|---|
+| Síncrona | **3**, **5** | POST 201 e consulta 200: registro presente no banco. |
+| Assíncrona normal | **4**, **7**, **5** | POST 202 e consulta 200 após o consumidor processar. |
+| Consumidor parado | **6**, **4**, **5**, **8** | Enviar um evento novo após a parada: POST 202, consulta 404 e eventual lag Kafka. |
+| Retomada | **7**, **5** | Conferir se o mesmo UUID aparece no banco; o menu aguarda até 60 s. |
+| k6 síncrono e assíncrono | **9**, depois **10** | Consumidor retomado; cada carga usa, por padrão, 5 eventos/s durante 20 s. |
+| Recursos e encerramento | **11**, depois **0** | Ver amostra de CPU/memória/logs e sair. Sair não desliga os cinco serviços. |
+
+O 201 síncrono confirma a transação; o 202 assíncrono confirma somente a publicação no Kafka. O resumo curto do k6 mede HTTP, não o tempo de conclusão da persistência assíncrona. Uma consulta não confirmada, erro ou teste reprovado deve ser explicado como tal. Essa demonstração não substitui os resultados da campanha definitiva de 65 tentativas.
+
+Para apenas verificar a prontidão pelo PowerShell, **sem enviar eventos, iniciar/parar contêineres ou baixar imagens**, use:
+
+```powershell
+wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java -- bash demo/apresentacao.sh --check
+```
+
+Se faltar alguma dependência, imagem ou serviço, a verificação informa o problema; ela não o corrige automaticamente. Se o consumidor ficar parado após uma saída abrupta, consulte a recuperação no [guia da demonstração](demo/README.md#5-segurança-e-arquivos).
+
+### Comparação completa e roteiro para a banca
+
+**Antes da apresentação**, use **13**, depois o cenário **1** (normal), para preparar uma comparação síncrona/assíncrona. Preparação, coleta e exportação levam alguns minutos além da janela de carga. **Durante a banca**, use **14** para reapresentar a última comparação concluída, sem nova carga, e abra o `relatorio.html` pelo caminho exibido. Confira o cenário e os identificadores desse relatório. Os cenários de falha também existem na opção 13, mas não é necessário executá-los todos ao vivo.
+
+Leia o [passo a passo completo e as falas de cada etapa](demo/README.md) e o [guia das métricas e falas](demo/METRICAS-E-FALAS.md) para ensaiar. Não execute a campanha longa durante a apresentação.
+
+O menu não recompila imagens nem inicia a campanha definitiva. As opções 1 a 12 preservam os dados do projeto principal. A comparação 13 reinicia somente a tabela experimental isolada, preserva exportações e para seu ambiente ao terminar. Relatórios ficam em `.runtime/demonstracao/` e evidências da comparação em `.runtime/entrega04/`, identificados como demonstração/validação, nunca como resultados definitivos. Se houver ensaio isolado ativo, as ações de demonstração são recusadas. Na saída tratável, o menu tenta retomar o consumidor somente se ele próprio o tiver pausado; os demais serviços continuam ativos.
 
 ## Medição e campanha experimental
 

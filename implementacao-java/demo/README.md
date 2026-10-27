@@ -1,29 +1,53 @@
 # Demonstração ao vivo com menu
 
-Este roteiro permite apresentar o protótipo sem depender de uma IA para executar comandos. Você escolhe as etapas no terminal. O menu explica o que está fazendo, guarda o último UUID e mostra uma fala sugerida. **Não executa as 130 repetições, não inicia `campaign.sh` e não produz resultados científicos definitivos.**
+Este roteiro permite apresentar o protótipo sem depender de uma IA para executar comandos. Você escolhe as etapas no terminal. O menu explica o que está fazendo, guarda o último UUID e mostra uma fala sugerida. **Não reinicia a campanha definitiva de 65 tentativas, não inicia `campaign.sh` e não produz resultados científicos definitivos.** A campanha concluída e os planos históricos permanecem separados desta demonstração.
 
 Para entender cada linha da tabela e ensaiar a explicação, leia o [guia completo das 45 métricas e falas para a banca](METRICAS-E-FALAS.md). Ele inclui unidades, cálculos, cuidados, exemplo real versionado, perguntas frequentes e roteiro de dez minutos.
 
 ## 1. Abrir o menu
 
-Use um terminal **WSL/Ubuntu ou Linux com Bash**, não o PowerShell nem o Git Bash. No computador atual:
+O menu executa em **WSL/Ubuntu ou Linux com Bash**. No Windows, você pode abri-lo pelo PowerShell usando `wsl`, ou entrar primeiro em um terminal Ubuntu/WSL.
+
+### Pelo PowerShell no Windows
+
+Abra o Windows Terminal/PowerShell e cole:
+
+```powershell
+wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java -- bash demo/apresentacao.sh
+```
+
+A chamada abre o menu no terminal atual, mas o Bash e os comandos Docker executam pelo WSL. Os arquivos continuam na pasta do Windows, montada em `/mnt/c/`. Neste projeto, Java e k6 executam em contêineres. **O k6 mostra o teste no terminal; não há uma janela k6 para abrir neste roteiro.** O Swagger abre separadamente no navegador do Windows.
+
+### Já dentro do Ubuntu/WSL
+
+No computador atual:
 
 ```bash
 cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java
 bash demo/apresentacao.sh
 ```
 
-Se o repositório estiver em outra pasta, entre em `implementacao-java` dessa cópia. O script encontra seus arquivos pelo próprio diretório e não depende de caminhos pessoais fixos no código.
+Se o repositório estiver em outra pasta, ajuste o caminho depois de `--cd` no PowerShell ou entre em `implementacao-java` dessa cópia no WSL. O script encontra seus arquivos pelo próprio diretório e não depende de caminhos pessoais fixos no código. Não execute `bash demo/apresentacao.sh` diretamente no PowerShell ou Git Bash.
+
+### Preparar antes da banca
 
 Pré-requisitos: Docker com Compose, `curl`, Python 3 e as imagens Java já preparadas. Python usa apenas a biblioteca padrão para criar/formatar JSON e verificar UUID/status; não é outra implementação do sistema. Java e k6 executam em contêineres. O menu informa qualquer pré-requisito ausente; não instala pacotes no sistema.
 
 **Antes da banca**, use a opção **1**. Ela inicia o projeto `tcc-java-2026` sem recompilar, aguarda a saúde das APIs e baixa a imagem fixada do k6 se estiver ausente. Isso pode exigir internet; não deixe downloads/builds para os dez minutos de apresentação. Se faltarem imagens Java, siga a preparação do [README da implementação](../README.md). Não reconstrua as imagens medidas da campanha congelada apenas para demonstrar.
 
-Uma conferência sem enviar eventos, iniciar/parar contêineres ou baixar imagens:
+Uma conferência pelo PowerShell **sem enviar eventos, iniciar/parar contêineres ou baixar imagens**:
+
+```powershell
+wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java -- bash demo/apresentacao.sh --check
+```
+
+Ou, já dentro de `implementacao-java` no WSL:
 
 ```bash
 bash demo/apresentacao.sh --check
 ```
+
+`--check` apenas confere a prontidão. Se algum serviço estiver parado ou faltar uma imagem, ele informa o problema. Use a opção **1** do menu para preparar/iniciar o ambiente. Se faltar uma dependência, prepare-a antes da banca conforme o README da implementação.
 
 ## 2. O que cada serviço faz
 
@@ -62,6 +86,19 @@ A opção **2** mostra os serviços, os fluxos e o endereço real do Swagger. O 
 Depois de cada ação, leia o resultado e pressione Enter para voltar. O menu mantém o UUID do último envio durante a sessão. Não é necessário copiar UUIDs para executar as opções 5 e 7. Para usar o Swagger em paralelo, copie o UUID exibido e consulte `GET /audit/{eventId}` na definição síncrona.
 
 ## 4. Passo a passo e falas para a banca
+
+Comece com **1** para preparar e **2** para conferir os serviços. Depois siga esta sequência, pressionando Enter entre as ações:
+
+| Etapa | Opções do menu, nesta ordem | Resultado a mostrar |
+|---|---|---|
+| Síncrona | **3**, **5** | 201 e consulta 200. |
+| Assíncrona normal | **4**, **7**, **5** | 202 e consulta 200 após processamento. |
+| Consumidor parado | **6**, **4**, **5**, **8** | Novo evento com 202, ainda ausente do banco (404), e eventual lag. |
+| Retomada | **7**, **5** | O mesmo evento passa a ser encontrado no banco, se a persistência for confirmada. |
+| Carga curta | **9**, **10** | k6 nas duas APIs, com consumidor retomado, 5 eventos/s por 20 s em cada teste. |
+| Recursos e saída | **11**, **0** | Amostra de recursos/logs e encerramento do menu, mantendo os serviços. |
+
+Deixe comparações completas prontas **antes da banca** com **13**, cenário **1**. Use **14** durante a apresentação para ver a última tabela e abrir seu HTML sem repetir a carga. Confira o cenário/UUID exibidos. Veja a seção 8 para os tempos e o isolamento desses ensaios.
 
 ### A. Mostrar a arquitetura
 
@@ -115,6 +152,8 @@ Essa carga curta não compara capacidade máxima, não inclui aquecimento cient�
 
 Opção **11** para ver uma amostra Docker de recursos e logs; **0** para sair. A amostra não mede energia, custo operacional, Windows inteiro ou médias entre repetições. Zero em um contêiner parado indica indisponibilidade, não eficiência.
 
+Sair do menu não desliga as APIs, o Kafka ou o PostgreSQL. O menu tenta retomar o consumidor somente se ele próprio o tiver pausado. Se desejar parar o projeto depois da apresentação, sem apagar os volumes, execute no WSL dentro de `implementacao-java`: `docker compose -p tcc-java-2026 stop`. Não use remoção de volumes para encerrar uma demonstração.
+
 Uma distribuição sugerida para dez minutos: arquitetura e síncrona (3 min), assíncrona com pausa/retomada (4 min), k6 e interpretação (2 min), limitações e encerramento (1 min). Prepare e ensaie antes; não rode a campanha longa durante a banca.
 
 ## 5. Segurança e arquivos
@@ -132,6 +171,8 @@ Arquivos locais das opções 1..12 em `.runtime/demonstracao/<sessão>/`, fora d
 
 | Problema | O que conferir |
 |---|---|
+| `bash` não encontrado ou comando recusado no PowerShell | Use a chamada completa com `wsl --cd ... -- bash demo/apresentacao.sh`. O script precisa de Bash no WSL/Linux, não de execução direta no PowerShell/Git Bash. |
+| O caminho de `--cd` não existe | Ajuste o caminho Linux da pasta do clone; no WSL, a unidade C: aparece em `/mnt/c/`. |
 | `Docker não está em execução` | Inicie o Docker no ambiente WSL usado pelo projeto. Não basta existir o comando. |
 | Falta `curl` ou Python 3 | Prepare o WSL antes da banca. Não há bibliotecas Python externas para instalar. |
 | Imagens Java ausentes | Prepare a implementação pelo README antes da apresentação; o menu deliberadamente não faz build. |
