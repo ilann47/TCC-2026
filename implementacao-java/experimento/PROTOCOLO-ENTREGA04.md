@@ -1,6 +1,8 @@
 # Protocolo experimental — campanha da Entrega 04
 
-Status em 26/10/2026: **instrumentação validada e protocolo congelado; campanha definitiva ainda não iniciada**. A [calibração](calibracao/2026-10-26-529e0349/README.md) confirmou referência comum de 48 eventos/s. Parâmetros e imagens estão em [FROZEN-PROTOCOL.json](FROZEN-PROTOCOL.json), com [plano de 130 execuções](calibracao/2026-10-26-529e0349/plan.csv). Os capítulos finais só podem incorporar resultados efetivamente reconciliados; calibração não confirma hipóteses.
+Revisão reduzida autorizada antes de qualquer execução definitiva: **65 execuções, cinco repetições por condição e 180 s de medição**. A [política V2](campanhas/2026-10-26-reduzida65/policy.json), o [plano](campanhas/2026-10-26-reduzida65/plan.csv) e a [análise predeclarada](campanhas/2026-10-26-reduzida65/ANALISE-PREDECLARADA.md) foram registrados antes do novo piloto. Sua liberação depende das nove validações descritas no [acompanhamento](campanhas/2026-10-26-reduzida65/ACOMPANHAMENTO.md). Enquanto isso, `FROZEN-PROTOCOL.json` preserva a V1 e o executor recusa iniciar suas 130 execuções. Após aprovação do piloto, o congelamento ativo será substituído pela V2, sem apagar a [V1 arquivada](protocolos/2026-10-26-v1-130/README.md).
+
+A [calibração original](calibracao/2026-10-26-529e0349/README.md) confirmou referência comum de 48 eventos/s, com instrumentos e imagens que não serão reconstruídos. O estado efetivo é consultado com `python3 experimento/reduced_campaign.py status`, no WSL. Capítulos finais só podem incorporar resultados efetivamente reconciliados; piloto e calibração não confirmam hipóteses comparativas.
 
 ## Escopo e instrumentos
 
@@ -49,12 +51,12 @@ O gerador recebe 2 CPUs/2 GiB e o observador 0,25 CPU/256 MiB. O executor confer
 | C1 / C2-25 | 12 eventos/s | Ambas | Carga baixa; a mesma coleta atende aos dois objetivos, sem duplicar o tamanho amostral. |
 | C2-50 / C2-75 / C2-100 | 24, 36 e 48 eventos/s | Ambas | Carga crescente, com taxas absolutas comuns. |
 | C3 | 48 → 96 → 48 eventos/s | Ambas | Rajada; duas transições de 1 s, delimitadas no script. |
-| C4 / C5-PG | 12 eventos/s; PostgreSQL interrompido por 40 s e retomado | Ambas | Mesma dependência indisponível, comando por volta dos 100 s de medição; instantes efetivos registrados. |
+| C4 / C5-PG | 12 eventos/s; PostgreSQL interrompido por 40 s e retomado | Ambas | Mesma dependência indisponível, comando por volta dos 60 s de medição; instantes efetivos registrados. |
 | C4 / C5-consumidor | 12 eventos/s; consumidor interrompido por 40 s e retomado | Apenas assíncrona | Kafka/PG ativos. Não é par equivalente da falha de PG. |
 
-Cada combinação terá **10 repetições**, com **60 s de aquecimento**, intervalo de até 12 s para conclusão das requisições de aquecimento e **300 s de medição**. A janela de drenagem é separada. Uma campanha com esta matriz totaliza **130 execuções**: 6 condições pareadas × 2 variantes × 10 + 1 condição assíncrona × 10. Somente aquecimento e medição somam 13 h; inicialização, exportação e drenagem aumentam esse tempo.
+Cada combinação terá **5 repetições**, com **60 s de aquecimento**, intervalo de 12 s para conclusão das requisições de aquecimento e **180 s de medição**. A janela de drenagem é separada, de 90 s. A matriz totaliza **65 execuções**: 6 condições pareadas × 2 variantes × 5 + 1 condição assíncrona × 5. Os tempos configurados somam 6 h 10 min 30 s, sem inicialização, exportação, análise ou o piloto adicional. O prazo real será maior; a redução não preserva automaticamente a precisão/poder estatístico do plano anterior.
 
-As repetições são unidades experimentais. Não transformar milhares de registros em milhares de amostras independentes. Ordem alternada das variantes em blocos com condições embaralhadas por semente registrada. Mesmo conteúdo por par. Os estados são reinicializados somente após exportar a coleta anterior.
+As repetições são unidades experimentais. Não transformar milhares de registros em milhares de amostras independentes. São cinco blocos completos com condições embaralhadas por semente registrada e mesmo conteúdo por par. A primeira variante é contrabalançada em 3/2 ou 2/3 por condição pareada e 15/15 globalmente. Os estados são reinicializados somente após exportar a coleta anterior. Mostrar valores por repetição, média, mediana, dispersão, extremos e diferenças pareadas, sem afirmar significância/ equivalência estatística não demonstrada. Resultados mistos permanecerão inconclusivos.
 
 VUs: 128 nas cargas normais e 176 nas falhas, acomodando o timeout HTTP de 10 s à taxa comum de 12/s. Drenagem: 90 s. O reset é lógico: tabela sintética reinicializada, tópico/grupo novos; broker, tópicos anteriores, volumes e caches não são zerados. Preserve o ambiente medido, sem reconstruir imagens; mudanças relevantes exigem nova calibração.
 

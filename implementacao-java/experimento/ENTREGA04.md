@@ -1,6 +1,8 @@
 # Instrumentos para a Entrega 04
 
-Leia primeiro o [protocolo](PROTOCOLO-ENTREGA04.md) e a [calibração de 26/10/2026](calibracao/2026-10-26-529e0349/README.md). Instrumentação validada, referência comum de **48 eventos/s** e plano congelado. As 130 execuções definitivas ainda não começaram; o texto e a apresentação históricos continuam sendo de preparação.
+Leia primeiro o [protocolo](PROTOCOLO-ENTREGA04.md), a [calibração original](calibracao/2026-10-26-529e0349/README.md) e o [acompanhamento da revisão reduzida](campanhas/2026-10-26-reduzida65/ACOMPANHAMENTO.md). Referência comum: **48 eventos/s**. Foi autorizada a redução para **65 execuções**, cinco repetições e 180 s medidos; o novo piloto precisa passar antes do congelamento V2 e de qualquer definitivo. O texto/apresentação históricos não são uma entrega final.
+
+Para o fluxo reduzido, use `python3 experimento/reduced_campaign.py status` e siga o acompanhamento. **Os comandos abaixo para a V1 são preservados como referência histórica; o executor não iniciará o plano antigo de 130 após a autorização da redução.** O verificador `--check` continua disponível, sem carga, para conferir a V1 enquanto seu arquivo ainda for o congelamento ativo.
 
 ## Antes de executar
 

@@ -12,6 +12,10 @@ if python3 -c 'import json,sys;sys.exit(0 if json.load(open("experimento/FROZEN-
   python3 experimento/check_reduced_plan.py "$plan" --require-unused
   exec python3 experimento/reduced_campaign.py campaign
 fi
+if ((check_only==0)) && [[ -f experimento/campanhas/2026-10-26-reduzida65/policy.json ]];then
+  echo 'A revisão reduzida foi autorizada; o plano antigo de 130 está preservado, mas não será iniciado. Aguarde validação e congelamento da V2.' >&2
+  exit 1
+fi
 [[ -z $(git status --porcelain) ]] || { echo 'Commit the reviewed frozen configuration before definitive runs.' >&2;exit 1; }
 check_file() {
   local key=$1 file=$2 expected
