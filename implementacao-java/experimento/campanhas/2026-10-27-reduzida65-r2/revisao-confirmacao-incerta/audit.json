@@ -1,0 +1,1389 @@
+{
+  "kind": "offline_formal_review_not_a_validity_amendment",
+  "review_tool_sha256": "6d368fe7c7c07bc61cf525b7718175e91d6f598cbaf62a441b664ba059210816",
+  "frozen_protocol_sha256": "3bcaa0251e239f84d0b0f8b26bb1f5f74a118adf3bc16a657c05cf0538ee1c77",
+  "state_sha256": "11f524868a420746311b9032fe0c6b4276ba4b6812970e7c5b99bea006d35fea",
+  "policy_sha256": "95d30475e16bcff2ebcd92f1257aa12e0e4d1aa7f64c9f72eaa6511a3f409499",
+  "plan_sha256": "4091d5891657c6d0d80614d4133fd776e80d93d1b342148978c6fad7022a8148",
+  "pilot_runs_reviewed": 9,
+  "definitive_attempts_reviewed": 37,
+  "previously_completed_runs": 36,
+  "not_started_UUIDs": 28,
+  "raw_files_verified_before_and_after": 1051,
+  "runs": [
+    {
+      "run_id": "20570d07-e554-41f1-94b9-c04296a42c22",
+      "stage": "pilot",
+      "block": 1,
+      "profile": "model",
+      "variant": "sync",
+      "rate": 5,
+      "summary_sha256": "734249a95949a1c26831ccf153040279a593e3f7d17305fb284875824e6d3ec0",
+      "raw_inventory_sha256": "42ce1be98ac158586e0e0c7547049bac6b97c5175d4de8ebe00ca30727cd1d4b",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 50,
+        "accepted": 50,
+        "stored_at_observation_end": 50,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 50
+      },
+      "stored_with_observed_commit_time": 50,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "30996e42-0a17-470a-b1df-418a448c5296",
+      "stage": "pilot",
+      "block": 1,
+      "profile": "model",
+      "variant": "async",
+      "rate": 5,
+      "summary_sha256": "ad191ece9a59c3147aab7a064055c756e674af16e31293914f8a78ca42d59f54",
+      "raw_inventory_sha256": "d169d518c03e9fb73c864725e83f739bcbe9dfeffb7cd0b4fa97282ab4c9a034",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 50,
+        "accepted": 50,
+        "stored_at_observation_end": 50,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 50
+      },
+      "stored_with_observed_commit_time": 50,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "0f1448d9-8b48-485f-9224-60ae26b7e0ce",
+      "stage": "pilot",
+      "block": 1,
+      "profile": "steady",
+      "variant": "async",
+      "rate": 48,
+      "summary_sha256": "4b8bb5b65b4971820fa1c1fe08a3349264d4ddaffeb256f41224d68b148c410e",
+      "raw_inventory_sha256": "e357b8cf48c906aeef2f2e1dd3aa120f401a28ba710b21f8e1d231ba83e082fe",
+      "raw_files_verified": 22,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 8641,
+        "accepted": 8641,
+        "stored_at_observation_end": 8641,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 8641
+      },
+      "stored_with_observed_commit_time": 8641,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "8563955e-51fe-42a2-9a3a-8c70badf1071",
+      "stage": "pilot",
+      "block": 1,
+      "profile": "steady",
+      "variant": "sync",
+      "rate": 48,
+      "summary_sha256": "ba0112b1efd507e13dac7727dbb3248cffbf7f24a3d9f67b914f9754f8586874",
+      "raw_inventory_sha256": "f2b8b2648f8cd4d6d829eb53f8e018b598abeb2935635df593a02a3bc784802e",
+      "raw_files_verified": 22,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 8641,
+        "accepted": 8641,
+        "stored_at_observation_end": 8641,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 8641
+      },
+      "stored_with_observed_commit_time": 8641,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "a3c19f44-6693-4927-ae9b-358954560697",
+      "stage": "pilot",
+      "block": 1,
+      "profile": "burst",
+      "variant": "sync",
+      "rate": 48,
+      "summary_sha256": "48f4c30630d2d4e6ddc6e6f299380dbda8a36a30d9aed987a9344b738cfda87f",
+      "raw_inventory_sha256": "be277a1906e651456d9ed1836f246efabc146b2abe1412cb2e8e2af4ec5f788d",
+      "raw_files_verified": 22,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 11519,
+        "accepted": 11519,
+        "stored_at_observation_end": 11519,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 11519
+      },
+      "stored_with_observed_commit_time": 11519,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "d170e95f-d10b-41a7-82fe-7aba2916398b",
+      "stage": "pilot",
+      "block": 1,
+      "profile": "burst",
+      "variant": "async",
+      "rate": 48,
+      "summary_sha256": "4f3822b03261664ce01eafcefd7064c1a34ad4cd9ed29678798ec30a579e303a",
+      "raw_inventory_sha256": "d92228415a24b1371a857c5ba30ec7fecaef7c03a72aacfa82e33d7a7015c717",
+      "raw_files_verified": 22,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 11519,
+        "accepted": 11519,
+        "stored_at_observation_end": 11519,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 11519
+      },
+      "stored_with_observed_commit_time": 11519,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "4843c1e1-5f98-4f62-b067-3341391f27f4",
+      "stage": "pilot",
+      "block": 1,
+      "profile": "postgres-stop",
+      "variant": "async",
+      "rate": 12,
+      "summary_sha256": "bcf022e4f1a39f0eb78c7546e2b998349fe30037009ab1b046b2dbdfbc6d78c6",
+      "raw_inventory_sha256": "85bbc4fe8a942c55073b3435be97b07dabb46f6f663d88d82b9236727121bbdd",
+      "raw_files_verified": 22,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2161,
+        "accepted": 2161,
+        "stored_at_observation_end": 2159,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 2161
+      },
+      "stored_with_observed_commit_time": 2159,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "d5424922-efac-4e65-a098-a0ec875edffc",
+      "stage": "pilot",
+      "block": 1,
+      "profile": "postgres-stop",
+      "variant": "sync",
+      "rate": 12,
+      "summary_sha256": "b96bdb93d18699a58ee31415a243155dd6e01dfee34b1f69eac7a472a3225438",
+      "raw_inventory_sha256": "908e5c85e52dcfbc2dd3d8b8806576cf8aba71e8b76a593bec33d4c6377c15f0",
+      "raw_files_verified": 22,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2160,
+        "accepted": 1676,
+        "stored_at_observation_end": 1676,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 1676,
+        "503": 484
+      },
+      "stored_with_observed_commit_time": 1676,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "531b34c7-961f-4eba-aeee-cb99c35ef68b",
+      "stage": "pilot",
+      "block": 1,
+      "profile": "consumer-stop",
+      "variant": "async",
+      "rate": 12,
+      "summary_sha256": "72cf9f4ed7e6b838630a6881fcecb9fa001155c02e59a968b04cc7d032e5c897",
+      "raw_inventory_sha256": "4210cad4848567378d25977831dc80b20abb8d5f163e1cda0538aaba5a757200",
+      "raw_files_verified": 22,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2161,
+        "accepted": 2161,
+        "stored_at_observation_end": 2161,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 2161
+      },
+      "stored_with_observed_commit_time": 2161,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "462cc199-3187-482b-94f2-cfc31e59ec1e",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "steady",
+      "variant": "sync",
+      "rate": 36,
+      "summary_sha256": "d088cdf809d1090fec56c4cfd59463b8007f06772cfc7a0645d676b1ef9c8451",
+      "raw_inventory_sha256": "845ab68e1da8d7a8a54fcbb96fb1625cac727d2ff6aa12e6365c4ace91ee01aa",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 6481,
+        "accepted": 6481,
+        "stored_at_observation_end": 6481,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 6481
+      },
+      "stored_with_observed_commit_time": 6481,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "45662332-9ef5-4a59-ad80-0e1fc98336e5",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "steady",
+      "variant": "async",
+      "rate": 36,
+      "summary_sha256": "1b90282ba06dd194e676a7e4ddf99050cf479067baab56db063ee21a603cc654",
+      "raw_inventory_sha256": "278ac442c3c4bec7ee5966752d3133eb6622948f99491c0daf918a57f60d764c",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 6481,
+        "accepted": 6481,
+        "stored_at_observation_end": 6481,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 6481
+      },
+      "stored_with_observed_commit_time": 6481,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "453b7333-4191-49bf-ac84-771e0262cf0f",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "consumer-stop",
+      "variant": "async",
+      "rate": 12,
+      "summary_sha256": "4f29647fcc66d9c3a381d2fc4f328486b05f8b4ef3199c7921af62cc564d626d",
+      "raw_inventory_sha256": "f3eb1ec300d3cd25a1916eb545dac0c5c2a4928adf19dab5cb80cdc92c07666f",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2160,
+        "accepted": 2160,
+        "stored_at_observation_end": 2160,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 2160
+      },
+      "stored_with_observed_commit_time": 2160,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "a11d58b2-fe82-4ea5-83d1-44480b8086b6",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "burst",
+      "variant": "sync",
+      "rate": 48,
+      "summary_sha256": "d96e9dcac9a2290f03948cbb272cff0020cd6215bc54b3b84bf32f2c52efe00e",
+      "raw_inventory_sha256": "a31cc18ffc66ca1551b114a93042c2ecb6d0afbbdeab7a7bb4c59c5167bdcf8d",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 11519,
+        "accepted": 11519,
+        "stored_at_observation_end": 11519,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 11519
+      },
+      "stored_with_observed_commit_time": 11519,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "c759cf5f-f17f-4a84-b516-95398ee10543",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "burst",
+      "variant": "async",
+      "rate": 48,
+      "summary_sha256": "d5615ff29c6b3976cd4872f1c3442cdc0934e0bea0ad32fcb2406376248f9d69",
+      "raw_inventory_sha256": "0be72f9ba8383bf3a3dc8e9b35b42ce06ac5d51cf808d030e4e289047dc33812",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 11519,
+        "accepted": 11519,
+        "stored_at_observation_end": 11519,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 11519
+      },
+      "stored_with_observed_commit_time": 11519,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "69404b80-c876-4971-9e90-8553eac1144a",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "steady",
+      "variant": "async",
+      "rate": 48,
+      "summary_sha256": "06ec3f9522b7dae28d106d4fb09736f0d7ae59b6f951952e117d31986e20d36d",
+      "raw_inventory_sha256": "a7c5e0569b62ebc1c88dece180f1ab75a53f08e54e05489c4bb3f966be5325fe",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 8641,
+        "accepted": 8641,
+        "stored_at_observation_end": 8641,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 8641
+      },
+      "stored_with_observed_commit_time": 8641,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "84ae6ce8-ae31-4fca-87d9-947743f27467",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "steady",
+      "variant": "sync",
+      "rate": 48,
+      "summary_sha256": "a7d8f70f6248ac91846dfaa0c24f67f54d7210aac8fe83e90d6b2360e33cb5ce",
+      "raw_inventory_sha256": "41f554a2de39745c812fa754afefa44299b2dca64a9b0813c5cacfea66407b70",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 8641,
+        "accepted": 8641,
+        "stored_at_observation_end": 8641,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 8641
+      },
+      "stored_with_observed_commit_time": 8641,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "4d7ff998-e613-43ed-842d-0898bd211c69",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "postgres-stop",
+      "variant": "async",
+      "rate": 12,
+      "summary_sha256": "861b273a98b91321576890f985b819ecc231d5e13111cba55c58e88607b9e22d",
+      "raw_inventory_sha256": "4fc8fb2bd13bdbd04be53d9944f17596895a7632382396696b2e7407a3b35fca",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2160,
+        "accepted": 2160,
+        "stored_at_observation_end": 2157,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 2160
+      },
+      "stored_with_observed_commit_time": 2157,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "a1bfb7d0-f27e-48f2-938e-3f281049f67a",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "postgres-stop",
+      "variant": "sync",
+      "rate": 12,
+      "summary_sha256": "16865578b8e1287224a6759181ddfd72864522d51d025c1c2d4b401ee61b97f5",
+      "raw_inventory_sha256": "8830e1d50bd629983280837a33097cb2e56ea9519efc96237f228b6176aeab20",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2161,
+        "accepted": 1676,
+        "stored_at_observation_end": 1676,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 1676,
+        "503": 485
+      },
+      "stored_with_observed_commit_time": 1676,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "ed420369-caba-4403-b2c4-907ed380da80",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "steady",
+      "variant": "async",
+      "rate": 24,
+      "summary_sha256": "f3ff569a588b6a1c55955f6d2645312b64466d6afcbe7aa32db81c4fcc088530",
+      "raw_inventory_sha256": "4c6b8853e659f07d46de692c02d64a7d50e6acd21ec998289a1a7b83e9db48b6",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 4321,
+        "accepted": 4321,
+        "stored_at_observation_end": 4321,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 4321
+      },
+      "stored_with_observed_commit_time": 4321,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "2e8e8eb1-40dc-4e61-9a7c-ba39ca4f846c",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "steady",
+      "variant": "sync",
+      "rate": 24,
+      "summary_sha256": "f0b7805f75ac63bc3eb7b0e5e5a078dc0a27c0fc4edf40245108e88f6f4ddb71",
+      "raw_inventory_sha256": "b695975a49eafdb9a05701bea0ddd632a216aef492c9cd1f019b897c9f48350c",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 4321,
+        "accepted": 4321,
+        "stored_at_observation_end": 4321,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 4321
+      },
+      "stored_with_observed_commit_time": 4321,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "c936e2c9-c658-4f0d-b32b-7c21dede239a",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "steady",
+      "variant": "sync",
+      "rate": 12,
+      "summary_sha256": "55752466c95c4d65fbf431e7e46a5cd48a64ad24c9c9a21bfee71e5e57764946",
+      "raw_inventory_sha256": "0ed4b018cfc71eeccede3bfb0288268d4956f1f95ca34357949d60e2e3192833",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2161,
+        "accepted": 2161,
+        "stored_at_observation_end": 2161,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 2161
+      },
+      "stored_with_observed_commit_time": 2161,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "1ff754e7-2773-425d-9b14-f0a03f5b2875",
+      "stage": "campaign",
+      "block": 1,
+      "profile": "steady",
+      "variant": "async",
+      "rate": 12,
+      "summary_sha256": "43358da39997277aeb8ac7b7a9c6392c730efebe676babc4cd5c08a9e2508068",
+      "raw_inventory_sha256": "751807c12bc9ce8b5375d05cdc6761668859f57a6d80e6c5e9dd2e77f22cae49",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2161,
+        "accepted": 2161,
+        "stored_at_observation_end": 2161,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 2161
+      },
+      "stored_with_observed_commit_time": 2161,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "4df3aa15-6bfa-49a4-b74e-3e80643ea45d",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "consumer-stop",
+      "variant": "async",
+      "rate": 12,
+      "summary_sha256": "986e504bebadc74efc41779064279998d5579d3c61a94c3b8cc8e6aec09c0b46",
+      "raw_inventory_sha256": "ad5a7c056ec21527adcbcba2bda0b74873570097512df410f5305fad677a3618",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2160,
+        "accepted": 2160,
+        "stored_at_observation_end": 2160,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 2160
+      },
+      "stored_with_observed_commit_time": 2160,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "47f9638e-68c7-40b1-a557-bbe6bd4b0b7b",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "postgres-stop",
+      "variant": "sync",
+      "rate": 12,
+      "summary_sha256": "2f38cf05256f4559b2cfa65075ab73d9b0e3fbfc41a88cf10dee095baf380405",
+      "raw_inventory_sha256": "ee718d3697fd68e6ebe7f639151195dd2a80569ce7eb8687f3783751b7ffa1e5",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2160,
+        "accepted": 1676,
+        "stored_at_observation_end": 1676,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 1676,
+        "503": 484
+      },
+      "stored_with_observed_commit_time": 1676,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "cdc37329-4ab6-454d-99b9-2aac40d65d97",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "postgres-stop",
+      "variant": "async",
+      "rate": 12,
+      "summary_sha256": "a9adb1e8d6861da9e05d16114397ed55a7729528558ee7d4069d77e2f582f492",
+      "raw_inventory_sha256": "650399f4c1eacb4c887680886a8f2cac81496802f41ce001a73ed8815f7ee4c9",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2161,
+        "accepted": 2161,
+        "stored_at_observation_end": 2158,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 2161
+      },
+      "stored_with_observed_commit_time": 2158,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "dd6c252a-c52f-40c2-8c17-1842b347391f",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "steady",
+      "variant": "sync",
+      "rate": 24,
+      "summary_sha256": "91428141738331d47bf289fd0555a9db7b3995934312289b9a1a5396f609b3d6",
+      "raw_inventory_sha256": "88e4ee99685ca8d08b4d3761a9b1ade27ad0c2e5320ecf393332dfa83230a89d",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 4321,
+        "accepted": 4321,
+        "stored_at_observation_end": 4321,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 4321
+      },
+      "stored_with_observed_commit_time": 4321,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "a16af893-f512-4362-ab03-2ccba14077b4",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "steady",
+      "variant": "async",
+      "rate": 24,
+      "summary_sha256": "4b177388043854a63e291b34c7468c35897021f990780208afd8b85af62a115d",
+      "raw_inventory_sha256": "2c12313901a310782041917beeb09c8e83cc273edc79f9ad3821f4fa621ace0c",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 4321,
+        "accepted": 4321,
+        "stored_at_observation_end": 4321,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 4321
+      },
+      "stored_with_observed_commit_time": 4321,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "a9c68237-9183-48c0-b01f-fecbf4917028",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "steady",
+      "variant": "async",
+      "rate": 36,
+      "summary_sha256": "a28b9d3fb406fbaa389c70d3d15eb9d635e801d8f79ffe2395fe44eae4977c3c",
+      "raw_inventory_sha256": "c43ab0e2f484e18c938d69038a8a75de515cadeda0b9a1d62e82e843e0aeb61f",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 6481,
+        "accepted": 6481,
+        "stored_at_observation_end": 6481,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 6481
+      },
+      "stored_with_observed_commit_time": 6481,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "7a6d8929-f510-4656-9261-a8ac82273c0e",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "steady",
+      "variant": "sync",
+      "rate": 36,
+      "summary_sha256": "a96cc0fd06a472dcd2c6a32cfff37f20c377feffe518f9e98fcdbf39a7fde620",
+      "raw_inventory_sha256": "9c22c7b8c01d46c81bc5b9765e2969278cb35277bf9460ecb521b1c4066b7be9",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 6481,
+        "accepted": 6481,
+        "stored_at_observation_end": 6481,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 6481
+      },
+      "stored_with_observed_commit_time": 6481,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "07d004a5-1471-4fb6-8ca9-b8689b1f44a9",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "burst",
+      "variant": "async",
+      "rate": 48,
+      "summary_sha256": "fe6e50301b875c55da70601e7c2da9d75355384c11ffbcff5f7c258dfa26659a",
+      "raw_inventory_sha256": "fffee526502e1758dc301f1652c879a6d10faf7b884daf56a8b61d824aa6a09c",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 11519,
+        "accepted": 11519,
+        "stored_at_observation_end": 11519,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 11519
+      },
+      "stored_with_observed_commit_time": 11519,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "09608b5e-1ad6-4032-a71b-bafbd2c86c39",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "burst",
+      "variant": "sync",
+      "rate": 48,
+      "summary_sha256": "283ed03a1cb70346b0f6328370b373a5d834edaa2b3ee7099dd8de4f84d0f596",
+      "raw_inventory_sha256": "b1ea01ac28541a2fca55a034d05578d4f64b178bef6376a9b6b7753ff0b14cf3",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 11519,
+        "accepted": 11519,
+        "stored_at_observation_end": 11519,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 11519
+      },
+      "stored_with_observed_commit_time": 11519,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "6263e7e9-70db-4414-85d2-4d818a19d87b",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "steady",
+      "variant": "sync",
+      "rate": 48,
+      "summary_sha256": "aac4330930415c9fc0f5d604b9410c723fd87e13862ff8cde3f68049cd8bd365",
+      "raw_inventory_sha256": "28ea5a0e9bce8cc7f6fc45320e8bfba81e31ab449b12a8121bdf72f1ec716b62",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 8641,
+        "accepted": 8641,
+        "stored_at_observation_end": 8641,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 8641
+      },
+      "stored_with_observed_commit_time": 8641,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "11a80400-b81e-4f8f-91ef-7b5906ee20b4",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "steady",
+      "variant": "async",
+      "rate": 48,
+      "summary_sha256": "841435231c91702e64619c87bb5dae8731cfc049c86b330348c8e04d8722d630",
+      "raw_inventory_sha256": "6aa10f640a46a385871176cab7acf9f4d675d0f9fb82404a69211b7627efc9bc",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 8641,
+        "accepted": 8641,
+        "stored_at_observation_end": 8641,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 8641
+      },
+      "stored_with_observed_commit_time": 8641,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "2c3571f9-94f5-4991-9564-50a8c852b629",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "steady",
+      "variant": "async",
+      "rate": 12,
+      "summary_sha256": "dd0477eb60dd6ad5fcafa886f70065ad5a8a4a46667b696cd23985a8083577b9",
+      "raw_inventory_sha256": "95d932811972ac320d33d05b0300e50f7ffadfd564f342e5bf927a4018b047ba",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2161,
+        "accepted": 2161,
+        "stored_at_observation_end": 2161,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 2161
+      },
+      "stored_with_observed_commit_time": 2161,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "2620a56f-56d5-4b7e-a9e7-ff3a689930ab",
+      "stage": "campaign",
+      "block": 2,
+      "profile": "steady",
+      "variant": "sync",
+      "rate": 12,
+      "summary_sha256": "b22e1cc4c48840bc31a079c3a3c85aa92e3e4105f16cd56de0901429b09c88d0",
+      "raw_inventory_sha256": "b0c474bbe02ea5f7f2229550c765d8bf7e7d92698d28c732112efdc1adb1b9ef",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2161,
+        "accepted": 2161,
+        "stored_at_observation_end": 2161,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 2161
+      },
+      "stored_with_observed_commit_time": 2161,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "b89b95fc-4804-4f1c-9a90-3cff382693ca",
+      "stage": "campaign",
+      "block": 3,
+      "profile": "steady",
+      "variant": "sync",
+      "rate": 12,
+      "summary_sha256": "051a8651919a23b0f465f2d0e0f41c798ecc73a00fcfe1e8c664aa0867d7e34d",
+      "raw_inventory_sha256": "c7a88db9786203e8ba478473e8345a54962e1f710fa2818cd9f0dc7b5633e07b",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2160,
+        "accepted": 2160,
+        "stored_at_observation_end": 2160,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 2160
+      },
+      "stored_with_observed_commit_time": 2160,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "27953345-e509-4f6f-8129-760fc8a467b2",
+      "stage": "campaign",
+      "block": 3,
+      "profile": "steady",
+      "variant": "async",
+      "rate": 12,
+      "summary_sha256": "82224f32995d83034bf3c7a7b2bdc8144ec8cbb27b5acf031de2775483d71b1e",
+      "raw_inventory_sha256": "b9ffa17de448704fb994eb7d73997584784d6c10bf76bab50fc810ec214217af",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2161,
+        "accepted": 2161,
+        "stored_at_observation_end": 2161,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 2161
+      },
+      "stored_with_observed_commit_time": 2161,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "849e6fc8-957d-4f1e-9793-1f2a2d618dae",
+      "stage": "campaign",
+      "block": 3,
+      "profile": "steady",
+      "variant": "async",
+      "rate": 48,
+      "summary_sha256": "eca4c289b4e5867fe43065127ee2ac754ac1b32e4000cbd8216b23b57b270530",
+      "raw_inventory_sha256": "2306c4483d34bc210523d16d11ffd07ef76f14dab7a0ec79d05a8024286e3e65",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 8641,
+        "accepted": 8641,
+        "stored_at_observation_end": 8641,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 8641
+      },
+      "stored_with_observed_commit_time": 8641,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "f7c16576-49c2-418f-934d-e3538cbd795e",
+      "stage": "campaign",
+      "block": 3,
+      "profile": "steady",
+      "variant": "sync",
+      "rate": 48,
+      "summary_sha256": "995b1cc1432dc2bea1e26b960abe68f834c5f758ad6cb76df3219e26affb52d2",
+      "raw_inventory_sha256": "8584c568b52c4bd0cd0c62889ac0d2036b2d4a86b9063fdd87a4ec751a31118d",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 8641,
+        "accepted": 8641,
+        "stored_at_observation_end": 8641,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 8641
+      },
+      "stored_with_observed_commit_time": 8641,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "47dea696-f6b0-45e5-a6c7-07280a4c04f0",
+      "stage": "campaign",
+      "block": 3,
+      "profile": "consumer-stop",
+      "variant": "async",
+      "rate": 12,
+      "summary_sha256": "c193aec8aed70c9bc6f7858a65625872391e1b3d0cfc6a7c7336df5fdf4bcb43",
+      "raw_inventory_sha256": "8e3501c8fd003375b77c14281e4c0310141ef82940d0922389e15c3f11cb5e72",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2160,
+        "accepted": 2160,
+        "stored_at_observation_end": 2160,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 2160
+      },
+      "stored_with_observed_commit_time": 2160,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "4762849b-bb76-4d64-8206-7934e8ed90c5",
+      "stage": "campaign",
+      "block": 3,
+      "profile": "steady",
+      "variant": "sync",
+      "rate": 36,
+      "summary_sha256": "c476b29f89a44b17cc39723737cf06701e6e2f920a8129d5799b473efee4511d",
+      "raw_inventory_sha256": "8a9c113e75730966f1558933ccf243e0a289e5fb7ef105c1ea6e10a3cb721a1e",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 6481,
+        "accepted": 6481,
+        "stored_at_observation_end": 6481,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 6481
+      },
+      "stored_with_observed_commit_time": 6481,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "26fe526c-6114-4683-9417-62192217f2cb",
+      "stage": "campaign",
+      "block": 3,
+      "profile": "steady",
+      "variant": "async",
+      "rate": 36,
+      "summary_sha256": "eb1049957ab111510002669a0fd901493bf0b93944b3ade5c53fa7130ca45ea8",
+      "raw_inventory_sha256": "8b8297c1a62dc9c4eb50aedd5581312e54c4d9c9b4a809390eff63e7649678f5",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 6481,
+        "accepted": 6481,
+        "stored_at_observation_end": 6481,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 6481
+      },
+      "stored_with_observed_commit_time": 6481,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "2ad67f5c-189f-4b47-b548-526b82629fe1",
+      "stage": "campaign",
+      "block": 3,
+      "profile": "burst",
+      "variant": "sync",
+      "rate": 48,
+      "summary_sha256": "42a9df9860fae3275f88c18948bc955c0cdab1a154ff198fc34268ea3287ecb8",
+      "raw_inventory_sha256": "e72360cb6533b3443256ab5182a61c9cd19f1f8c75cc819f3686e00a98ee8992",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 11519,
+        "accepted": 11519,
+        "stored_at_observation_end": 11519,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "201": 11519
+      },
+      "stored_with_observed_commit_time": 11519,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "7d6670c8-e1f9-485d-8c1e-8373c5041287",
+      "stage": "campaign",
+      "block": 3,
+      "profile": "burst",
+      "variant": "async",
+      "rate": 48,
+      "summary_sha256": "08b931c866312c9e769e24ff23051f6c5c8b6227c282069f7f8f9544c4e014c6",
+      "raw_inventory_sha256": "77c65b21d91c75d13161ff4668ce868edc6eae7c8cf62afc23649ecbba9a3234",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 11519,
+        "accepted": 11519,
+        "stored_at_observation_end": 11519,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 11519
+      },
+      "stored_with_observed_commit_time": 11519,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "c62a44a5-5e5c-426e-944d-f5b2e6a26dce",
+      "stage": "campaign",
+      "block": 3,
+      "profile": "postgres-stop",
+      "variant": "async",
+      "rate": 12,
+      "summary_sha256": "e9ec8a97aae2b169d78680b6e3d1d08068eaf5e5b4a9cadd7876d5adad6aebf5",
+      "raw_inventory_sha256": "796dd7113e6ce361744c65378b0cb4ae0b537edefaee3fbe69d4d57823eb2f6d",
+      "raw_files_verified": 23,
+      "original_instrument_valid": true,
+      "original_issues": [],
+      "original_analyzer_exit": 0,
+      "counts_crosschecked": {
+        "offered": 2161,
+        "accepted": 2161,
+        "stored_at_observation_end": 2158,
+        "stored_despite_unconfirmed_http": 0
+      },
+      "http_status_counts": {
+        "202": 2161
+      },
+      "stored_with_observed_commit_time": 2158,
+      "stored_without_observed_commit_time": 0,
+      "findings": [],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    },
+    {
+      "run_id": "8733a7d2-89b5-4a5e-be22-0e4ed6e6b29b",
+      "stage": "campaign",
+      "block": 3,
+      "profile": "postgres-stop",
+      "variant": "sync",
+      "rate": 12,
+      "summary_sha256": "f34209d961bdd29ebea8aa3646aaf147a946908d10bd767aa4c0b98762385df8",
+      "raw_inventory_sha256": "aea7423ead429817226c7db23ba42303d1adf512f21e993409159dfd16027fc0",
+      "raw_files_verified": 23,
+      "original_instrument_valid": false,
+      "original_issues": [
+        "d68f2ee7-bbc4-4380-b8e1-0000000002d5:incomplete_commit_db_evidence"
+      ],
+      "original_analyzer_exit": 2,
+      "counts_crosschecked": {
+        "offered": 2160,
+        "accepted": 1666,
+        "stored_at_observation_end": 1667,
+        "stored_despite_unconfirmed_http": 1
+      },
+      "http_status_counts": {
+        "201": 1666,
+        "503": 494
+      },
+      "stored_with_observed_commit_time": 1666,
+      "stored_without_observed_commit_time": 1,
+      "findings": [
+        {
+          "event_id": "d68f2ee7-bbc4-4380-b8e1-0000000002d5",
+          "phase": "measure",
+          "finding": "persisted_with_unobserved_commit_time_and_http_503",
+          "http_status": 503,
+          "commit_time": null,
+          "row_observed": true,
+          "request_milestones": [
+            {
+              "milestone": "request_received",
+              "timestamp": "2026-10-27T09:06:29.877793617Z",
+              "wall_time_ns": 1793091989877793617,
+              "monotonic_ns": 41370725910411,
+              "run_id": "8733a7d2-89b5-4a5e-be22-0e4ed6e6b29b",
+              "variant": "sync",
+              "event_id": "d68f2ee7-bbc4-4380-b8e1-0000000002d5"
+            },
+            {
+              "milestone": "request_failed",
+              "timestamp": "2026-10-27T09:06:29.911335695Z",
+              "wall_time_ns": 1793091989911335695,
+              "monotonic_ns": 41370759453641,
+              "run_id": "8733a7d2-89b5-4a5e-be22-0e4ed6e6b29b",
+              "variant": "sync",
+              "event_id": "d68f2ee7-bbc4-4380-b8e1-0000000002d5",
+              "reason": "database_unavailable"
+            }
+          ]
+        }
+      ],
+      "all_mismatches_have_narrow_diagnostic_explanation": true,
+      "original_validity_verdict_unchanged": true,
+      "campaign_admission_authorized": false
+    }
+  ],
+  "raw_evidence_modified": false,
+  "frozen_protocol_modified": false,
+  "journal_modified": false,
+  "campaign_resumed": false
+}

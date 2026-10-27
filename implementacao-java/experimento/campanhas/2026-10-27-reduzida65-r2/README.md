@@ -42,7 +42,11 @@ As falhas apresentaram recuperação operacional sustentada dentro da entrada at
 
 Nas sete coletas de carga, os máximos entre execuções do p95 de CPU do gerador/observador foram 13,63%/5,16% das quotas; os máximos de memória foram 23,37%/45,78% dos limites. São verificações de folga do instrumento, não consumo global do Windows ou custo da arquitetura. Os valores individuais permanecem nos resumos byte a byte em `pilot-runs/`, com SHA-256 no catálogo.
 
-## Próxima etapa autorizada
+## Interrupção e revisão formal em 27/10
+
+A campanha foi iniciada e interrompida na 37ª tentativa: 36 definitivos válidos preservados, uma coleta inválida pelo critério congelado e 28 UUIDs ainda não iniciados. Após autorização humana, a [revisão formal da confirmação incerta](revisao-confirmacao-incerta/README.md) auditou os nove pilotos e as 37 tentativas, sem alterar o protocolo, o diário ou o veredito original. A emenda analítica sugerida nesse parecer **ainda não está adotada**; a campanha permanece parada. As instruções de liberação abaixo registram a etapa anterior, não autorizam reiniciar ou ignorar a pasta recusada.
+
+## Liberação original, já executada
 
 Após revisar, testar, commitar e publicar esta liberação, executar exclusivamente os 65 UUIDs do plano, em cinco blocos, pelo controlador. Não mudar arquivos rastreados, reconstruir imagens, compilar o PDF ou rodar demonstrações durante a medição. Em falha de coleta ou instrumento, preservar a execução e investigar; não iniciar cópia concorrente, sobrescrever UUID ou trocar critérios silenciosamente. Ver [roteiro operacional](ACOMPANHAMENTO.md).
 
