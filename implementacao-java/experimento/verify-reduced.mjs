@@ -4,6 +4,33 @@ import crypto from 'node:crypto';
 import assert from 'node:assert/strict';
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const json=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+export function verifyAmendment(frozen) {
+  const amendment=frozen.analytical_amendment;
+  if(!amendment)return false;
+  assert.equal(amendment.revision,'2026-10-27-a1-qualified-commit');
+  assert.deepEqual(Object.keys(amendment.files).sort(),['adoption_audit','analysis','baseline_audit','original_controller','original_protocol','policy','review']);
+  for(const item of Object.values(amendment.files)){
+    assert.ok(!item.path.includes('..')&&!item.path.startsWith('/')&&!item.path.includes('\\'));
+    assert.equal(sha(fs.readFileSync(item.path)),item.sha256,item.path);
+  }
+  const original=json(amendment.files.original_protocol.path);
+  const current={...frozen};delete current.analytical_amendment;current.controller_sha256=original.controller_sha256;
+  assert.deepEqual(current,original,'measurement protocol must remain identical');
+  assert.equal(amendment.files.original_controller.sha256,original.controller_sha256);
+  const policy=json(amendment.files.policy.path),audit=json(amendment.files.adoption_audit.path);
+  assert.equal(policy.human_authorized,true);assert.equal(policy.no_imputation,true);assert.equal(policy.no_replacement_or_repeat,true);
+  assert.equal(policy.revision,amendment.revision);assert.equal(policy.plan_sha256,frozen.plan_sha256);
+  assert.equal(policy.reference_rate,48);assert.equal(policy.allowed_variant,'sync');assert.equal(policy.allowed_profile,'postgres-stop');
+  assert.equal(policy.baseline_audit_sha256,amendment.files.baseline_audit.sha256);
+  assert.deepEqual(audit.counts,{pilot:9,complete:36,partial:1,unstarted:28});
+  assert.equal(audit.original_summary_changes,0);assert.equal(audit.raw_verdicts_rewritten,0);assert.equal(audit.new_measurements,0);
+  assert.deepEqual(audit.implementation_hashes,{analysis:amendment.files.analysis.sha256,review:amendment.files.review.sha256,controller:frozen.controller_sha256,policy:amendment.files.policy.sha256});
+  const partial=audit.assessments.filter(a=>a.classification==='partial_commit_timing');
+  assert.equal(audit.assessments.length,37);assert.equal(partial.length,1);
+  assert.equal(partial[0].run_id,policy.initial_partial_run_id);assert.equal(partial[0].original_instrument_valid,false);
+  assert.equal(partial[0].eligibility.commit_latency_primary,false);assert.equal(partial[0].timing.imputed_timestamps,0);
+  return true;
+}
 export function verifyReduced(frozen) {
   assert.equal(frozen.schema_version,2);assert.ok(['pilot_pending','ready_for_definitive_runs'].includes(frozen.status));
   const ready=frozen.status==='ready_for_definitive_runs';
@@ -48,5 +75,6 @@ export function verifyReduced(frozen) {
   const calibration=json(`${frozen.calibration_report}/catalog.json`);
   assert.equal(calibration.runs.length,20);
   for(const run of calibration.runs)assert.equal(sha(fs.readFileSync(`${frozen.calibration_report}/runs/${run.run_id}-${run.variant}.json`)),run.summary_sha256);
-  console.log(JSON.stringify({revision:frozen.protocol_revision,status:frozen.status,definitive_execution_authorized:ready,reference:frozen.reference_rate,original_calibration_runs:20,reduced_validation_runs:pilot.records.length,planned_runs:65,conditions:13,repetitions:5,measure_seconds:180,paired_first_variant:'3/2 or 2/3 per condition; 15/15 overall',planned_output_folders_present:present,source_and_file_hashes:'match'},null,2));
+  const amended=verifyAmendment(frozen);
+  console.log(JSON.stringify({revision:frozen.protocol_revision,status:frozen.status,original_measurement_protocol_ready:ready,definitive_execution_authorized:ready&&!amended,resumption_requires_controller_preflight:amended,analytical_amendment:amended?frozen.analytical_amendment.revision:null,reference:frozen.reference_rate,original_calibration_runs:20,reduced_validation_runs:pilot.records.length,planned_runs:65,conditions:13,repetitions:5,measure_seconds:180,paired_first_variant:'3/2 or 2/3 per condition; 15/15 overall',planned_output_folders_present:present,source_and_file_hashes:'match'},null,2));
 }

@@ -1,5 +1,7 @@
 # Instrumentação e execução dos experimentos
 
+**Retomada atual:** após 36 completas e a 37ª tentativa temporalmente parcial, foi autorizada a [emenda A1](campanhas/2026-10-27-reduzida65-r2/emenda-a1/README.md). O caminho vigente é `audit-amendment` e `launch-reviewed-campaign`, após validação/commit/push; os comandos originais abaixo não reiniciam a campanha interrompida. Não repetir UUIDs ou editar o diário. A elegibilidade é por métrica; o resultado inválido original permanece preservado.
+
 A instrumentação foi validada e a referência comum foi calibrada em **48 eventos/s** em 26/10/2026. Em 27/10/2026, as [nove validações da R2](campanhas/2026-10-27-reduzida65-r2/README.md) passaram e a [configuração ativa](FROZEN-PROTOCOL.json) foi congelada para **65 execuções**, com cinco repetições e 180 s medidos. Consulte o [relatório de calibração](calibracao/2026-10-26-529e0349/README.md) e o [protocolo](PROTOCOLO-ENTREGA04.md). A V1 de 130 execuções foi arquivada sem ser executada. A aprovação do piloto libera a campanha, mas não constitui resultado final nem confirmação das hipóteses.
 
 ## O que é medido
@@ -29,11 +31,12 @@ Dentro de `implementacao-java`, confira o plano sem gerar carga:
 bash experimento/campaign.sh --check experimento/campanhas/2026-10-27-reduzida65-r2/plan.csv
 ```
 
-Para iniciar a campanha, em uma janela reservada sem outros trabalhos pesados:
+Para a retomada A1 autorizada, em uma janela reservada sem outros trabalhos pesados, após validar e publicar:
 
 ```bash
-python3 experimento/check_reduced_plan.py experimento/campanhas/2026-10-27-reduzida65-r2/plan.csv --require-unused
-python3 experimento/reduced_campaign.py launch-campaign
+python3 experimento/check_reduced_plan.py experimento/campanhas/2026-10-27-reduzida65-r2/plan.csv
+python3 experimento/reduced_campaign.py audit-amendment
+python3 experimento/reduced_campaign.py launch-reviewed-campaign
 # Leitura do progresso, inclusive em outro terminal:
 python3 experimento/reduced_campaign.py status
 ```

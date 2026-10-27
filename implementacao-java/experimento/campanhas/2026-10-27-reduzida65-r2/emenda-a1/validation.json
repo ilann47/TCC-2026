@@ -1,0 +1,47 @@
+{
+  "revision": "2026-10-27-a1-qualified-commit",
+  "validation_date_local": "2026-10-27",
+  "python_regressions": {
+    "passed": 33,
+    "failed": 0,
+    "includes": "review classifier, original controller, A1 negative cases, simulated 28-only launch and stop-on-other-failure"
+  },
+  "node_provenance_regressions": {
+    "passed": 7,
+    "failed": 0
+  },
+  "adoption_raw_audit": {
+    "pilots": 9,
+    "definitive_attempts": 37,
+    "complete": 36,
+    "partial": 1,
+    "unstarted": 28,
+    "catalogued_files_verified_before_and_after": 1051,
+    "original_summary_changes": 0,
+    "new_measurements": 0
+  },
+  "original_java_guard": {
+    "result": "passed",
+    "image_rebuilt": false,
+    "network": "none",
+    "evidence_mounts": "read-only"
+  },
+  "methodology_preview": {
+    "compiled": true,
+    "passes": "pdflatex, bibtex, pdflatex, pdflatex in isolated output directory",
+    "source_sha256": "19a22413464c4f4b891ae2f1d39fd8e7eac2c41b71f005c25bba45202c016634",
+    "pdf_sha256": "eda6c121bf8aefc617876783fbefeb0cc61d7095bcea9a05d5e9b27ff094e250",
+    "pages": 72,
+    "visually_reviewed_pdf_pages": [
+      28,
+      29,
+      30
+    ],
+    "visual_issues_found_on_changed_pages": 0,
+    "undefined_references_or_overfull_boxes_in_final_log": false,
+    "remaining_log_notice": "Unused global options pagestart,sumario; MiKTeX update check notice",
+    "scope": "Intermediate local methodology preview only; not final thesis, chapters 5/6 still pending"
+  },
+  "measurement_instrument_or_application_changes": false,
+  "authorization": "Human approved implementation, validation, publication and only then resumption of 28 unstarted UUIDs."
+}

@@ -1,5 +1,7 @@
 # Plano de análise antes da coleta definitiva
 
+**Proveniência:** este plano foi registrado antes das coletas. Após observar a 37ª tentativa, o usuário autorizou a [emenda analítica A1](emenda-a1/README.md). Ela mantém o texto original arquivado, o veredito bruto e a análise estrita, mas acrescenta elegibilidade por métrica para confirmação incerta: sem timestamp imputado, latência primária exclui a execução parcial e seu par, vazão apresenta limites e n efetivo é explícito. A1 é retrospectiva nas primeiras 37 e declarada antes das 28 restantes; não alegar que a exceção abaixo estava prevista desde o início.
+
 Esta revisão é um experimento local de comparação com orçamento de cinco repetições por condição, não um estudo dimensionado por poder estatístico. Os resultados só permitem conclusões delimitadas ao ambiente e às implementações medidas. Não há autorização para repetir até uma hipótese vencer, trocar métricas após observar qual favorece uma variante ou tratar eventos correlacionados como repetições independentes.
 
 ## Unidades e apresentação

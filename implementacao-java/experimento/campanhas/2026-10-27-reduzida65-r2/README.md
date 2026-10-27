@@ -44,7 +44,7 @@ Nas sete coletas de carga, os máximos entre execuções do p95 de CPU do gerado
 
 ## Interrupção e revisão formal em 27/10
 
-A campanha foi iniciada e interrompida na 37ª tentativa: 36 definitivos válidos preservados, uma coleta inválida pelo critério congelado e 28 UUIDs ainda não iniciados. Após autorização humana, a [revisão formal da confirmação incerta](revisao-confirmacao-incerta/README.md) auditou os nove pilotos e as 37 tentativas, sem alterar o protocolo, o diário ou o veredito original. A emenda analítica sugerida nesse parecer **ainda não está adotada**; a campanha permanece parada. As instruções de liberação abaixo registram a etapa anterior, não autorizam reiniciar ou ignorar a pasta recusada.
+A campanha foi iniciada e interrompida na 37ª tentativa: 36 definitivos válidos preservados, uma coleta inválida pelo critério congelado e 28 UUIDs ainda não iniciados. A [revisão formal da confirmação incerta](revisao-confirmacao-incerta/README.md) foi publicada e a **adoção da [emenda A1](emenda-a1/README.md) foi autorizada pelo usuário**: preservar a 37ª como parcial e retomar somente os 28 restantes após validação/publicação. O veredito bruto continua inválido; a elegibilidade passa a ser por métrica, com n efetivo explícito. As instruções de liberação abaixo registram a etapa anterior, não autorizam reiniciar ou ignorar a pasta recusada. O estado local, não este texto, confirma se a retomada está ativa.
 
 ## Liberação original, já executada
 

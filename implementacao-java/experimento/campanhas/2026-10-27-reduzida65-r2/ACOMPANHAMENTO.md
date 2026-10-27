@@ -4,6 +4,8 @@ Autorização do usuário em 26/10/2026: atualizar protocolo e metodologia para 
 
 ## Arquivos e comandos
 
+**Atualização A1, autorizada em 27/10 após o início:** preservar 36 completas e a 37ª como parcial, sem repetir, e retomar apenas os 28 UUIDs nunca iniciados depois de validação/publicação. O [roteiro A1](emenda-a1/README.md) prevalece nos comandos de retomada e elegibilidade. Usar `audit-amendment` e `launch-reviewed-campaign`, não editar o diário nem reutilizar o comando original de início. O estado distingue `campaign_completed`, `campaign_qualified` e sua união `campaign_accounted`. A autorização humana de adoção já foi recebida; não pedir a mesma decisão outra vez.
+
 Pasta de execução no WSL: `/mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java`.
 
 - Política predeclarada: `policy.json` nesta pasta. Mantém as 13 condições, taxa comum 48/s, 5 blocos, aquecimento 60 s, intervalo 12 s, medição 180 s, drenagem 90 s, falha 40 s iniciada aproximadamente aos 60 s; VUs/limites/imagens inalterados.
@@ -45,7 +47,7 @@ Os tempos configurados somam **6 h 10 min 30 s** para 65 execuções, sem prepar
 
 ## Após os dados
 
-- Conferir exatamente 65 coletas válidas, cinco por condição/variante e datasets pareados. Publicar catálogo e cópias dos resumos com hashes, mantendo brutos locais e tentativas inválidas identificadas.
+- Conferir exatamente os 65 UUIDs previstos, cinco tentativas por condição/variante e datasets pareados. Distinguir completas, parciais A1 e inválidas não cobertas; jamais anunciar 65 integralmente válidas se houver parcial. Informar n efetivo por métrica/par e a análise estrita original. Publicar catálogo e cópias dos resumos com hashes, mantendo brutos locais e tentativas inválidas identificadas.
 - Agregar por **execução** e por **par**, não transformar milhares de eventos correlacionados em milhares de repetições. Mostrar valores por repetição, média/mediana, desvio-padrão, mínimo/máximo e diferenças pareadas. Não alegar significância estatística ou usar intervalos injustificados com n=5. Resultados inconsistentes/inconclusivos permanecem assim.
 - Capítulo 5 na ordem da orientadora: ferramentas/piloto; modelo comum (a); síncrona (b); assíncrona (c); execução dos cenários (d); tabelas comparativas (e); trade-offs/hipóteses (f); limitações. Incorporar calibração de 26/10 separadamente dos definitivos e da preparação histórica.
 - Sempre separar HTTP de envio→commit. Informar número de commits observados e destinos dos não gravados. Vazão somente dentro da janela; drenagem não infla o throughput. DLQ é não persistência terminal, não desaparecimento nem reprocessamento automático. Recursos de sistema e instrumentos separados; contêiner parado não significa eficiência.

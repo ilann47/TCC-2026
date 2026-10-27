@@ -1,0 +1,21 @@
+{
+  "revision": "2026-10-27-a1-qualified-commit",
+  "kind": "authorized_metric_specific_analytical_amendment",
+  "human_authorized": true,
+  "authorization_date_local": "2026-10-27",
+  "human_direction": "Adotar a emenda qualificada e retomar após validação (recomendado)",
+  "reference_rate": 48,
+  "plan_sha256": "4091d5891657c6d0d80614d4133fd776e80d93d1b342148978c6fad7022a8148",
+  "baseline_audit_sha256": "86aed0e8f2bb5c7a94b637194c1d1e7516b7b11e94f953c01f3da5540fe4c975",
+  "retrospective_attempts": 37,
+  "initial_partial_run_id": "8733a7d2-89b5-4a5e-be22-0e4ed6e6b29b",
+  "allowed_variant": "sync",
+  "allowed_profile": "postgres-stop",
+  "qualification": "Correct final row and complete client evidence; HTTP 503, one request_received and one request_failed/database_unavailable; no commit_completed, persistence_confirmed, retry, replay, DLQ or other instrument issue. Measured events only. Warmup, async, other profiles/statuses or unexplained failures remain blocked.",
+  "raw_verdict_policy": "Never edit instrument_valid, issues, timestamps, summaries, SHA256SUMS or manifests. Separate assessment outside the raw folder.",
+  "metric_eligibility": "HTTP, final persistence and resources retained. Primary completion-latency analysis excludes any partial run and its counterpart from that paired indicator only; report effective n. Partial latency distribution is sensitivity-only with observed/stored coverage. Throughput is bounded using observed within-window count and the number of stored events without commit time. Recovery describes observed milestones only.",
+  "no_imputation": true,
+  "no_replacement_or_repeat": true,
+  "scope": "Post hoc for attempts 1-37; declared before the 28 remaining UUIDs. Same conservative rule applies to all definitive runs, without choosing an architecture winner. Further partial runs reduce effective sample size and must be reported, not replaced.",
+  "measurement_change": "None: original run.sh/load.js/Java instrument, images, Compose, quotas, durations, fault timing, reference and UUID/dataset plan unchanged. Offline regression/audit only; no new load pilot or third measurement attempt."
+}

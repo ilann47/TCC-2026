@@ -228,7 +228,36 @@ def terminate_child():
     CHILD = None
 
 
-def execute(stage):
+def checked_amendment():
+    import qualified_analysis as qualified
+    frozen = read(APP / 'experimento/FROZEN-PROTOCOL.json')
+    qualified.verify_extension(frozen)
+    if sha(Path(__file__).read_bytes()) != frozen['controller_sha256']:
+        raise ValueError('Controlador diverge da emenda congelada')
+    return frozen
+
+
+def published_checkout():
+    clean()
+    if output(['git', 'rev-parse', 'HEAD']) != output(['git', 'rev-parse', 'refs/remotes/origin/main']):
+        raise ValueError('Publicar e confirmar origin/main antes da retomada A1')
+
+
+def record_assessment(state, assessment):
+    import qualified_analysis as qualified
+    partial = assessment['classification'] == 'partial_commit_timing'
+    key = 'campaign_qualified' if partial else 'campaign_completed'
+    opposite = 'campaign_completed' if partial else 'campaign_qualified'
+    if assessment['run_id'] in state.get(opposite, []):
+        raise ValueError('UUID não pode ser simultaneamente completo e parcial')
+    qualified.save_assessment(assessment)
+    state.setdefault(key, [])
+    if assessment['run_id'] not in state[key]: state[key].append(assessment['run_id'])
+    state['campaign_accounted'] = len(set(state['campaign_completed']) | set(state.get('campaign_qualified', [])))
+    state['updated_utc'] = now()
+
+
+def execute(stage, reviewed=False):
     import fcntl
     global CHILD
     RUNTIME.mkdir(parents=True, exist_ok=True)
@@ -246,6 +275,25 @@ def execute(stage):
             if sha(Path(__file__).read_bytes()) != policy['controller_sha256']: raise ValueError('Controlador mudou após congelamento')
             if sha((REPORT / 'plan.csv').read_bytes()) != policy['plan_sha256']: raise ValueError('Plano alterado')
             rows = plan_rows(REPORT / 'plan.csv');validate_plan(rows)
+            if policy.get('analytical_amendment') and not reviewed:
+                raise ValueError('A1 exige o caminho explícito campaign-reviewed; não reiniciar campaign')
+        approved_partial = None
+        if reviewed:
+            import qualified_analysis as qualified
+            published_checkout()
+            policy = checked_amendment()
+            approved_partial = qualified.resume_preflight(state, rows, policy)
+            snapshot = RUNTIME / 'state-before-a1.json'
+            if snapshot.exists(): raise ValueError('Retomada A1 já iniciada; não repetir sem nova auditoria')
+            # Preserve the prior journal byte for byte; only this locked controller advances it.
+            with snapshot.open('xb') as stream: stream.write(STATE.read_bytes())
+            state['analytical_amendment'] = policy['analytical_amendment']['revision']
+            state['campaign_qualified'] = []
+            state['published_resume_commit'] = output(['git', 'rev-parse', 'HEAD'])
+            state['original_interruption'] = state.get('error')
+            state.pop('error', None)
+            adoption = read(APP / policy['analytical_amendment']['files']['adoption_audit']['path'])
+            for assessment in adoption['assessments']: qualified.save_assessment(assessment)
         completed_key = stage + '_completed'
         primary = output(['docker', 'ps', '-q', '--filter', 'label=com.docker.compose.project=tcc-java-2026']).split()
         state.update(phase=stage + '_running', controller_pid=os.getpid(), updated_utc=now(), primary_previously_running=primary)
@@ -256,8 +304,17 @@ def execute(stage):
             for index, row in enumerate(rows, 1):
                 if row['run_id'] in state[completed_key]:
                     audit_case(row, policy, stage);continue
+                if reviewed and row['run_id'] in state.get('campaign_qualified', []):
+                    record_assessment(state, qualified.assess(row, policy));continue
                 root = folder(row)
-                if root.exists(): raise ValueError('Pasta existente não concluída no diário; não sobrescrever/reexecutar: ' + str(root))
+                if root.exists():
+                    if reviewed and row['run_id'] == approved_partial['run_id']:
+                        assessment = qualified.assess(row, policy)
+                        if assessment != approved_partial: raise ValueError('Parecer parcial mudou após preflight')
+                        record_assessment(state, assessment);write(STATE, state)
+                        print(f'{now()} A1 preserved partial collection {row["run_id"]}; no load repeated', flush=True)
+                        continue
+                    raise ValueError('Pasta existente não concluída no diário; não sobrescrever/reexecutar: ' + str(root))
                 clean();fingerprints(policy)
                 state.update(current=row, current_index=index, total=len(rows), updated_utc=now());write(STATE, state)
                 print(f'{now()} {stage} {index}/{len(rows)} {row["profile"]} {row["variant"]} {row["rate"]}/s {row["run_id"]}', flush=True)
@@ -267,9 +324,19 @@ def execute(stage):
                     CHILD = subprocess.Popen(['bash', 'experimento/run.sh', row['variant']], cwd=APP, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
                     state['runner_pid'] = CHILD.pid;write(STATE, state)
                     code = CHILD.wait(timeout=900);CHILD = None
-                if code: raise ValueError(f'Executor retornou {code}; preservar {root}')
-                audit_case(row, policy, stage)
-                state[completed_key].append(row['run_id']);state['updated_utc'] = now();write(STATE, state)
+                state.pop('runner_pid', None)
+                if reviewed:
+                    if code not in (0, 2): raise ValueError(f'Executor retornou {code}; preservar {root}')
+                    assessment = qualified.assess(row, policy)
+                    if code != assessment['original_analyzer_exit']: raise ValueError('Saída do executor/analisador divergente')
+                    if assessment['classification'] == 'complete_original_evidence': audit_case(row, policy, stage)
+                    record_assessment(state, assessment)
+                    print(f'{now()} A1 {row["run_id"]} {assessment["classification"]}', flush=True)
+                else:
+                    if code: raise ValueError(f'Executor retornou {code}; preservar {root}')
+                    audit_case(row, policy, stage)
+                    state[completed_key].append(row['run_id']);state['updated_utc'] = now()
+                write(STATE, state)
             if stage == 'pilot':
                 models = [r for r in rows if r['profile'] == 'model'];sync = next(r for r in models if r['variant'] == 'sync');async_row = next(r for r in models if r['variant'] == 'async')
                 command(['docker', 'run', '--rm', '--network', 'none', '--user', f'{os.getuid()}:{os.getgid()}', '--mount', f'type=bind,src={APP / ".runtime"},dst=/evidence', policy['analyzer_image_id'], 'model', f'/evidence/entrega04/{sync["run_id"]}-sync/database.jsonl', f'/evidence/entrega04/{async_row["run_id"]}-async/database.jsonl', f'/evidence/{RUNTIME.name}/model-comparison.json'])
@@ -319,22 +386,29 @@ def freeze():
     print('V2 congelada após validar 9 coletas. Revisar/commitar antes de iniciar campaign.')
 
 
-def launch(stage):
+def launch(stage, reviewed=False):
     state = read(STATE)
     if state.get('controller_pid'):
         try:
             os.kill(state['controller_pid'], 0)
             raise ValueError('Controlador já ativo; não iniciar cópia')
         except ProcessLookupError: pass
-    expected = 'prepared' if stage == 'pilot' else 'pilot_complete'
+    expected = 'attention_required' if reviewed else 'prepared' if stage == 'pilot' else 'pilot_complete'
     if state['phase'] != expected: raise ValueError('Estado não permite iniciar: ' + state['phase'])
+    if reviewed:
+        import qualified_analysis as qualified
+        published_checkout()
+        frozen = checked_amendment()
+        rows = plan_rows(REPORT / 'plan.csv');validate_plan(rows)
+        qualified.initial_shape(state, rows, read(qualified.POLICY))
     log = (RUNTIME / f'{stage}-controller.log').open('ab', buffering=0)
-    child = subprocess.Popen([sys.executable, str(Path(__file__).resolve()), stage], cwd=APP, stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+    action = 'campaign-reviewed' if reviewed else stage
+    child = subprocess.Popen([sys.executable, str(Path(__file__).resolve()), action], cwd=APP, stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
     print(json.dumps({'pid': child.pid, 'stage': stage, 'log': str(RUNTIME / f'{stage}-controller.log')}, ensure_ascii=False))
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__);parser.add_argument('action', choices=['prepare', 'pilot', 'campaign', 'freeze', 'status', 'launch-pilot', 'launch-campaign'])
+    parser = argparse.ArgumentParser(description=__doc__);parser.add_argument('action', choices=['prepare', 'pilot', 'campaign', 'freeze', 'status', 'launch-pilot', 'launch-campaign', 'audit-amendment', 'campaign-reviewed', 'launch-reviewed-campaign'])
     args = parser.parse_args()
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(143))
     try:
@@ -342,6 +416,13 @@ def main():
         elif args.action in ('pilot', 'campaign'): execute(args.action)
         elif args.action == 'freeze': freeze()
         elif args.action == 'status': print(json.dumps(read(STATE) if STATE.exists() else {'phase': 'not_prepared'}, ensure_ascii=False, indent=2))
+        elif args.action == 'audit-amendment':
+            import qualified_analysis as qualified
+            frozen = checked_amendment()
+            qualified.resume_preflight(read(STATE), plan_rows(REPORT / 'plan.csv'), frozen)
+            print('A1: 36 completas, 1 parcial preservada, 28 UUIDs não iniciados; sem carga ou alteração do diário.')
+        elif args.action == 'campaign-reviewed': execute('campaign', reviewed=True)
+        elif args.action == 'launch-reviewed-campaign': launch('campaign', reviewed=True)
         else: launch(args.action.split('-', 1)[1])
     except (ValueError, OSError, subprocess.SubprocessError) as error:
         parser.exit(1, f'Parado para revisão, sem sobrescrever evidências: {error}\n')

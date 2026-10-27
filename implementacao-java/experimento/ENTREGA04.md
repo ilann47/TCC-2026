@@ -1,5 +1,7 @@
 # Instrumentos para a Entrega 04
 
+**Atualização A1:** a campanha já foi iniciada e parou na 37ª tentativa. A [emenda qualificada autorizada](campanhas/2026-10-27-reduzida65-r2/emenda-a1/README.md) preserva 36 completas e uma parcial, sem repetir a coleta, e libera somente os 28 UUIDs não iniciados após auditoria/testes/publicação. Consulte a elegibilidade por métrica; o resumo bruto inválido não é reescrito.
+
 Leia primeiro o [protocolo](PROTOCOLO-ENTREGA04.md), a [calibração original](calibracao/2026-10-26-529e0349/README.md) e o [relatório do piloto R2](campanhas/2026-10-27-reduzida65-r2/README.md). Referência comum: **48 eventos/s**. A redução para **65 execuções**, cinco repetições e 180 s medidos foi validada nos nove casos em 27/10/2026 e congelada como `ready_for_definitive_runs`. Piloto aprovado não significa campanha concluída; o texto/apresentação históricos não são uma entrega final.
 
 Para o fluxo reduzido, use `python3 experimento/reduced_campaign.py status` e siga o [acompanhamento](campanhas/2026-10-27-reduzida65-r2/ACOMPANHAMENTO.md). Os comandos de campanha abaixo apontam à R2. O plano antigo de 130 permanece apenas como histórico e não será iniciado. `policy.json` preserva o candidato predeclarado com `status=pilot_pending`; a autorização efetiva está no `FROZEN-PROTOCOL.json` ativo, acompanhado do catálogo aprovado.
@@ -46,11 +48,12 @@ Substitua os dois UUIDs pelos ensaios pareados com o mesmo `dataset_id`. O compa
 bash experimento/campaign.sh --check experimento/campanhas/2026-10-27-reduzida65-r2/plan.csv
 ```
 
-Esse comando verifica hashes e a matriz sem gerar carga ou alterar serviços. Exige checkout limpo. Para iniciar uma única vez, reserve uma janela longa, sem outra medição ativa:
+Esse comando verifica hashes e a matriz sem gerar carga ou alterar serviços. Exige checkout limpo. Para retomar pela A1, somente após os verificadores e publicação, sem outra medição ativa:
 
 ```bash
-python3 experimento/check_reduced_plan.py experimento/campanhas/2026-10-27-reduzida65-r2/plan.csv --require-unused
-python3 experimento/reduced_campaign.py launch-campaign
+python3 experimento/check_reduced_plan.py experimento/campanhas/2026-10-27-reduzida65-r2/plan.csv
+python3 experimento/reduced_campaign.py audit-amendment
+python3 experimento/reduced_campaign.py launch-reviewed-campaign
 python3 experimento/reduced_campaign.py status
 ```
 

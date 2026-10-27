@@ -22,6 +22,10 @@ def main():
     for key, path in checks:
         if reduced.sha(path.read_bytes()) != f[key]: raise ValueError('Fingerprint divergente: ' + key)
     if reduced.instrument_hash() != f['instrument_source_sha256']: raise ValueError('Instrumentação alterada')
+    if f.get('analytical_amendment'):
+        import qualified_analysis
+        qualified_analysis.verify_extension(f)
+        if args.require_unused: raise ValueError('A1 exige audit-amendment e launch-reviewed-campaign, sem repetir UUIDs')
     rows = reduced.plan_rows(plan);reduced.validate_plan(rows)
     if args.require_unused:
         if any(reduced.folder(row).exists() for row in rows): raise ValueError('UUID definitivo já usado; não iniciar nem sobrescrever')

@@ -2,6 +2,8 @@
 
 Data: 27/10/2026. Situação: **revisão concluída; emenda analítica proposta, ainda não adotada**.
 
+**Registro histórico:** o estado acima é o do parecer publicado em `effa20b`. Posteriormente, ainda em 27/10, o usuário autorizou adotar a emenda e retomar após validação. A implementação e os comandos vigentes estão na [A1](../emenda-a1/README.md). O conteúdo do parecer e seu `audit.json` permanecem como evidência da decisão, não como nova proibição de uma adoção já autorizada.
+
 ## Escopo e conclusão
 
 O usuário autorizou neste chat a revisão formal do tratamento de confirmação incerta, preservando o resultado e avaliando o impacto nas coletas anteriores. Esta revisão é offline e não constitui autorização técnica do controlador para retomar a campanha. Não houve alteração dos critérios congelados, dos instrumentos, das imagens, do plano ou do diário de execução.

@@ -2,6 +2,8 @@
 
 Este repositório reúne o texto editável do TCC, diagramas, entregas acadêmicas e o protótipo experimental de processamento de registros de auditoria. As duas variantes são implementadas em Java: uma usa comunicação REST síncrona e a outra usa comunicação assíncrona orientada a eventos.
 
+Estado experimental em 27/10: a campanha foi interrompida com 36 definitivos completos e uma coleta com confirmação temporal incompleta. A [emenda analítica A1](implementacao-java/experimento/campanhas/2026-10-27-reduzida65-r2/emenda-a1/README.md), autorizada pelo usuário, preserva essa coleta como parcial e permite retomar somente os 28 UUIDs nunca iniciados após validação/publicação. Não são 65 resultados integralmente válidos nem TCC finalizado; o estado local informa o progresso real.
+
 | Pasta | Conteúdo |
 |---|---|
 | [projeto-latex-java](projeto-latex-java/README.md) | Fonte atual do TCC (`modelo.tex`), bibliografia e diagramas alinhados ao código Java. |

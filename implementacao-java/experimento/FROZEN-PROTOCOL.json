@@ -63,7 +63,7 @@
   "plan_sha256": "4091d5891657c6d0d80614d4133fd776e80d93d1b342148978c6fad7022a8148",
   "reduced_policy_sha256": "95d30475e16bcff2ebcd92f1257aa12e0e4d1aa7f64c9f72eaa6511a3f409499",
   "pilot_catalog_sha256": "dbc639ea72331bda885eac31ee66898a5c291a9b25088b40b762b82179169dae",
-  "controller_sha256": "dd5e0f73fc3f4e47775a701130514a617f3984db2dbdf7bcf2071ccf8bfebd0e",
+  "controller_sha256": "a56c537aef915b0a6380084ee5a245f9beabed4dc4eba6bbfe4454e602499324",
   "pilot_validation_run_ids": [
     "20570d07-e554-41f1-94b9-c04296a42c22",
     "30996e42-0a17-470a-b1df-418a448c5296",
@@ -74,5 +74,38 @@
     "4843c1e1-5f98-4f62-b067-3341391f27f4",
     "d5424922-efac-4e65-a098-a0ec875edffc",
     "531b34c7-961f-4eba-aeee-cb99c35ef68b"
-  ]
+  ],
+  "analytical_amendment": {
+    "revision": "2026-10-27-a1-qualified-commit",
+    "files": {
+      "policy": {
+        "path": "experimento/campanhas/2026-10-27-reduzida65-r2/emenda-a1/policy.json",
+        "sha256": "d316daff629890ad4d67022ef4ac73e7e4455571d0b4b39f7119648960673f12"
+      },
+      "analysis": {
+        "path": "experimento/qualified_analysis.py",
+        "sha256": "81f2a69ab37d5abf9d8384c4aac9ee1b750738530c02f6235eedd9384c5b7899"
+      },
+      "review": {
+        "path": "experimento/review_commit_uncertainty.py",
+        "sha256": "6d368fe7c7c07bc61cf525b7718175e91d6f598cbaf62a441b664ba059210816"
+      },
+      "baseline_audit": {
+        "path": "experimento/campanhas/2026-10-27-reduzida65-r2/revisao-confirmacao-incerta/audit.json",
+        "sha256": "86aed0e8f2bb5c7a94b637194c1d1e7516b7b11e94f953c01f3da5540fe4c975"
+      },
+      "adoption_audit": {
+        "path": "experimento/campanhas/2026-10-27-reduzida65-r2/emenda-a1/adoption-audit.json",
+        "sha256": "02f4b79e1033af11f0907748c4a5f948dd4936fddc4d5228f2f410b83f7f1014"
+      },
+      "original_protocol": {
+        "path": "experimento/protocolos/2026-10-27-r2-before-a1/FROZEN-PROTOCOL.json",
+        "sha256": "3bcaa0251e239f84d0b0f8b26bb1f5f74a118adf3bc16a657c05cf0538ee1c77"
+      },
+      "original_controller": {
+        "path": "experimento/protocolos/2026-10-27-r2-before-a1/reduced_campaign.py.txt",
+        "sha256": "dd5e0f73fc3f4e47775a701130514a617f3984db2dbdf7bcf2071ccf8bfebd0e"
+      }
+    }
+  }
 }
