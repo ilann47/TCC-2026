@@ -122,7 +122,7 @@ def build_report(summaries, scenario):
     for key, label in [('offered', 'Requisições enviadas'), ('accepted', 'Aceitos (201 / 202 com UUID correto)'),
                        ('stored_within_measurement', 'Gravados dentro da medição'), ('stored_at_observation_end', 'Gravados até o fim da coleta')]:
         row('Carga e persistência', label, lambda s, k=key: number(s.get(k), integer=True))
-    row('Erros e destinos', 'Respostas por código HTTP', lambda s: ' | '.join(f'{k}: {v}' for k, v in sorted(s.get('http_status_counts', {}).items())) or MISSING)
+    row('Erros e destinos', 'Respostas por código HTTP', lambda s: '; '.join(f'{k}: {v}' for k, v in sorted(s.get('http_status_counts', {}).items())) or MISSING)
     row('Erros e destinos', 'Erros HTTP/contrato', lambda s: number(s.get('http_error_fraction') * 100, ' %') if isinstance(s.get('http_error_fraction'), (int, float)) else MISSING)
     for key, label in [('dropped_iterations_all_phases', 'Iterações não iniciadas (inclui aquecimento)'),
                        ('dlq_terminal', 'Aceitos em DLQ, não gravados'), ('pending_retained', 'Aceitos pendentes no Kafka ao fim'),

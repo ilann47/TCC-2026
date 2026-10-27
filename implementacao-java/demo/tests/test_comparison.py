@@ -47,6 +47,11 @@ class ComparisonTests(unittest.TestCase):
         self.assertEqual(self.row(report, 'Recuperação sustentada confirmada')['async'], REPORT.NA)
         self.assertEqual(self.row(report, 'Pico de lag Kafka amostrado')['sync'], REPORT.NA)
 
+    def test_http_codes_do_not_create_fake_terminal_columns(self):
+        pair = self.pair();pair['sync']['http_status_counts']['503'] = 2
+        report = REPORT.build_report(pair, 'normal')
+        self.assertEqual(self.row(report, 'Respostas por código HTTP')['sync'], '201: 3; 503: 2')
+
     def test_different_business_components_and_missing_resource(self):
         pair = self.pair();report = REPORT.build_report(pair, 'normal')
         row = self.row(report, 'CPU média — soma dos serviços do fluxo')
