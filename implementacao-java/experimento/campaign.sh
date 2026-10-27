@@ -7,6 +7,11 @@ if [[ ${1:-} == --check ]];then check_only=1;shift;fi
 plan=${1:?Usage: bash experimento/campaign.sh [--check] experimento/calibracao/DATE/plan.csv}
 frozen=experimento/FROZEN-PROTOCOL.json
 [[ -f $frozen && -f $plan ]] || exit 1
+if python3 -c 'import json,sys;sys.exit(0 if json.load(open("experimento/FROZEN-PROTOCOL.json"))["schema_version"]==2 else 1)';then
+  if ((check_only));then python3 experimento/check_reduced_plan.py "$plan";exit 0;fi
+  python3 experimento/check_reduced_plan.py "$plan" --require-unused
+  exec python3 experimento/reduced_campaign.py campaign
+fi
 [[ -z $(git status --porcelain) ]] || { echo 'Commit the reviewed frozen configuration before definitive runs.' >&2;exit 1; }
 check_file() {
   local key=$1 file=$2 expected

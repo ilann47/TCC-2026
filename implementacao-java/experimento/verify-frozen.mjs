@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const json=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 const frozen=json('experimento/FROZEN-PROTOCOL.json');
+if(frozen.schema_version===2){const {verifyReduced}=await import('./verify-reduced.mjs');verifyReduced(frozen);process.exit(0);}
 const report=frozen.report,catalog=json(`${report}/catalog.json`);
 assert.equal(frozen.status,'ready_for_definitive_runs');
 for(const [key,file] of [['plan_sha256',`${report}/plan.csv`],['base_compose_sha256','docker-compose.yml'],['observer_compose_sha256','experimento/compose.yml'],['policy_sha256','experimento/calibration-policy.json']])assert.equal(sha(fs.readFileSync(file)),frozen[key],file);
