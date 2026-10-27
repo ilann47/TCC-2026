@@ -49,7 +49,7 @@ O aceite e a persistência são etapas distintas. Com Kafka disponível, a API p
 \input{Capitulos/resultados-validacao}
 
 \section{Métricas comparativas: objetivo e}
-Ainda não existem as dez repetições por combinação de variante e cenário previstas no método. Por esse motivo, não são apresentadas tabelas de desempenho como se os cenários definitivos já tivessem sido executados. O analisador passou a calcular distribuições por execução, throughput concluído dentro da janela de medição, categorias de resposta, destinos dos eventos e recursos por contêiner. Salvar um evento durante a drenagem não aumenta o throughput da janela anterior.
+A revisão reduzida do método prevê cinco repetições por combinação de condição e variante, após validação adicional do piloto; essas coletas ainda não foram executadas. Por esse motivo, não são apresentadas tabelas de desempenho como se os cenários definitivos já tivessem sido concluídos. O analisador calcula distribuições por execução, throughput concluído dentro da janela de medição, categorias de resposta, destinos dos eventos e recursos por contêiner. Salvar um evento durante a drenagem não aumenta o throughput da janela anterior.
 
 A campanha deverá agregar resultados por repetição e apresentar dispersão, carga efetiva e quantidade de observações. O número de eventos não representa o número de repetições independentes. Recuperação deve separar o primeiro commit após a retomada, a conclusão do backlog e a retomada de throughput estável. Caso existam eventos na DLQ, não cabe declarar recuperação completa da persistência somente porque o lag do grupo chegou a zero.
 

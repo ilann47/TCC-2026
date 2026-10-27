@@ -47,6 +47,7 @@ jobs:
           bash demo/tests/test_menu.sh
           bash demo/tests/test_comparison.sh
           python3 -m unittest discover -s demo/tests -v
+          python3 -m unittest discover -s experimento/tests -v
           node --input-type=module --check < demo/load.js
 
   integration-smoke:

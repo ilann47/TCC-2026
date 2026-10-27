@@ -1,0 +1,83 @@
+[
+  {
+    "block": 1,
+    "profile": "model",
+    "rate": 5,
+    "variant": "sync",
+    "run_id": "b96a0db0-9b49-4e86-8448-d954140f397a",
+    "dataset_id": "baf23fde-7a7c-4b1f-b29c-d5ab6f5e9d77",
+    "vus": 1
+  },
+  {
+    "block": 1,
+    "profile": "model",
+    "rate": 5,
+    "variant": "async",
+    "run_id": "03a67728-444e-43c8-bcc9-91003d205ac7",
+    "dataset_id": "baf23fde-7a7c-4b1f-b29c-d5ab6f5e9d77",
+    "vus": 1
+  },
+  {
+    "block": 1,
+    "profile": "steady",
+    "rate": 48,
+    "variant": "async",
+    "run_id": "bedbd896-c279-475a-94f1-712c88b7f904",
+    "dataset_id": "6e935a1b-a039-42a7-b4d5-d9785f6673df",
+    "vus": 128
+  },
+  {
+    "block": 1,
+    "profile": "steady",
+    "rate": 48,
+    "variant": "sync",
+    "run_id": "36e3dc6f-3337-4c65-ad99-85c9abafe845",
+    "dataset_id": "6e935a1b-a039-42a7-b4d5-d9785f6673df",
+    "vus": 128
+  },
+  {
+    "block": 1,
+    "profile": "burst",
+    "rate": 48,
+    "variant": "sync",
+    "run_id": "d9282cb7-e3bd-4934-8a58-a5b22d54b0ee",
+    "dataset_id": "753d7e7d-1afd-4418-ac35-9bab1294e928",
+    "vus": 128
+  },
+  {
+    "block": 1,
+    "profile": "burst",
+    "rate": 48,
+    "variant": "async",
+    "run_id": "fde0dec1-cbb4-4cac-92c8-342db41cb14c",
+    "dataset_id": "753d7e7d-1afd-4418-ac35-9bab1294e928",
+    "vus": 128
+  },
+  {
+    "block": 1,
+    "profile": "postgres-stop",
+    "rate": 12,
+    "variant": "async",
+    "run_id": "eab43cb3-0daa-4104-9584-ce8c036df269",
+    "dataset_id": "3b9298e6-a251-4a60-94a9-416ac5038f1c",
+    "vus": 176
+  },
+  {
+    "block": 1,
+    "profile": "postgres-stop",
+    "rate": 12,
+    "variant": "sync",
+    "run_id": "9013c281-4802-4284-b07b-d64fcff2cd8f",
+    "dataset_id": "3b9298e6-a251-4a60-94a9-416ac5038f1c",
+    "vus": 176
+  },
+  {
+    "block": 1,
+    "profile": "consumer-stop",
+    "rate": 12,
+    "variant": "async",
+    "run_id": "8038da1f-eaef-43d8-94ac-8c59678a8049",
+    "dataset_id": "f656c09c-438f-4dd6-a2ba-992fcf9481ea",
+    "vus": 176
+  }
+]
