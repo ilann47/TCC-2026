@@ -15,7 +15,7 @@ pdflatex -interaction=nonstopmode -halt-on-error modelo.tex
 pdflatex -interaction=nonstopmode -halt-on-error modelo.tex
 ```
 
-Para regenerar os PNG dos diagramas, use PlantUML nos arquivos `.puml`. O [PDF da Entrega 03](../entregas/entrega-03-java/TCC_Entrega03_Java.pdf) é histórico. O [PDF consolidado atual](../output/pdf/TCC-2026-final.pdf) inclui resultados e conclusão da R2/A1. A compilação e revisão visual finais ocorreram depois de encerrar o controlador, sem interferir na medição.
+Para regenerar os PNG dos diagramas, use PlantUML nos arquivos `.puml`. O [PDF da Entrega 03](../entregas/entrega-03-java/TCC_Entrega03_Java.pdf) é histórico. O [PDF consolidado na entrega atual](../entregas/2026-10-27-entrega-04-java-final/TCC-Entrega04-final.pdf) inclui resultados e conclusão da R2/A1, acompanhado de apresentação e roteiro atualizados. A cópia em `output/pdf/` é idêntica. A compilação e revisão visual finais ocorreram depois de encerrar o controlador, sem interferir na medição.
 
 O capítulo 5 segue ferramentas/piloto, modelo comum (a), síncrona (b), assíncrona (c), cenários e qualificação (d), métricas (e), trade-offs/hipóteses (f) e limitações. O capítulo 6 responde à pergunta, avalia objetivos e limita recomendações sem introduzir resultados novos. Resumo/abstract, método e declaração de IA foram atualizados. Orientadora: Professora Alessandra Bussador. Dados institucionais de banca/ficha continuam sem invenção e não implicam aprovação ou submissão.
 

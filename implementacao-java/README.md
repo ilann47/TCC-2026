@@ -2,7 +2,7 @@
 
 ## Finalidade e estado
 
-**Atualização experimental de 27/10:** campanha concluída às 17h01 de Brasília: 64 completas e uma parcial A1, exatamente 65 UUIDs sem reposição. [Resultados, auditoria e limitações](experimento/campanhas/2026-10-27-reduzida65-r2/RESULTADOS.md) e [PDF com capítulos 5/6](../output/pdf/TCC-2026-final.pdf). Aplicações e instrumentos medidos permanecem inalterados; a qualificação parcial conserva o veredito bruto e não inventa horário de commit.
+**Atualização experimental de 27/10:** campanha concluída às 17h01 de Brasília: 64 completas e uma parcial A1, exatamente 65 UUIDs sem reposição. [Resultados, auditoria e limitações](experimento/campanhas/2026-10-27-reduzida65-r2/RESULTADOS.md) e [entrega datada com PDF, apresentação e roteiro](../entregas/2026-10-27-entrega-04-java-final/README.md). Aplicações e instrumentos medidos permanecem inalterados; a qualificação parcial conserva o veredito bruto e não inventa horário de commit.
 
 Três processos executáveis implementam o mesmo contrato `AuditEvent`: `sync-api` grava antes da resposta `201`; `async-api` responde `202` após o ACK do Kafka; `consumer` grava o evento, controla tentativas/DLQ e só então confirma o offset. `audit-core` e `audit-storage` são bibliotecas compartilhadas. Esta é a implementação usada na [Entrega 03 em Java](../entregas/entrega-03-java/README.md). Artefatos históricos não fornecem resultados atribuídos à campanha atual; a comparação definitiva é identificada no catálogo R2/A1.
 

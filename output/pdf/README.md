@@ -1,5 +1,7 @@
 # Documento consolidado após a campanha R2/A1
 
+O ponto de entrada da entrega é a [pasta datada de 27/10](../../entregas/2026-10-27-entrega-04-java-final/README.md), com cópia idêntica deste PDF, apresentação final editável, roteiro e relatório. Esta pasta conserva o artefato original da compilação, sem alterar seu conteúdo.
+
 [PDF final técnico](TCC-2026-final.pdf), compilado em 27/10/2026 a partir de `projeto-latex-java/modelo.tex`, com capítulos 5/6 e declaração de IA. São 80 páginas; conclusão nas páginas PDF 76–78 (numeração impressa 75–77), três páginas, sem resultados novos.
 
 SHA-256: `46b54cf04f64f33a4ac5f3fe65ff58b8f6555a2899d0046ba3398fceedf05182`.

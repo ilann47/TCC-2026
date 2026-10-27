@@ -2,7 +2,7 @@
 
 Concluída em **27/10/2026 às 17h01 de Brasília** (`20:01:08Z`). São exatamente os **65 UUIDs planejados: 64 completos no critério original e um parcial sob A1**, sem UUID repetido/substituído, cinco tentativas em cada uma das treze condições, trinta pares e cinco casos de consumidor parado. O controlador encerrou e restaurou os cinco serviços interativos; não há nova medição a iniciar.
 
-Os [dados públicos](resultados-a1/) e os capítulos 5/6 são a análise definitiva, distintos do piloto e das entregas históricas. O [PDF consolidado](../../../../output/pdf/TCC-2026-final.pdf) mantém as limitações e a declaração de IA. Isso é fechamento técnico do documento e campanha, não confirmação de aprovação institucional ou submissão ao portal.
+Os [dados públicos](resultados-a1/) e os capítulos 5/6 são a análise definitiva, distintos do piloto e das entregas históricas. A [entrega datada de 27/10](../../../../entregas/2026-10-27-entrega-04-java-final/README.md) reúne o PDF consolidado, apresentação final e roteiro, mantendo as limitações e a declaração de IA. Isso é fechamento técnico do documento e campanha, não confirmação de aprovação institucional ou submissão ao portal.
 
 ## Integridade e proveniência
 

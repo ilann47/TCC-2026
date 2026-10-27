@@ -2,7 +2,7 @@
 
 Este repositório reúne o texto editável do TCC, diagramas, entregas acadêmicas e o protótipo experimental de processamento de registros de auditoria. As duas variantes são implementadas em Java: uma usa comunicação REST síncrona e a outra usa comunicação assíncrona orientada a eventos.
 
-Estado experimental em 27/10: **campanha concluída às 17h01 de Brasília, com 64 coletas completas e uma parcial A1 nos 65 UUIDs planejados**, sem reposição. A [análise final e suas limitações](implementacao-java/experimento/campanhas/2026-10-27-reduzida65-r2/RESULTADOS.md) preservam o veredito original da parcial, os dados e a qualificação por métrica. [PDF consolidado com capítulos 5/6](output/pdf/TCC-2026-final.pdf) e [fonte editável](projeto-latex-java/modelo.tex). Fechamento técnico não significa aprovação institucional ou envio ao portal.
+Estado experimental em 27/10: **campanha concluída às 17h01 de Brasília, com 64 coletas completas e uma parcial A1 nos 65 UUIDs planejados**, sem reposição. A [análise final e suas limitações](implementacao-java/experimento/campanhas/2026-10-27-reduzida65-r2/RESULTADOS.md) preservam o veredito original da parcial, os dados e a qualificação por métrica. A [nova entrega datada de 27/10](entregas/2026-10-27-entrega-04-java-final/) reúne o [PDF com capítulos 5/6](entregas/2026-10-27-entrega-04-java-final/TCC-Entrega04-final.pdf), a [apresentação final editável](entregas/2026-10-27-entrega-04-java-final/Apresentacao-Entrega04-final.pptx), roteiro e verificação. [Fonte LaTeX editável](projeto-latex-java/modelo.tex). Fechamento técnico não significa aprovação institucional ou envio ao portal.
 
 | Pasta | Conteúdo |
 |---|---|
