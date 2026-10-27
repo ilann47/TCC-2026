@@ -154,13 +154,16 @@
     %==============================================================================
     % ELEMENTOS PRÉ-TEXTUAIS
     %==============================================================================
+    \hypersetup{pageanchor=false}
     \imprimircapa
 
     \imprimirfolhaderosto* % (o * indica que haverá a ficha bibliográfica)
 
+    \hypersetup{pageanchor=true}
+
     \input{Apresentacao/declaracao_uso_ia}
 
-    % Elementos ainda não emitidos nesta entrega parcial:
+    % Elementos institucionais/opcionais não emitidos sem dados confirmados:
     % ficha catalográfica, folha de aprovação, dedicatória, agradecimentos e epígrafe.
 
     \imprimirresumo
@@ -196,7 +199,7 @@
     \input{Capitulos/materiais_metodo}
     \input{Capitulos/implementacao}
     \input{Capitulos/resultados}
-    % A análise distingue validação e campanha definitiva ainda pendente.
+    \input{Capitulos/conclusao}
     % Conclusão científica permanece reservada até a coleta completa.
 
     %\bookmarksetup{startatroot}

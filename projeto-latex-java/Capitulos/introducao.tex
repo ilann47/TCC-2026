@@ -42,18 +42,18 @@ Comparar experimentalmente o desempenho e a resiliência de uma implementação 
 \item implementar uma variante síncrona baseada em API REST e PostgreSQL;
 \item implementar uma variante assíncrona baseada em Apache Kafka, consumidor e PostgreSQL;
 \item definir cenários controlados de carga, indisponibilidade e recuperação;
-\item coletar posteriormente latência, throughput, taxa de erro, uso de recursos, perda, duplicidade e tempo de recuperação;
+\item coletar latência, throughput, taxa de erro, uso de recursos, destinos dos eventos, duplicidade e tempo de recuperação;
 \item analisar os trade-offs observados sem pressupor superioridade de uma alternativa.
 \end{alineas}
 
 \section{Hipóteses de trabalho}
 
-As hipóteses orientam o experimento futuro e não representam resultados já obtidos. Espera-se que a variante síncrona apresente menor complexidade e menor custo básico em cargas reduzidas. Espera-se também que a variante assíncrona reduza a latência de aceitação e retenha eventos durante a indisponibilidade do consumidor, ao custo de maior uso de recursos e diferença entre aceitação e conclusão. Todas as hipóteses poderão ser refutadas pelos dados.
+As hipóteses foram formuladas antes da campanha e não pressupõem sua confirmação. Esperava-se menor complexidade e menor custo básico da variante síncrona em cargas reduzidas. Esperava-se também que a variante assíncrona reduzisse a latência de aceitação e retivesse eventos durante a indisponibilidade do consumidor, com contrapartida de recursos e diferença entre aceitação e conclusão. O experimento operacionaliza custo básico como CPU e memória do caminho de processamento; custo financeiro e esforço de manutenção não foram medidos. O Capítulo~\ref{cap:resultados} confronta essas expectativas com os dados e distingue confirmação descritiva, refutação e aspectos inconclusivos.
 
 \section{Delimitação}
 
-O estudo limita-se a REST e Kafka. Não serão comparados RabbitMQ, gRPC ou GraphQL. Não fazem parte do escopo Kubernetes, Debezium, Event Sourcing, CQRS, Saga, replicação geográfica ou integrações externas. O ambiente será local e conteinerizado. Os eventos utilizarão dados sintéticos e não conterão credenciais ou dados pessoais reais. As conclusões futuras serão restritas às versões, configurações, cargas e recursos documentados.
+O estudo limita-se às implementações REST e Kafka construídas. Não compara RabbitMQ, gRPC ou GraphQL. Não fazem parte do escopo Kubernetes, Debezium, Event Sourcing, CQRS, Saga, replicação geográfica ou integrações externas. O ambiente foi local e conteinerizado, com eventos sintéticos. As conclusões restringem-se às versões, configurações, cargas e recursos documentados.
 
 \section{Organização do trabalho}
 
-O Capítulo~\ref{cap:revisao} apresenta a revisão bibliográfica. O Capítulo~\ref{cap:metodo} descreve os materiais e o método experimental. O Capítulo~\ref{cap:implementacao} documenta o protótipo e seus diagramas. O Capítulo~\ref{cap:resultados} organiza a análise pelos objetivos específicos, distinguindo as evidências de validação dos resultados comparativos que dependem da campanha completa. A conclusão da pesquisa será elaborada a partir dos resultados dessa campanha.
+O Capítulo~\ref{cap:revisao} apresenta a revisão bibliográfica. O Capítulo~\ref{cap:metodo} descreve os materiais e o método experimental. O Capítulo~\ref{cap:implementacao} documenta o protótipo e seus diagramas. O Capítulo~\ref{cap:resultados} organiza a análise pelos objetivos específicos, separando validação, campanha definitiva e qualificação parcial. O Capítulo~\ref{cap:conclusao} responde à pergunta de pesquisa e delimita recomendações e trabalhos futuros.

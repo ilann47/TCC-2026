@@ -1,5 +1,7 @@
 # Validação R2 e liberação da campanha reduzida
 
+**Checkpoint final:** campanha encerrada em 27/10 às 17h01, com 64 completas e uma parcial nos 65 UUIDs, sem reposição. [Resultados definitivos, auditoria e sensibilidades](RESULTADOS.md). O restante deste arquivo preserva a validação e liberação anteriores; não executar novamente os comandos de lançamento.
+
 Em 27/10/2026, o piloto concluiu os nove casos predeclarados, mantendo a referência de **48 eventos/s**. O controlador auditou novamente as identidades, o checkout limpo de cada coleta, parâmetros, imagens, instrumentação e os checksums de **200 arquivos brutos** antes de publicar o [catálogo](pilot-catalog.json) e o [congelamento ativo](../../FROZEN-PROTOCOL.json), com `status=ready_for_definitive_runs`.
 
 **Esses nove casos são validação/calibração, não as 65 repetições definitivas.** O estado local de execução é consultado no WSL com `python3 experimento/reduced_campaign.py status`; este relatório registra a liberação, não prova por si só início ou término da campanha.

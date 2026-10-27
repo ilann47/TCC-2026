@@ -1,0 +1,33 @@
+{
+  "projection_not_raw_manifest": true,
+  "fields": {
+    "kind": "definitive",
+    "run_id": "cdcaf960-ec24-4337-9cd5-fdefbdef3482",
+    "dataset_id": "0ee54bdb-7dd1-4e0c-aa22-92342244d129",
+    "variant": "async",
+    "profile": "steady",
+    "rate": "48",
+    "vus": "128",
+    "warmup_seconds": "60",
+    "measure_seconds": "180",
+    "drain_seconds": "90",
+    "fault_seconds_requested": "40",
+    "commit": "cb3e9b30e9d86ce4b288a6d8f0f917c4b342d409",
+    "working_tree": "clean",
+    "instrumentation_version": "2",
+    "observer_enabled": "1",
+    "resources_enabled": "1",
+    "telemetry": "full",
+    "instrument_source_sha256": "bc7092f6b534a4404f248ae5073755f58e21255c389a70b84086f40c87f4aeb4",
+    "application_images_sha256": "92f2003488ba7f6243144bff082f9caa8717e8e7a7e262667b4122d44130ed3e",
+    "analyzer_image_id": "sha256:8d833bb3e7ac6abba985222e27972fda703950c5528dbf2aba59f30503680b0c",
+    "started_utc": "2026-10-27T19:46:47.722011142Z",
+    "measurement_start_ms": "1793130532648",
+    "load_end_utc": "2026-10-27T19:51:53.603260915Z",
+    "collection_end_utc": "2026-10-27T19:53:51.960621979Z",
+    "k6_exit": "0",
+    "observer_exit": "0",
+    "analyzer_exit": "0"
+  },
+  "original_manifest_sha256": "f50037b8add161385dd7f4f3c71049ef08a237f6e249dc3f40846d848f99354f"
+}

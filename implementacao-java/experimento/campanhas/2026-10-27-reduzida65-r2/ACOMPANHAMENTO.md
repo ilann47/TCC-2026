@@ -1,5 +1,7 @@
 # Campanha reduzida e fechamento científico
 
+**Encerramento da coleta em 27/10, 17h01:** `campaign_complete`, 65 UUIDs contabilizados, 64 completos e uma parcial A1, sem controlador/executor de medição ativo, projeto interativo restaurado. [Auditoria final e resultados](RESULTADOS.md). Os comandos de piloto/congelamento/lançamento abaixo são históricos, não próximos passos. Não reiniciar, repetir UUIDs ou editar o diário. O fechamento atual inclui capítulos 5/6 e PDF consolidado, distintos das entregas históricas.
+
 Autorização do usuário em 26/10/2026: atualizar protocolo e metodologia para **65 execuções**, validar o piloto antes, executar e finalizar capítulos 5/6 somente com resultados reais. Acompanhamento automático neste chat foi expressamente autorizado. Este arquivo é um roteiro operacional; o estado efetivo é o JSON local, não um texto de status presumido.
 
 ## Arquivos e comandos

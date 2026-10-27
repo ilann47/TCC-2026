@@ -1,6 +1,6 @@
 # Instrumentação e execução dos experimentos
 
-**Retomada atual:** após 36 completas e a 37ª tentativa temporalmente parcial, foi autorizada a [emenda A1](campanhas/2026-10-27-reduzida65-r2/emenda-a1/README.md). O caminho vigente é `audit-amendment` e `launch-reviewed-campaign`, após validação/commit/push; os comandos originais abaixo não reiniciam a campanha interrompida. Não repetir UUIDs ou editar o diário. A elegibilidade é por métrica; o resultado inválido original permanece preservado.
+**Campanha encerrada em 27/10 às 17h01:** 64 completas e uma parcial A1, exatamente os 65 UUIDs planejados. [Resultados e reprodução offline](campanhas/2026-10-27-reduzida65-r2/RESULTADOS.md). A auditoria verificou 1.495 arquivos brutos antes/depois sem alterar resumos. **Não executar novamente comandos de lançamento**: todos os UUIDs já foram usados. A elegibilidade é por métrica, preservando o resultado inválido original.
 
 A instrumentação foi validada e a referência comum foi calibrada em **48 eventos/s** em 26/10/2026. Em 27/10/2026, as [nove validações da R2](campanhas/2026-10-27-reduzida65-r2/README.md) passaram e a [configuração ativa](FROZEN-PROTOCOL.json) foi congelada para **65 execuções**, com cinco repetições e 180 s medidos. Consulte o [relatório de calibração](calibracao/2026-10-26-529e0349/README.md) e o [protocolo](PROTOCOLO-ENTREGA04.md). A V1 de 130 execuções foi arquivada sem ser executada. A aprovação do piloto libera a campanha, mas não constitui resultado final nem confirmação das hipóteses.
 
@@ -21,7 +21,7 @@ HTTP `201` significa persistência concluída na síncrona. HTTP `202` significa
 
 O gerador recebe 2 CPUs/2 GiB; o observador, 0,25 CPU/256 MiB. A calibração verificou a folga dos dois e comparou coleta reduzida/completa em dois blocos por variante. Os critérios são margens de engenharia predefinidas, não limites universais nem prova de overhead zero.
 
-## Antes da campanha
+## Sequência histórica de liberação (já executada; não relançar)
 
 Use WSL/Linux, Docker e Compose >=2.24.4. Não é necessário instalar k6 ou Java no WSL: gerador e analisador executam em contêineres. Preserve as imagens medidas; reconstrução de imagens ou mudança relevante de ambiente exige revisar/recalibrar o protocolo. O analisador recusa IDs de imagem, código instrumentador ou parâmetros diferentes dos congelados.
 
@@ -51,7 +51,7 @@ Os dados brutos ficam em `.runtime/entrega04/<run_id>-<variante>/`, fora do Git.
 
 `instrument_valid=true` indica consistência da coleta, não aprovação da hipótese ou ausência de falhas do sistema. HTTP 503, DLQ, pendências e drops em sobrecarga podem ser resultados válidos, mas precisam de interpretação. Drops são iterações que o gerador não iniciou, não registros enviados e perdidos. DLQ é não persistência terminal, não desaparecimento nem recuperação automática. Um HTTP não confirmado pode coexistir com um registro salvo.
 
-Os percentis do analisador usam nearest rank por execução. A comparação de interferência usa o mesmo percentil nativo do k6 nos dois modos. Não misture os estimadores nem transforme eventos individuais em repetições experimentais independentes. A agregação e discussão entre repetições dependem da campanha posterior.
+Os percentis do analisador usam nearest rank por execução. A comparação de interferência usa o mesmo percentil nativo do k6 nos dois modos. Não misture os estimadores nem transforme eventos individuais em repetições experimentais independentes. A agregação final publica valores individuais, média, mediana, desvio-padrão, extremos e diferenças por par, com análise estrita e sensibilidade parcial separadas.
 
 O Docker exibiu CPU/memória zero para contêineres parados. As médias em falhas misturam períodos ativos e indisponíveis; não demonstram economia, energia, custo operacional ou eficiência. Relógios de parede e amostragem também limitam a precisão dos intervalos. Os resultados valem apenas para o ambiente observado.
 

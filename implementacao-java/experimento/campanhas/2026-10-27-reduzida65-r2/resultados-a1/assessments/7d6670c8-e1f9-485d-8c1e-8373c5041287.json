@@ -1,0 +1,55 @@
+{
+  "run_id": "7d6670c8-e1f9-485d-8c1e-8373c5041287",
+  "variant": "async",
+  "profile": "burst",
+  "block": 3,
+  "rate": 48,
+  "classification": "complete_original_evidence",
+  "original_instrument_valid": true,
+  "original_issues": [],
+  "original_analyzer_exit": 0,
+  "original_summary_sha256": "08b931c866312c9e769e24ff23051f6c5c8b6227c282069f7f8f9544c4e014c6",
+  "raw_inventory_sha256": "77c65b21d91c75d13161ff4668ce868edc6eae7c8cf62afc23649ecbba9a3234",
+  "amendment_revision": "2026-10-27-a1-qualified-commit",
+  "policy_sha256": "d316daff629890ad4d67022ef4ac73e7e4455571d0b4b39f7119648960673f12",
+  "implementation_hashes": {
+    "analysis": "81f2a69ab37d5abf9d8384c4aac9ee1b750738530c02f6235eedd9384c5b7899",
+    "review": "6d368fe7c7c07bc61cf525b7718175e91d6f598cbaf62a441b664ba059210816",
+    "controller": "a56c537aef915b0a6380084ee5a245f9beabed4dc4eba6bbfe4454e602499324",
+    "policy": "d316daff629890ad4d67022ef4ac73e7e4455571d0b4b39f7119648960673f12"
+  },
+  "eligibility": {
+    "http": true,
+    "persistence_at_observation_end": true,
+    "resources": true,
+    "commit_latency_primary": true,
+    "commit_latency_sensitivity": true,
+    "throughput": "observed_exact",
+    "recovery": "observed_milestones_only"
+  },
+  "counts": {
+    "offered": 11519,
+    "accepted": 11519,
+    "stored_at_observation_end": 11519,
+    "stored_despite_unconfirmed_http": 0
+  },
+  "http_status_counts": {
+    "202": 11519
+  },
+  "timing": {
+    "stored_with_observed_time": 11519,
+    "stored_without_observed_time": 0,
+    "unobserved_event_ids": [],
+    "imputed_timestamps": 0
+  },
+  "completion_in_measurement": {
+    "observed_count": 11519,
+    "lower_count": 11519,
+    "upper_count": 11519,
+    "duration_seconds": 180,
+    "lower_per_second": 63.99444444444445,
+    "upper_per_second": 63.99444444444445,
+    "interpretation": "accounting sensitivity bounds, not a confidence interval"
+  },
+  "raw_verdict_rewritten": false
+}

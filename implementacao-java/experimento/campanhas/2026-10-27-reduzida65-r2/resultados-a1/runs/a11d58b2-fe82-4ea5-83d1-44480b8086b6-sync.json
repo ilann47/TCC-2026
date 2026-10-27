@@ -1,0 +1,303 @@
+{
+  "kind" : "definitive",
+  "run_id" : "a11d58b2-fe82-4ea5-83d1-44480b8086b6",
+  "dataset_id" : "05c0a4b9-a722-4c75-bafa-d44c075e5d8c",
+  "variant" : "sync",
+  "profile" : "burst",
+  "rate" : 48,
+  "measure_seconds" : 180,
+  "instrument_valid" : true,
+  "offered" : 11519,
+  "accepted" : 11519,
+  "stored_at_observation_end" : 11519,
+  "stored_within_measurement" : 11519,
+  "completed_per_second" : 63.99444444444445,
+  "http_status_counts" : {
+    "201" : 11519
+  },
+  "http_error_fraction" : 0.0,
+  "dropped_iterations_all_phases" : 0.0,
+  "dlq_terminal" : 0,
+  "dlq_message_with_already_stored_uuid" : 0,
+  "pending_retained" : 0,
+  "accepted_unreconciled" : 0,
+  "stored_despite_unconfirmed_http" : 0,
+  "integrity_mismatches" : 0,
+  "retry_scheduled" : 0,
+  "idempotent_replays" : 0,
+  "http_duration_ms" : {
+    "n" : 11519,
+    "mean" : 4.437678777845299,
+    "median" : 3.585857,
+    "sd_sample" : 9.843785749656845,
+    "p95" : 4.780815,
+    "p99" : 15.290207,
+    "max" : 322.241751
+  },
+  "send_to_response_ms" : {
+    "n" : 11519,
+    "mean" : 4.740274619585033,
+    "median" : 3.880486,
+    "sd_sample" : 9.851935881959141,
+    "p95" : 5.20678,
+    "p99" : 15.585174,
+    "max" : 322.466095
+  },
+  "send_to_commit_ms" : {
+    "n" : 11519,
+    "mean" : 4.022557930115461,
+    "median" : 3.241877,
+    "sd_sample" : 9.032945167245849,
+    "p95" : 4.297282,
+    "p99" : 14.835528,
+    "max" : 321.738959
+  },
+  "resources" : {
+    "tcc-e04-load-a11d58b2-fe82-4ea5-83d1-44480b8086b6" : {
+      "memory_mib" : {
+        "n" : 55,
+        "mean" : 302.0509090909091,
+        "median" : 300.5,
+        "sd_sample" : 111.91400281884313,
+        "p95" : 476.5,
+        "p99" : 486.9,
+        "max" : 486.9
+      },
+      "cpu_percent" : {
+        "n" : 55,
+        "mean" : 10.927454545454545,
+        "median" : 8.45,
+        "sd_sample" : 6.34358533340215,
+        "p95" : 20.46,
+        "p99" : 48.25,
+        "max" : 48.25
+      }
+    },
+    "tcc-entrega04-kafka-1" : {
+      "memory_mib" : {
+        "n" : 55,
+        "mean" : 597.5854545454545,
+        "median" : 597.5,
+        "sd_sample" : 0.6272863903259944,
+        "p95" : 598.2,
+        "p99" : 601.4,
+        "max" : 601.4
+      },
+      "cpu_percent" : {
+        "n" : 55,
+        "mean" : 1.4725454545454544,
+        "median" : 1.16,
+        "sd_sample" : 0.8943427509791513,
+        "p95" : 3.77,
+        "p99" : 4.1,
+        "max" : 4.1
+      }
+    },
+    "tcc-entrega04-observer-1" : {
+      "memory_mib" : {
+        "n" : 55,
+        "mean" : 77.11618181818183,
+        "median" : 77.07,
+        "sd_sample" : 0.28681191997732136,
+        "p95" : 77.59,
+        "p99" : 77.86,
+        "max" : 77.86
+      },
+      "cpu_percent" : {
+        "n" : 55,
+        "mean" : 0.30618181818181817,
+        "median" : 0.26,
+        "sd_sample" : 0.1765354954245212,
+        "p95" : 0.58,
+        "p99" : 1.41,
+        "max" : 1.41
+      }
+    },
+    "tcc-entrega04-postgres-1" : {
+      "memory_mib" : {
+        "n" : 55,
+        "mean" : 44.01109090909091,
+        "median" : 44.03,
+        "sd_sample" : 1.6656515494469675,
+        "p95" : 46.21,
+        "p99" : 48.07,
+        "max" : 48.07
+      },
+      "cpu_percent" : {
+        "n" : 55,
+        "mean" : 5.7050909090909085,
+        "median" : 6.03,
+        "sd_sample" : 2.4256811740723796,
+        "p95" : 10.4,
+        "p99" : 13.8,
+        "max" : 13.8
+      }
+    },
+    "tcc-entrega04-sync-api-1" : {
+      "memory_mib" : {
+        "n" : 55,
+        "mean" : 200.44545454545454,
+        "median" : 201.3,
+        "sd_sample" : 4.4230799635137,
+        "p95" : 208.0,
+        "p99" : 210.8,
+        "max" : 210.8
+      },
+      "cpu_percent" : {
+        "n" : 55,
+        "mean" : 15.147636363636364,
+        "median" : 11.3,
+        "sd_sample" : 10.616414956659641,
+        "p95" : 43.16,
+        "p99" : 54.34,
+        "max" : 54.34
+      }
+    }
+  },
+  "measurement_windows_10s" : [ {
+    "offered" : 479,
+    "start_seconds" : 0,
+    "unique_commits" : 479,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 480,
+    "start_seconds" : 10,
+    "unique_commits" : 480,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 480,
+    "start_seconds" : 20,
+    "unique_commits" : 480,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 480,
+    "start_seconds" : 30,
+    "unique_commits" : 480,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 480,
+    "start_seconds" : 40,
+    "unique_commits" : 480,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 480,
+    "start_seconds" : 50,
+    "unique_commits" : 480,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 936,
+    "start_seconds" : 60,
+    "unique_commits" : 936,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 960,
+    "start_seconds" : 70,
+    "unique_commits" : 960,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 960,
+    "start_seconds" : 80,
+    "unique_commits" : 960,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 960,
+    "start_seconds" : 90,
+    "unique_commits" : 960,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 960,
+    "start_seconds" : 100,
+    "unique_commits" : 960,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 960,
+    "start_seconds" : 110,
+    "unique_commits" : 960,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 504,
+    "start_seconds" : 120,
+    "unique_commits" : 504,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 480,
+    "start_seconds" : 130,
+    "unique_commits" : 480,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 480,
+    "start_seconds" : 140,
+    "unique_commits" : 480,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 480,
+    "start_seconds" : 150,
+    "unique_commits" : 480,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 480,
+    "start_seconds" : 160,
+    "unique_commits" : 480,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  }, {
+    "offered" : 480,
+    "start_seconds" : 170,
+    "unique_commits" : 480,
+    "accepted_not_persisted_at_boundary" : 0,
+    "duration_seconds" : 10
+  } ],
+  "instrumentation" : {
+    "enabled" : true,
+    "samples_in_measurement" : 180,
+    "sample_gaps_ms" : {
+      "n" : 179,
+      "mean" : 1000.6191358547485,
+      "median" : 1000.570469,
+      "sd_sample" : 0.67083649382165,
+      "p95" : 1001.474481,
+      "p99" : 1002.899908,
+      "max" : 1005.099241
+    },
+    "database_error_samples" : 0,
+    "kafka_error_samples" : 0,
+    "clock_error_samples" : 0,
+    "max_kafka_lag" : null,
+    "max_sampled_accepted_not_committed" : 0.0,
+    "max_accepted_not_committed" : 0,
+    "pending_tail_slope_events_per_second" : 0.0,
+    "generator" : {
+      "name" : "tcc-e04-load-a11d58b2-fe82-4ea5-83d1-44480b8086b6",
+      "samples" : 55,
+      "cpu_p95_percent_of_limit" : 10.23,
+      "memory_max_percent_of_limit" : 23.7744140625
+    },
+    "observer" : {
+      "name" : "tcc-entrega04-observer-1",
+      "samples" : 55,
+      "cpu_p95_percent_of_limit" : 2.32,
+      "memory_max_percent_of_limit" : 30.4140625
+    }
+  },
+  "recovery" : {
+    "applicable" : false
+  },
+  "issues" : [ ],
+  "loss_interpretation" : "DLQ is terminal non-persistence, not disappearance. Retention is not pending if DB/DLQ already reconciled. Unreconciled acceptance requires investigation; no missing event is silently labeled loss."
+}
