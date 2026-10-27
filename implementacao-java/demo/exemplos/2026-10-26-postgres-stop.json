@@ -1,0 +1,318 @@
+{
+  "kind": "presentation_comparison_not_definitive",
+  "scenario": "postgres-stop",
+  "title": "PostgreSQL interrompido nas duas versões",
+  "dataset_id": "cd283427-8c0d-4331-aeb4-7f1129a9d12c",
+  "rate": 5,
+  "measure_seconds": 90,
+  "runs": {
+    "sync": {
+      "run_id": "7a1faa00-f101-447d-9a50-c95b68a4a0f6",
+      "evidence": ".runtime/entrega04/7a1faa00-f101-447d-9a50-c95b68a4a0f6-sync"
+    },
+    "async": {
+      "run_id": "7612e846-70c5-42f6-acfa-64678f245ca2",
+      "evidence": ".runtime/entrega04/7612e846-70c5-42f6-acfa-64678f245ca2-async"
+    }
+  },
+  "rows": [
+    {
+      "group": "Tempos",
+      "metric": "Resposta HTTP — média",
+      "sync": "438,51 ms",
+      "async": "11,67 ms"
+    },
+    {
+      "group": "Tempos",
+      "metric": "Resposta HTTP — mediana",
+      "sync": "6,47 ms",
+      "async": "7,46 ms"
+    },
+    {
+      "group": "Tempos",
+      "metric": "Resposta HTTP — p95",
+      "sync": "5.004,18 ms",
+      "async": "68,90 ms"
+    },
+    {
+      "group": "Tempos",
+      "metric": "Resposta HTTP — p99",
+      "sync": "5.005,40 ms",
+      "async": "71,53 ms"
+    },
+    {
+      "group": "Tempos",
+      "metric": "Envio → resposta — média",
+      "sync": "438,93 ms",
+      "async": "12,23 ms"
+    },
+    {
+      "group": "Tempos",
+      "metric": "Envio → commit no banco — média",
+      "sync": "157,62 ms",
+      "async": "598,78 ms"
+    },
+    {
+      "group": "Tempos",
+      "metric": "Envio → commit no banco — p95",
+      "sync": "828,34 ms",
+      "async": "5.712,03 ms"
+    },
+    {
+      "group": "Tempos",
+      "metric": "Envio → commit no banco — p99",
+      "sync": "4.135,82 ms",
+      "async": "8.993,59 ms"
+    },
+    {
+      "group": "Tempos",
+      "metric": "Amostras com commit observado",
+      "sync": "423",
+      "async": "451"
+    },
+    {
+      "group": "Carga e persistência",
+      "metric": "Gravados/s dentro da medição",
+      "sync": "4,70 registros/s",
+      "async": "5,00 registros/s"
+    },
+    {
+      "group": "Carga e persistência",
+      "metric": "Requisições enviadas",
+      "sync": "450",
+      "async": "451"
+    },
+    {
+      "group": "Carga e persistência",
+      "metric": "Aceitos (201 / 202 com UUID correto)",
+      "sync": "423",
+      "async": "451"
+    },
+    {
+      "group": "Carga e persistência",
+      "metric": "Gravados dentro da medição",
+      "sync": "423",
+      "async": "450"
+    },
+    {
+      "group": "Carga e persistência",
+      "metric": "Gravados até o fim da coleta",
+      "sync": "423",
+      "async": "451"
+    },
+    {
+      "group": "Erros e destinos",
+      "metric": "Respostas por código HTTP",
+      "sync": "201: 423 | 503: 27",
+      "async": "202: 451"
+    },
+    {
+      "group": "Erros e destinos",
+      "metric": "Erros HTTP/contrato",
+      "sync": "6,00 %",
+      "async": "0,00 %"
+    },
+    {
+      "group": "Erros e destinos",
+      "metric": "Iterações não iniciadas (inclui aquecimento)",
+      "sync": "0",
+      "async": "0"
+    },
+    {
+      "group": "Erros e destinos",
+      "metric": "Aceitos em DLQ, não gravados",
+      "sync": "0",
+      "async": "0"
+    },
+    {
+      "group": "Erros e destinos",
+      "metric": "Aceitos pendentes no Kafka ao fim",
+      "sync": "0",
+      "async": "0"
+    },
+    {
+      "group": "Erros e destinos",
+      "metric": "Aceitos sem destino reconciliado",
+      "sync": "0",
+      "async": "0"
+    },
+    {
+      "group": "Erros e destinos",
+      "metric": "Gravados sem confirmação HTTP",
+      "sync": "0",
+      "async": "0"
+    },
+    {
+      "group": "Erros e destinos",
+      "metric": "UUIDs duplicados no banco (medição)",
+      "sync": "0",
+      "async": "0"
+    },
+    {
+      "group": "Erros e destinos",
+      "metric": "Divergências de conteúdo/hash",
+      "sync": "0",
+      "async": "0"
+    },
+    {
+      "group": "Erros e destinos",
+      "metric": "Reentregas idempotentes observadas",
+      "sync": "0",
+      "async": "0"
+    },
+    {
+      "group": "Fila",
+      "metric": "Pico de aceitos ainda não gravados",
+      "sync": "0",
+      "async": "49"
+    },
+    {
+      "group": "Fila",
+      "metric": "Pico de lag Kafka amostrado",
+      "sync": "Não se aplica",
+      "async": "48"
+    },
+    {
+      "group": "Recursos",
+      "metric": "CPU média — soma dos serviços do fluxo",
+      "sync": "7,05 %",
+      "async": "45,32 %"
+    },
+    {
+      "group": "Recursos",
+      "metric": "Memória média — soma dos serviços do fluxo",
+      "sync": "220,61 MiB",
+      "async": "923,51 MiB"
+    },
+    {
+      "group": "Recursos por serviço",
+      "metric": "sync-api: CPU média",
+      "sync": "5,89 %",
+      "async": "Não se aplica"
+    },
+    {
+      "group": "Recursos por serviço",
+      "metric": "sync-api: memória média",
+      "sync": "185,92 MiB",
+      "async": "Não se aplica"
+    },
+    {
+      "group": "Recursos por serviço",
+      "metric": "async-api: CPU média",
+      "sync": "Não se aplica",
+      "async": "6,14 %"
+    },
+    {
+      "group": "Recursos por serviço",
+      "metric": "async-api: memória média",
+      "sync": "Não se aplica",
+      "async": "168,16 MiB"
+    },
+    {
+      "group": "Recursos por serviço",
+      "metric": "consumer: CPU média",
+      "sync": "Não se aplica",
+      "async": "3,88 %"
+    },
+    {
+      "group": "Recursos por serviço",
+      "metric": "consumer: memória média",
+      "sync": "Não se aplica",
+      "async": "165,91 MiB"
+    },
+    {
+      "group": "Recursos por serviço",
+      "metric": "postgres: CPU média",
+      "sync": "1,16 %",
+      "async": "1,80 %"
+    },
+    {
+      "group": "Recursos por serviço",
+      "metric": "postgres: memória média",
+      "sync": "34,68 MiB",
+      "async": "34,13 MiB"
+    },
+    {
+      "group": "Recursos por serviço",
+      "metric": "kafka: CPU média",
+      "sync": "Não se aplica",
+      "async": "33,49 %"
+    },
+    {
+      "group": "Recursos por serviço",
+      "metric": "kafka: memória média",
+      "sync": "Não se aplica",
+      "async": "555,31 MiB"
+    },
+    {
+      "group": "Instrumentos (separados do sistema)",
+      "metric": "k6: CPU p95 / limite",
+      "sync": "1,09 %",
+      "async": "1,76 %"
+    },
+    {
+      "group": "Instrumentos (separados do sistema)",
+      "metric": "k6: memória máxima / limite",
+      "sync": "2,02 %",
+      "async": "2,29 %"
+    },
+    {
+      "group": "Instrumentos (separados do sistema)",
+      "metric": "Observador: CPU p95 / limite",
+      "sync": "3,20 %",
+      "async": "13,96 %"
+    },
+    {
+      "group": "Instrumentos (separados do sistema)",
+      "metric": "Observador: memória máxima / limite",
+      "sync": "41,56 %",
+      "async": "43,28 %"
+    },
+    {
+      "group": "Recuperação",
+      "metric": "Primeiro commit após retomada",
+      "sync": "4.301,83 ms",
+      "async": "2.732,20 ms"
+    },
+    {
+      "group": "Recuperação",
+      "metric": "Todos os aceitos pendentes gravados",
+      "sync": "Sem aceitos pendentes na retomada",
+      "async": "3.303,39 ms"
+    },
+    {
+      "group": "Recuperação",
+      "metric": "Recuperação sustentada confirmada",
+      "sync": "44.177,35 ms",
+      "async": "31.786,60 ms"
+    }
+  ],
+  "warnings": [
+    "Demonstração curta, uma execução por versão, em sequência (síncrona primeiro). Não é resultado definitivo nem comprova superioridade arquitetural.",
+    "202 significa aceitação pelo Kafka, não persistência. Tempos de commit incluem somente registros cujo commit foi observado; leia também os destinos não gravados.",
+    "Gravados/s considera a janela medida, sem somar a drenagem posterior. A contagem final inclui a observação após a carga.",
+    "Fluxo síncrono: sync-api + PostgreSQL. Fluxo assíncrono: async-api + consumer + PostgreSQL + Kafka. CPU é soma das médias por contêiner; 100% equivale a um núcleo lógico e a soma pode ultrapassar 100%. Memória Docker em MiB; não é memória total do computador.",
+    "k6 e observador estão separados do consumo do sistema. Outros contêineres/programas do computador podem disputar recursos; não foram encerrados.",
+    "Zero UUID duplicado não implica ausência de reentrega; o banco usa chave única. DLQ não é gravação nem desaparecimento; aceitos sem destino exigem investigação.",
+    "Recuperação sustentada exige três janelas completas de 10 s após a retomada, ≥90% da taxa-alvo gravada/s, sem erros HTTP e com pendências/lag limitados e observação saudável. Não observada não significa zero.",
+    "Dados sintéticos e banco isolado tcc-entrega04. A cada execução, somente sua tabela experimental é reiniciada; exportações anteriores são preservadas. O banco principal/Swagger não é alterado."
+  ],
+  "provenance": {
+    "description": "Snapshot do relatório demonstrativo real; valores formatados/arredondados como no original. Evidências brutas locais não são publicadas neste arquivo.",
+    "local_date": "2026-10-26",
+    "timezone": "America/Sao_Paulo",
+    "instrument_commit": "f3c81a809c0143275b9e6f5ff196a3bcfc26cdaa",
+    "working_tree": "dirty",
+    "sync_started_utc": "2026-10-27T02:03:56.070306851Z",
+    "async_started_utc": "2026-10-27T02:07:38.353038323Z",
+    "warmup_seconds": 10,
+    "measure_seconds": 90,
+    "drain_seconds": 20,
+    "vus": 64,
+    "fault_seconds_requested": 5,
+    "application_images_sha256": "92f2003488ba7f6243144bff082f9caa8717e8e7a7e262667b4122d44130ed3e",
+    "instrument_source_sha256": "bc7092f6b534a4404f248ae5073755f58e21255c389a70b84086f40c87f4aeb4",
+    "analyzer_image_id": "sha256:8d833bb3e7ac6abba985222e27972fda703950c5528dbf2aba59f30503680b0c",
+    "source_report_local": ".runtime/demonstracao/comparacao-cd283427-8c0d-4331-aeb4-7f1129a9d12c/comparacao.json"
+  }
+}

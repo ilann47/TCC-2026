@@ -52,6 +52,24 @@ class ComparisonTests(unittest.TestCase):
         report = REPORT.build_report(pair, 'normal')
         self.assertEqual(self.row(report, 'Respostas por código HTTP')['sync'], '201: 3; 503: 2')
 
+    def test_every_report_metric_is_documented(self):
+        guide = (Path(__file__).parents[1] / 'METRICAS-E-FALAS.md').read_text(encoding='utf-8')
+        report = REPORT.build_report(self.pair(), 'normal')
+        for row in report['rows']:
+            with self.subTest(metric=row['metric']):
+                self.assertIn(row['metric'], guide)
+
+    def test_published_example_is_demonstration_and_contains_all_metrics(self):
+        example = json.loads((Path(__file__).parents[1] / 'exemplos' / '2026-10-26-postgres-stop.json').read_text(encoding='utf-8'))
+        self.assertEqual(example['kind'], 'presentation_comparison_not_definitive')
+        self.assertEqual(example['scenario'], 'postgres-stop')
+        self.assertEqual(example['provenance']['working_tree'], 'dirty')
+        expected = {r['metric'] for r in REPORT.build_report(self.pair(), 'normal')['rows']}
+        self.assertEqual({r['metric'] for r in example['rows']}, expected)
+        self.assertEqual(set(example['runs']), {'sync', 'async'})
+        self.assertNotIn('/mnt/c/Users/', json.dumps(example))
+        self.assertNotIn('C:\\Users\\', json.dumps(example))
+
     def test_eighty_column_terminal_keeps_metrics_side_by_side(self):
         report = REPORT.build_report(self.pair(), 'normal')
         table = REPORT.as_text(report, width=80)

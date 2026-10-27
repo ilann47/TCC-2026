@@ -283,6 +283,7 @@ talktrack() {
   printf '9. Opção 14: mostrar a última tabela pronta sem executar carga; abrir o HTML no navegador.\n'
   printf '10. Opção 0: sair. Se este menu pausou o consumidor, tentará retomá-lo.\n'
   printf 'Leia: %s/demo/README.md\n' "$TCC_DEMO_APP"
+  printf 'Explicação de cada métrica, exemplos e falas: %s/demo/METRICAS-E-FALAS.md\n' "$TCC_DEMO_APP"
 }
 
 compare_menu() {

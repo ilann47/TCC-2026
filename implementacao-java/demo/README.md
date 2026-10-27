@@ -2,6 +2,8 @@
 
 Este roteiro permite apresentar o protótipo sem depender de uma IA para executar comandos. Você escolhe as etapas no terminal. O menu explica o que está fazendo, guarda o último UUID e mostra uma fala sugerida. **Não executa as 130 repetições, não inicia `campaign.sh` e não produz resultados científicos definitivos.**
 
+Para entender cada linha da tabela e ensaiar a explicação, leia o [guia completo das 45 métricas e falas para a banca](METRICAS-E-FALAS.md). Ele inclui unidades, cálculos, cuidados, exemplo real versionado, perguntas frequentes e roteiro de dez minutos.
+
 ## 1. Abrir o menu
 
 Use um terminal **WSL/Ubuntu ou Linux com Bash**, não o PowerShell nem o Git Bash. No computador atual:
@@ -117,7 +119,7 @@ Uma distribuição sugerida para dez minutos: arquitetura e síncrona (3 min), a
 
 ## 5. Segurança e arquivos
 
-- Opera somente no projeto interativo `tcc-java-2026`; confere os rótulos dos contêineres antes de parar/retomar o consumidor.
+- As opções 1..12 operam no projeto interativo `tcc-java-2026`; conferem os rótulos dos contêineres antes de parar/retomar o consumidor. A opção 13 usa o projeto experimental isolado, descrito na seção 8; a 14 apenas lê o último relatório.
 - Recusa ações de preparação, envio, pausa e carga se houver contêineres ativos do projeto experimental `tcc-entrega04`. Não misture apresentação e campanha.
 - Nas opções 1..12, não executa TRUNCATE, exclusão de registros, remoção de volumes ou reset de offsets. Não apaga mensagens/tópicos e não recompila o analisador nem as aplicações. A opção 13 é a exceção explícita: reinicia somente a tabela experimental isolada, conforme a seção 8; nunca o banco principal.
 - Os eventos são sintéticos e permanecem no banco. Os envios manuais usam `source=demo-apresentacao-<sessão>`; k6 usa `source=demo-k6-<execução>`. UUIDs novos evitam sobrescrever conteúdo de demonstrações anteriores.
@@ -183,6 +185,8 @@ No cenário normal, `TCC_DEMO_RATE` (1..10/s) e `TCC_DEMO_SECONDS` (6..30 s para
 **Há preparação, intervalo de 12 s após aquecimento, coleta e exportação além do tempo medido.** A comparação normal leva alguns minutos; falhas levam mais. Não execute todas as opções nos dez minutos da apresentação. Deixe o relatório pronto e use o teste HTTP curto (9/10) e uma pausa manual do consumidor para ilustrar o funcionamento ao vivo.
 
 ### Métricas e leitura correta
+
+O resumo abaixo agrupa as medidas. As definições individuais e as falas sugeridas estão no [guia das métricas](METRICAS-E-FALAS.md).
 
 | Grupo | O que aparece nas duas colunas |
 |---|---|

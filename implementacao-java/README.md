@@ -99,6 +99,8 @@ As variáveis principais são `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNA
 
 ## Demonstração com menu para a apresentação
 
+Leia também o [guia completo das métricas e falas](demo/METRICAS-E-FALAS.md): definições de cada linha da comparação, exemplo demonstrativo, cuidados de interpretação e roteiro para a banca.
+
 No WSL/Linux, dentro desta pasta, execute `bash demo/apresentacao.sh`. O menu inicia/confere os serviços, envia eventos nas duas variantes, guarda o UUID, consulta a persistência, pausa/retoma o consumidor, mostra lag Kafka, roda k6 por 20 segundos e exibe falas sugeridas. Leia o [passo a passo da demonstração](demo/README.md) antes da banca.
 
 As opções **13** (comparar) e **14** (reapresentar a última comparação sem carga) mostram tabela síncrona/assíncrona e geram HTML offline com HTTP, persistência, vazão, erros, destinos, CPU/memória, fila e recuperação quando aplicável. Há modos de carga normal, interrupção de PostgreSQL nas duas variantes e parada de consumidor apenas na assíncrona. Execute a coleta antes da banca; preparação/exportação acrescentam minutos.
