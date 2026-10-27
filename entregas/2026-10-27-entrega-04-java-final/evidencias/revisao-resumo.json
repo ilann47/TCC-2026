@@ -1,0 +1,24 @@
+{
+  "revision_id": "resumo-clarificado-2026-10-27",
+  "date": "2026-10-27",
+  "scope": "Esclarecimento editorial do resumo solicitado por Ilan; abstract no fonte alinhado, ainda fora do PDF. Sem novas medições ou mudanças analíticas.",
+  "base_scientific_commit": "771d7a621c31aaccda7359b8207979c4bc84f19d",
+  "base_delivery_commit": "71df262ca6af10a13a0c698459add60622bba32e",
+  "base_pdf_sha256": "46b54cf04f64f33a4ac5f3fe65ff58b8f6555a2899d0046ba3398fceedf05182",
+  "pdf_sha256": "56431f7482c5f90eec7a4501dabc70da1a965fceed49e660913b8495e4aed1e5",
+  "pdf_pages": 80,
+  "changed_pdf_pages": [4],
+  "other_pdf_pages_text_unchanged": true,
+  "other_pdf_pages_render_unchanged": true,
+  "results_and_classifications_unchanged": true,
+  "original_scientific_validation_preserved": true,
+  "source_sha256": {
+    "projeto-latex-java/Configuracoes/dados_documento.tex": "1cc3054d39fd8453cd38149f95a535f583178dbc8fb45ec5745e40ba3f738c03"
+  },
+  "review": "Resumo renderizado com Poppler e revisado visualmente; comparação textual por página e comparação dos pixels das 80 páginas renderizadas por PDF com Poppler a 72 dpi confirmaram alteração apenas na página PDF 4. Compilação isolada das fontes rastreadas com BibTeX e passagens LaTeX até estabilizar referências.",
+  "latex_undefined_references": 0,
+  "latex_overfull_boxes": 0,
+  "latex_duplicate_page_anchors": 0,
+  "conclusion_pdf_pages_inclusive": [76, 78],
+  "institutional_approval_or_portal_submission_claimed": false
+}

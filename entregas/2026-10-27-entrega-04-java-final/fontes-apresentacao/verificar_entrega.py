@@ -23,7 +23,17 @@ def require(value, message):
 
 def verify():
     scientific = json.loads((REPORT / 'VALIDACAO-FINAL.json').read_text(encoding='utf-8'))
-    require(sha(ROOT / 'TCC-Entrega04-final.pdf') == scientific['pdf_sha256'] == sha(REPO / 'output/pdf/TCC-2026-final.pdf'), 'PDF differs from scientific closure')
+    revision = json.loads((ROOT / 'evidencias/revisao-resumo.json').read_text(encoding='utf-8'))
+    require(revision['base_pdf_sha256'] == scientific['pdf_sha256'], 'PDF revision lost scientific provenance')
+    require(sha(ROOT / 'TCC-Entrega04-final.pdf') == revision['pdf_sha256'] == sha(REPO / 'output/pdf/TCC-2026-final.pdf'), 'PDF differs from reviewed abstract revision')
+    require(revision['changed_pdf_pages'] == [4] and revision['pdf_pages'] == scientific['pdf_pages'] == 80,
+            'abstract revision changed expected pagination')
+    require(revision['other_pdf_pages_text_unchanged'] and revision['results_and_classifications_unchanged'],
+            'abstract revision must preserve results and other page texts')
+    require(set(revision['source_sha256']) == {'projeto-latex-java/Configuracoes/dados_documento.tex'},
+            'unexpected abstract revision source scope')
+    for name, digest in revision['source_sha256'].items():
+        require(sha(REPO / name) == digest, 'abstract source differs from reviewed revision')
     require(sha(ROOT / 'evidencias/catalogo-campanha.json') == scientific['catalog_sha256'] == sha(REPORT / 'resultados-a1/catalog.json'), 'catalog copy differs')
     require(sha(ROOT / 'evidencias/validacao-cientifica.json') == sha(REPORT / 'VALIDACAO-FINAL.json'), 'scientific validation copy differs')
     require(sha(ROOT / 'Apresentacao-Entrega04-final.pptx') == '43e8b0ea342d3f550c16465d0020f4a68380e5c296e68abb5e95fc0a1d64e247', 'PPTX differs from visually reviewed version')
@@ -55,7 +65,8 @@ def verify():
     actual = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob('*') if p.is_file() and p.name != 'SHA256SUMS'}
     require(set(inventory) == actual, 'delivery checksum inventory incomplete')
     return {'delivery_files_hashed': len(inventory), 'slides': 10, 'notes': 10, 'native_table_slides': owners,
-            'pdf_identical_to_scientific_closure': True, 'campaign': {'complete': 64, 'partial': 1},
+            'pdf_identical_to_reviewed_abstract_revision': True,
+            'original_scientific_validation_preserved': True, 'campaign': {'complete': 64, 'partial': 1},
             'native_powerpoint_application_tested': False}
 
 

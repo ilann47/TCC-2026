@@ -1,10 +1,10 @@
 # Documento consolidado após a campanha R2/A1
 
-O ponto de entrada da entrega é a [pasta datada de 27/10](../../entregas/2026-10-27-entrega-04-java-final/README.md), com cópia idêntica deste PDF, apresentação final editável, roteiro e relatório. Esta pasta conserva o artefato original da compilação, sem alterar seu conteúdo.
+O ponto de entrada da entrega é a [pasta datada de 27/10](../../entregas/2026-10-27-entrega-04-java-final/README.md), com cópia idêntica deste PDF, apresentação final editável, roteiro e relatório. As duas cópias foram atualizadas com a revisão editorial do resumo; dados e resultados permanecem os mesmos.
 
 [PDF final técnico](TCC-2026-final.pdf), compilado em 27/10/2026 a partir de `projeto-latex-java/modelo.tex`, com capítulos 5/6 e declaração de IA. São 80 páginas; conclusão nas páginas PDF 76–78 (numeração impressa 75–77), três páginas, sem resultados novos.
 
-SHA-256: `46b54cf04f64f33a4ac5f3fe65ff58b8f6555a2899d0046ba3398fceedf05182`.
+SHA-256 atual: `56431f7482c5f90eec7a4501dabc70da1a965fceed49e660913b8495e4aed1e5`. A [revisão editorial](../../entregas/2026-10-27-entrega-04-java-final/evidencias/revisao-resumo.json) preserva a referência ao PDF anterior e registra mudança textual apenas na página PDF 4. O resumo explica a evidência temporal incompleta e os quatro pares completos na comparação afetada, sem estimar o instante ausente.
 
 Campanha: 65 UUIDs planejados, 64 coletas completas e uma parcial A1, não 65 integralmente válidas. A conclusão primária com banco parado utiliza quatro pares completos. [Resultados, dados por execução e limitações](../../implementacao-java/experimento/campanhas/2026-10-27-reduzida65-r2/RESULTADOS.md).
 

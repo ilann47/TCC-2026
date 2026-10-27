@@ -6,7 +6,7 @@ Nova entrega datada após a campanha definitiva R2/A1, sem substituir a [prepara
 
 | Arquivo | Conteúdo |
 |---|---|
-| [TCC-Entrega04-final.pdf](TCC-Entrega04-final.pdf) | Documento de 80 páginas, capítulos 5/6 completos, conclusão de três páginas e declaração de IA. Cópia byte a byte do fechamento científico, sem nova medição ou reescrita dos dados. |
+| [TCC-Entrega04-final.pdf](TCC-Entrega04-final.pdf) | Documento de 80 páginas, capítulos 5/6 completos, conclusão de três páginas e declaração de IA. Resumo esclarecido em revisão editorial de 27/10, sem nova medição ou alteração dos resultados. |
 | [Apresentacao-Entrega04-final.pptx](Apresentacao-Entrega04-final.pptx) | Dez slides editáveis atualizados com resultados definitivos, seis tabelas nativas e notas de fala. Mantém o formato visual da preparação, com dados, hipóteses e limitações atuais. |
 | [ROTEIRO-APRESENTACAO.md](ROTEIRO-APRESENTACAO.md) | Texto das notas e sugestão de divisão de dez minutos para ensaio. Duração sugerida, não cronometrada. |
 | [RELATORIO-VERIFICACAO.md](RELATORIO-VERIFICACAO.md) | Conferências dos arquivos, conteúdo e apresentação, com limites de validação. |
@@ -17,6 +17,8 @@ Nova entrega datada após a campanha definitiva R2/A1, sem substituir a [prepara
 ## Resultado que a entrega apresenta
 
 A campanha terminou em 27/10/2026 às 17h01 de Brasília com exatamente 65 UUIDs planejados: **64 coletas completas e uma parcial A1**, em treze condições e cinco tentativas por condição. Não são 65 integralmente válidas para toda métrica. A latência de conclusão primária com banco parado utiliza quatro pares completos, sem preencher o instante de commit ausente.
+
+O resumo agora explica diretamente a evidência temporal incompleta: um evento apareceu no banco apesar de HTTP 503, mas sem registro do horário de conclusão de seu commit. A [revisão editorial](evidencias/revisao-resumo.json) identifica o PDF atualizado, sem reclassificar a coleta nem substituir a validação científica histórica.
 
 O texto e os slides separam HTTP de conclusão, aceites de persistência, DLQ de desaparecimento e recuperação do serviço de recuperação integral do backlog. Preservam os resultados desfavoráveis: 14 eventos assíncronos em DLQ no banco parado e somente um dos cinco casos atendendo o indicador composto de recuperação sustentada nessa condição. O indicador inclui aceites em DLQ na contagem sem commit, limitação discutida explicitamente.
 

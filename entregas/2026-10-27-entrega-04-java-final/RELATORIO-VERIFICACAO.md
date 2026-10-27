@@ -2,7 +2,10 @@
 
 ## Documento e evidências
 
-- PDF idêntico ao fechamento científico de 27/10: SHA-256 `46b54cf04f64f33a4ac5f3fe65ff58b8f6555a2899d0046ba3398fceedf05182`, 80 páginas e conclusão de três páginas. Este empacotamento não recompilou nem modificou o documento.
+- PDF com resumo esclarecido em revisão editorial de 27/10: SHA-256 `56431f7482c5f90eec7a4501dabc70da1a965fceed49e660913b8495e4aed1e5`, 80 páginas e conclusão de três páginas. A comparação textual por página com o PDF científico anterior confirmou mudança apenas na página PDF 4; as outras 79 páginas mantêm o texto. Nenhum resultado foi alterado.
+- Compilação em cópia isolada das fontes rastreadas, com BibTeX e passagens LaTeX até estabilizar índices/referências. Página do resumo renderizada com Poppler e inspecionada visualmente, sem sobreposição ou corte. Log final sem referências indefinidas, overfull ou âncoras duplicadas.
+- Comparação dos pixels das 80 páginas de cada versão, renderizadas com Poppler a 72 dpi, confirmou mudança somente no resumo: as outras 79 páginas também mantêm a renderização anterior.
+- `evidencias/revisao-resumo.json` registra o novo PDF e o hash do fonte. A validação científica original e sua cópia continuam intactas, inclusive o hash do PDF anterior; a revisão não reescreve esse registro histórico. As cópias atuais do PDF na entrega e em `output/pdf/` são idênticas.
 - O fechamento científico registrou 1.495 arquivos brutos conferidos antes/depois, 39 testes Python, sete Node e guard Java original sem rede. Esses controles pertencem à versão científica; `evidencias/validacao-cientifica.json` preserva seu registro.
 - Catálogo com exatamente 65 UUIDs: 64 completos no critério original e um parcial A1. Mantidos cinco ensaios por condição e quatro pares completos para conclusão primária com banco parado.
 - Cópias do catálogo e da validação científica sem alterações; dados completos, manifestos sanitizados e resumos originais continuam no local público referenciado, sem duplicar os brutos privados.
