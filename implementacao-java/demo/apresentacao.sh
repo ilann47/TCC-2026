@@ -279,8 +279,23 @@ talktrack() {
   printf '5. Opção 7, depois 5 e 8: retomar, verificar o UUID e observar o lag.\n'
   printf '6. Opções 9 e 10: executar cargas curtas; explicar média/p95 HTTP e erros.\n'
   printf '7. Opção 11: mostrar uma amostra de recursos e marcos. Não inferir eficiência de contêiner parado.\n'
-  printf '8. Opção 0: sair. Se este menu pausou o consumidor, tentará retomá-lo.\n'
+  printf '8. Opção 13: comparar com persistência/recursos medidos em projeto isolado; execute antes da banca.\n'
+  printf '9. Opção 14: mostrar a última tabela pronta sem executar carga; abrir o HTML no navegador.\n'
+  printf '10. Opção 0: sair. Se este menu pausou o consumidor, tentará retomá-lo.\n'
   printf 'Leia: %s/demo/README.md\n' "$TCC_DEMO_APP"
+}
+
+compare_menu() {
+  local choice scenario
+  no_experiment || return 1
+  printf '\nComparação isolada (não são as 130 execuções):\n'
+  printf '1 Carga normal — duas execuções curtas (preparação/coleta acrescentam minutos)\n'
+  printf '2 PostgreSQL interrompido por 5 s — 90 s medidos por versão\n'
+  printf '3 Consumidor interrompido por 5 s — somente assíncrona, 90 s medidos\n'
+  printf '0 Voltar. Execute antes da banca e use 14 para reapresentar sem carga.\n'
+  IFS= read -r -p 'Cenário: ' choice || return 1
+  case $choice in 0) return 0;;1) scenario=normal;;2) scenario=postgres-stop;;3) scenario=consumer-stop;;*) demo_error 'Cenário inválido.';return 1;;esac
+  bash "$TCC_DEMO_APP/demo/comparar.sh" "$scenario"
 }
 
 check_ready() {
@@ -319,7 +334,7 @@ smoke() {
 usage() {
   printf 'Uso no WSL/Linux: bash demo/apresentacao.sh [--check|--smoke|--help]\n'
   printf 'Sem argumento: menu interativo. --check: somente leitura. --smoke: validação curta com escrita/pausa.\n'
-  printf 'Nunca executa campaign.sh, não limpa tabelas/volumes e não recompila imagens.\n'
+  printf 'Não executa campaign.sh nem recompila imagens. Comparação 13 reinicia somente a tabela experimental isolada.\n'
 }
 
 main() {
@@ -341,7 +356,7 @@ main() {
     printf ' 3 Enviar evento síncrono (201)\n 4 Enviar evento assíncrono (202)\n 5 Consultar último evento no PostgreSQL\n'
     printf ' 6 Pausar consumidor\n 7 Retomar consumidor e aguardar último evento assíncrono\n 8 Ver offsets/lag no Kafka\n'
     printf ' 9 k6 síncrono (%s/s por %s s)\n10 k6 assíncrono (%s/s por %s s)\n' "$TCC_DEMO_RATE" "$TCC_DEMO_SECONDS" "$TCC_DEMO_RATE" "$TCC_DEMO_SECONDS"
-    printf '11 Ver recursos e logs recentes\n12 Mostrar roteiro e falas\n 0 Sair\n'
+    printf '11 Ver recursos e logs recentes\n12 Mostrar roteiro e falas\n13 Comparar síncrono × assíncrono lado a lado\n14 Mostrar última comparação pronta (sem carga)\n 0 Sair\n'
     IFS= read -r -p 'Escolha: ' choice || return 0
     case $choice in
       0) return 0;;
@@ -357,6 +372,8 @@ main() {
       10) run_k6 async || demo_error 'Demonstração k6 não aprovada.';;
       11) show_resources || demo_error 'Recursos/logs não disponíveis.';;
       12) talktrack;;
+      13) compare_menu || demo_error 'Comparação não concluída; evidências preservadas. Veja o log indicado.';;
+      14) python3 "$TCC_DEMO_APP/demo/comparison_report.py" --latest || demo_error 'Nenhuma comparação completa disponível. Execute a opção 13 primeiro.';;
       *) printf 'Opção inválida.\n';;
     esac
     IFS= read -r -p 'Pressione Enter para voltar ao menu...' choice || return 0

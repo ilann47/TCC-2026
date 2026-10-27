@@ -53,6 +53,8 @@ A opção **2** mostra os serviços, os fluxos e o endereço real do Swagger. O 
 | 10 | k6 na assíncrona, com a mesma carga curta. |
 | 11 | Amostra de CPU/memória dos cinco serviços e logs recentes. |
 | 12 | Exibir o roteiro e falas dentro do terminal. |
+| 13 | Comparar lado a lado: carga normal, falha do PostgreSQL ou parada do consumidor. Coleta persistência, recursos e destinos em ambiente isolado. |
+| 14 | Mostrar a última comparação concluída, sem gerar carga, e indicar o relatório HTML para o navegador. |
 | 0 | Sair; tentar retomar o consumidor caso este menu o tenha pausado. |
 
 Depois de cada ação, leia o resultado e pressione Enter para voltar. O menu mantém o UUID do último envio durante a sessão. Não é necessário copiar UUIDs para executar as opções 5 e 7. Para usar o Swagger em paralelo, copie o UUID exibido e consulte `GET /audit/{eventId}` na definição síncrona.
@@ -117,12 +119,12 @@ Uma distribuição sugerida para dez minutos: arquitetura e síncrona (3 min), a
 
 - Opera somente no projeto interativo `tcc-java-2026`; confere os rótulos dos contêineres antes de parar/retomar o consumidor.
 - Recusa ações de preparação, envio, pausa e carga se houver contêineres ativos do projeto experimental `tcc-entrega04`. Não misture apresentação e campanha.
-- Não executa TRUNCATE, exclusão de registros, remoção de volumes ou reset de offsets. Não apaga mensagens/tópicos e não recompila o analisador nem as aplicações.
+- Nas opções 1..12, não executa TRUNCATE, exclusão de registros, remoção de volumes ou reset de offsets. Não apaga mensagens/tópicos e não recompila o analisador nem as aplicações. A opção 13 é a exceção explícita: reinicia somente a tabela experimental isolada, conforme a seção 8; nunca o banco principal.
 - Os eventos são sintéticos e permanecem no banco. Os envios manuais usam `source=demo-apresentacao-<sessão>`; k6 usa `source=demo-k6-<execução>`. UUIDs novos evitam sobrescrever conteúdo de demonstrações anteriores.
 - Na saída normal, Ctrl+C ou SIGTERM, tenta retomar o consumidor **somente se este menu o tiver pausado**. Não encerra os demais serviços. Fechar abruptamente o computador/processo pode impedir essa limpeza.
 - Se Docker ficar indisponível e a retomada não puder ser confirmada, use depois: `docker compose -p tcc-java-2026 start consumer`.
 
-Arquivos locais em `.runtime/demonstracao/<sessão>/`, fora do Git: manifesto, ações TSV, JSONs enviados, respostas/consultas e subpastas k6 com console, resumo JSON e amostras comprimidas. Não são colocados em `.runtime/entrega04/` e não entram na contagem da campanha. Uma falha de transporte mantém o UUID para consulta; não provoque novo envio às cegas supondo que nada foi gravado.
+Arquivos locais das opções 1..12 em `.runtime/demonstracao/<sessão>/`, fora do Git: manifesto, ações TSV, JSONs enviados, respostas/consultas e subpastas k6 com console, resumo JSON e amostras comprimidas. Essas opções não colocam arquivos em `.runtime/entrega04/`. Já a comparação 13 reutiliza o coletor isolado e guarda ali suas evidências brutas com `kind=validation`, sem entrar na contagem da campanha definitiva. Uma falha de transporte mantém o UUID para consulta; não provoque novo envio às cegas supondo que nada foi gravado.
 
 ## 6. Problemas comuns
 
@@ -161,3 +163,73 @@ TCC_DEMO_RATE=2 TCC_DEMO_SECONDS=10 bash demo/apresentacao.sh
 ```
 
 Limites do menu: 1..10 eventos/s e 1..30 s. Fontes técnicas: [k6 e resumos customizados](https://grafana.com/docs/k6/latest/results-output/end-of-test/custom-summary/), [checks e thresholds](https://grafana.com/docs/k6/latest/using-k6/checks/) e [Docker Compose port](https://docs.docker.com/reference/cli/docker/compose/port/). Os comandos e os resultados esperados também foram confrontados com os controllers Java e o Compose deste repositório.
+
+## 8. Comparação lado a lado — opções 13 e 14
+
+**Para mostrar as métricas na banca:** execute **13 → 1** antes da apresentação. Depois, use **14** para consultar a tabela já pronta e abra `relatorio.html` no navegador pelo caminho exibido. O HTML funciona offline, tem colunas síncrona/assíncrona e permite imprimir/salvar PDF. A opção 14 não repete os testes. Use zoom ou tela cheia do navegador ao projetar.
+
+O comparador reutiliza `experimento/run.sh` e o analisador Java existente, **sem modificar a instrumentação congelada**. k6 gera a carga; logs de marcos/commit, exportação do PostgreSQL, Kafka e amostras de Docker alimentam o relatório. Não é apenas um cronômetro de HTTP nem uma tabela com valores estimados. Todos os arquivos ficam locais e são identificados como `presentation_comparison_not_definitive`.
+
+### Cenários disponíveis na opção 13
+
+| Escolha | O que executa | Parâmetros padrão |
+|---|---|---|
+| 1 — normal | Síncrona e depois assíncrona, separadamente. Recuperação: não se aplica. | 5 eventos/s, 5 s de aquecimento, 20 s medidos e 10 s de drenagem por versão; 32 VUs. |
+| 2 — PostgreSQL | Mesma dependência interrompida por 5 s em cada versão. | 5 eventos/s, 10 s de aquecimento, 90 s medidos, 20 s de drenagem; 64 VUs. |
+| 3 — consumidor | Consumidor interrompido por 5 s, somente na assíncrona. | Mesmos parâmetros do cenário de falha. Síncrona: **não se aplica**, pois ela não tem consumidor. |
+
+No cenário normal, `TCC_DEMO_RATE` (1..10/s) e `TCC_DEMO_SECONDS` (6..30 s para comparar) ajustam a carga. Nos cenários de falha, somente a taxa é ajustável por essa variável; a janela de 90 s é mantida para permitir observar recuperação. A falha começa aproximadamente em um terço da janela; o manifesto registra os instantes efetivos. Os 5 s são de indisponibilidade solicitada, não um resultado de recuperação.
+
+**Há preparação, intervalo de 12 s após aquecimento, coleta e exportação além do tempo medido.** A comparação normal leva alguns minutos; falhas levam mais. Não execute todas as opções nos dez minutos da apresentação. Deixe o relatório pronto e use o teste HTTP curto (9/10) e uma pausa manual do consumidor para ilustrar o funcionamento ao vivo.
+
+### Métricas e leitura correta
+
+| Grupo | O que aparece nas duas colunas |
+|---|---|
+| Tempos | HTTP média/mediana/p95/p99; envio→resposta; envio→commit média/p95/p99 e quantidade de commits observados. |
+| Vazão e contagens | Registros gravados/s na janela; enviados, aceitos, gravados na janela e gravados até o fim da coleta. |
+| Erros e integridade | Códigos HTTP, erros HTTP/contrato, iterações não iniciadas, DLQ, pendentes, aceitos sem destino reconciliado, gravações sem confirmação HTTP, UUIDs duplicados no banco, divergências de conteúdo/hash e reentregas idempotentes. |
+| Fila | Pico de aceitos ainda não gravados; pico amostrado de lag Kafka (não se aplica à síncrona). |
+| Recursos | CPU e memória médias dos componentes, soma do fluxo; consumo de k6/observador separado. |
+| Recuperação | Primeiro commit após retomada, drenagem completa dos aceitos pendentes e confirmação de recuperação sustentada. Apenas cenários de falha. |
+
+O p95 representa o tempo até o qual ficaram 95% das observações. O tempo de persistência inclui **somente os registros com commit observado**, portanto leia a quantidade de amostras e os destinos pendentes/DLQ junto com a latência. A taxa de gravação usa apenas commits dentro da janela medida; não soma drenagem posterior como se tivesse ocorrido durante a carga.
+
+O total síncrono soma `sync-api + postgres`; o assíncrono soma `async-api + consumer + postgres + kafka`. A soma das médias de CPU usa a escala Docker (100% ≈ um núcleo lógico), não é percentual de todo o computador nem fica limitada a 100%. Memória é a exibida pelo Docker, em MiB, não memória global do Windows. O Kafka experimental também é iniciado para infraestrutura/coleta no ensaio síncrono, mas não pertence ao seu caminho de negócio e não entra naquele total. Os componentes são discriminados para deixar esse recorte explícito. Fonte: [Docker stats, CPU/memória e tratamento de cache](https://docs.docker.com/reference/cli/docker/container/stats/).
+
+Recuperação sustentada usa o critério existente: três janelas completas consecutivas de 10 s após retomada, pelo menos 90% da taxa-alvo gravada/s, sem erros HTTP, pendências/lag limitados e observação saudável. “Não observada na janela” **não é zero**. Recuperar a vazão não prova que toda mensagem anterior foi salva; uma mensagem enviada à DLQ continua não gravada. Zero UUID duplicado não significa zero reentrega, pois a persistência é idempotente.
+
+### Isolamento, arquivos e preparação
+
+As duas versões recebem conteúdo determinístico do mesmo dataset; o número efetivamente enviado pode diferir em uma iteração na fronteira ou por saturação, e é mostrado. São execuções sequenciais, síncrona primeiro, com a mesma configuração de imagens/gerador/instrumentação. Há apenas uma execução por versão: **não permite declarar vencedor ou substituir a campanha científica**.
+
+O comparador usa exclusivamente `tcc-entrega04`, sem portas publicadas. Recusa projeto experimental ativo ou outro comparador com lock. Reinicia **somente a tabela desse banco experimental** entre execuções; o runner recusa dados de origem não experimental. Não apaga volumes, não altera eventos/banco do projeto principal `tcc-java-2026`, não para projetos alheios, não inicia `campaign.sh` e não recompila imagens. Ao terminar ou tratar Ctrl+C, tenta encerrar seus processos e para o projeto experimental. Em encerramento forçado do terminal/computador, confira `docker ps` antes de prosseguir.
+
+O projeto interativo pode permanecer ativo para o Swagger. Seus contêineres e outros programas competem por recursos: esta é uma demonstração, não o ambiente controlado da campanha. Nenhum experimento definitivo deve ocorrer simultaneamente. Não inicie outro executor manual enquanto esta comparação estiver rodando; o lock protege comparadores, não substitui a coordenação com comandos externos.
+
+Arquivos:
+
+- `.runtime/demonstracao/comparacao-<dataset>/`: `comparacao.txt`, `comparacao.json`, `relatorio.html`, consoles e log de controle.
+- `.runtime/entrega04/<run>-<variante>/`: evidências brutas reais, manifesto, checksums e resumo do analisador. Permanecem após a parada do projeto.
+- `.runtime/demonstracao/ultima-comparacao.json`: aponta **somente à última comparação concluída**. Uma nova tentativa malsucedida não substitui silenciosamente esse relatório; confira cenário e UUID ao reapresentar.
+
+Além dos pré-requisitos do menu, precisa de `flock`, `setsid` e `timeout` (usuais no Ubuntu/WSL) e da imagem `tcc-pilot-analyzer:local`. Se estiver preparando um clone novo, sem imagens calibradas a preservar, construa antes da banca:
+
+```bash
+docker build -t tcc-pilot-analyzer:local experimento/analyzer
+```
+
+Se já houver campanha/calibração congelada nesse computador, **não reconstrua/substitua suas imagens** apenas para demonstrar; o comparador exige as imagens locais existentes e falha se faltarem. Ele nunca baixa nem compila automaticamente.
+
+Comandos equivalentes, fora do menu:
+
+```bash
+bash demo/comparar.sh normal
+bash demo/comparar.sh postgres-stop
+bash demo/comparar.sh consumer-stop
+python3 demo/comparison_report.py --latest
+```
+
+Teste de integração curto: `bash demo/comparar.sh --smoke` (2 eventos/s, 2 s de aquecimento, 10 s medidos, 5 s de drenagem, cada versão). Ele grava dados sintéticos **somente no ambiente experimental**, exige imagens prontas e não mede recuperação.
+
+Fala sugerida: “Aqui eu separo duas perguntas: quanto o cliente esperou pela resposta e quando o banco terminou a gravação. Na assíncrona, o 202 confirma o Kafka; por isso eu não comparo esse tempo como se ele significasse a mesma conclusão do 201. A tabela também mostra o custo dos componentes e o destino de cada aceito. Estes números são desta execução de demonstração; a conclusão do TCC depende das repetições do experimento.”

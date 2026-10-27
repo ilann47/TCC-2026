@@ -43,7 +43,9 @@ jobs:
         working-directory: implementacao-java
         run: |
           bash -n demo/apresentacao.sh
+          bash -n demo/comparar.sh
           bash demo/tests/test_menu.sh
+          bash demo/tests/test_comparison.sh
           python3 -m unittest discover -s demo/tests -v
           node --input-type=module --check < demo/load.js
 
@@ -154,6 +156,11 @@ jobs:
       - name: Demonstração curta do menu com serviços reais
         working-directory: implementacao-java
         run: bash demo/apresentacao.sh --smoke
+      - name: Comparação lado a lado com coleta real
+        working-directory: implementacao-java
+        run: |
+          docker build -t tcc-pilot-analyzer:local experimento/analyzer
+          bash demo/comparar.sh --smoke
       - name: Diagnóstico em falha
         if: failure()
         working-directory: implementacao-java
@@ -161,4 +168,6 @@ jobs:
       - name: Encerrar serviços
         if: always()
         working-directory: implementacao-java
-        run: docker compose down
+        run: |
+          EXPERIMENT_TOPIC=unused docker compose -p tcc-entrega04 -f docker-compose.yml -f experimento/compose.yml --profile observation down
+          docker compose down

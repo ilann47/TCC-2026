@@ -101,7 +101,9 @@ As variáveis principais são `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNA
 
 No WSL/Linux, dentro desta pasta, execute `bash demo/apresentacao.sh`. O menu inicia/confere os serviços, envia eventos nas duas variantes, guarda o UUID, consulta a persistência, pausa/retoma o consumidor, mostra lag Kafka, roda k6 por 20 segundos e exibe falas sugeridas. Leia o [passo a passo da demonstração](demo/README.md) antes da banca.
 
-O menu não recompila imagens, não apaga dados e não inicia a campanha definitiva. As cargas são pequenas e demonstrativas; os arquivos ficam em `.runtime/demonstracao/`, separados dos experimentos. Se houver ensaio isolado ativo, as ações de demonstração são recusadas. Para uma conferência somente de leitura: `bash demo/apresentacao.sh --check`.
+As opções **13** (comparar) e **14** (reapresentar a última comparação sem carga) mostram tabela síncrona/assíncrona e geram HTML offline com HTTP, persistência, vazão, erros, destinos, CPU/memória, fila e recuperação quando aplicável. Há modos de carga normal, interrupção de PostgreSQL nas duas variantes e parada de consumidor apenas na assíncrona. Execute a coleta antes da banca; preparação/exportação acrescentam minutos.
+
+O menu não recompila imagens nem inicia a campanha definitiva. Não apaga dados do projeto principal. A comparação reinicia somente a tabela experimental isolada, preserva exportações e para seu ambiente ao terminar. Relatórios ficam em `.runtime/demonstracao/` e evidências em `.runtime/entrega04/`, identificados como demonstração/validação, nunca como resultados definitivos. Se houver ensaio isolado ativo, as ações de demonstração são recusadas. Para uma conferência somente de leitura: `bash demo/apresentacao.sh --check`.
 
 ## Medição e campanha experimental
 
