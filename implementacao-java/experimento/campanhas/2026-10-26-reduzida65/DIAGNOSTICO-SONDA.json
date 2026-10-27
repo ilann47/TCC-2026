@@ -1,5 +1,8 @@
 {
   "kind": "diagnostic_not_definitive",
+  "raw_summary_sha256": "c94b2c4117717fc77c9b753b6f178e7be844493e076ba657be04351487ec9abf",
+  "published_summary_sha256": "69e7e8314fdb0671282a529b35ce81678c859fab039459079f9d783cc157009e",
+  "published_copy_note": "Same JSON values; text/newline normalization. Original raw bytes remain local and unchanged.",
   "scope": "Stopped experimental Kafka container before R2 configuration; no topic or record deleted",
   "command": [
     "CMD-SHELL",

@@ -2,7 +2,7 @@
 
 O controlador parou antes de liberar a campanha. As duas verificações de modelo concluíram 50 registros cada, com hash correspondente, reenvio idempotente e conflito preservando a linha original; a comparação final conjunta do lote de nove não foi executada porque a etapa de referência falhou antes.
 
-Execução `bedbd896-c279-475a-94f1-712c88b7f904-async`, steady 48/s, 60 s de aquecimento, 180 s medidos, 90 s de observação. O [resumo original](rejected-runs/bedbd896-c279-475a-94f1-712c88b7f904-async.json) é preservado sem alterações. A instrumentação foi íntegra; o que falhou foi a elegibilidade da referência nesta configuração/execução.
+Execução `bedbd896-c279-475a-94f1-712c88b7f904-async`, steady 48/s, 60 s de aquecimento, 180 s medidos, 90 s de observação. A [cópia do resumo](rejected-runs/bedbd896-c279-475a-94f1-712c88b7f904-async.json) mantém os valores, com normalização de texto/final de linha; não é uma cópia byte a byte. O bruto local e seus checksums permanecem inalterados. Os hashes distintos estão no [diagnóstico](DIAGNOSTICO-SONDA.json). A instrumentação foi íntegra; o que falhou foi a elegibilidade da referência nesta configuração/execução.
 
 | Resultado | Observado | Critério anterior |
 |---|---:|---:|
