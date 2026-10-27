@@ -20,8 +20,8 @@ import sys
 import uuid
 
 APP = Path(__file__).resolve().parents[1]
-REPORT = APP / 'experimento/campanhas/2026-10-26-reduzida65'
-RUNTIME = APP / '.runtime/reduzida65-2026-10-26'
+REPORT = APP / 'experimento/campanhas/2026-10-27-reduzida65-r2'
+RUNTIME = APP / '.runtime/reduzida65-2026-10-27-r2'
 STATE = RUNTIME / 'state.json'
 POLICY = REPORT / 'policy.json'
 FIELDS = ['block', 'profile', 'variant', 'rate', 'run_id', 'dataset_id', 'vus']
@@ -302,7 +302,9 @@ def freeze():
     state = read(STATE);policy = read(POLICY)
     if state['phase'] != 'pilot_complete': raise ValueError('Piloto ainda não aprovado')
     clean();fingerprints(policy)
-    if (APP / 'experimento/FROZEN-PROTOCOL.json').read_bytes() != (APP / policy['previous_protocol']).read_bytes(): raise ValueError('V1 ativa não coincide com a cópia preservada')
+    active = read(APP / 'experimento/FROZEN-PROTOCOL.json')
+    if active.get('status') != 'pilot_pending' or active.get('protocol_revision') != policy['protocol_revision']: raise ValueError('Revisão pendente ativa divergente')
+    if sha((APP / policy['previous_protocol']).read_bytes()) != policy['previous_protocol_sha256']: raise ValueError('V1 preservada foi alterada')
     pilots = read(REPORT / 'pilot-plan.json');records = [audit_case(r, policy, 'pilot') for r in pilots]
     model = read(RUNTIME / 'model-comparison.json')
     if model.get('same_ids_fields_payload_hash') is not True: raise ValueError('Modelo comum divergente')

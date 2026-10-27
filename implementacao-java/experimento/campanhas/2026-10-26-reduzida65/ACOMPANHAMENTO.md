@@ -1,5 +1,7 @@
 # Campanha reduzida e fechamento científico
 
+**Histórico R1: piloto interrompido por referência não elegível a 48/s.** Não retomar esta sessão nem congelá-la. O usuário escolheu manter a taxa e investigar. Consulte [PILOTO-REJEITADO.md](PILOTO-REJEITADO.md) e a [R2 ativa](../2026-10-27-reduzida65-r2/ACOMPANHAMENTO.md), com estado local separado.
+
 Autorização do usuário em 26/10/2026: atualizar protocolo e metodologia para **65 execuções**, validar o piloto antes, executar e finalizar capítulos 5/6 somente com resultados reais. Acompanhamento automático neste chat foi expressamente autorizado. Este arquivo é um roteiro operacional; o estado efetivo é o JSON local, não um texto de status presumido.
 
 ## Arquivos e comandos

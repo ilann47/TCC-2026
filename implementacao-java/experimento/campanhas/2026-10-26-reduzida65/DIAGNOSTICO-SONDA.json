@@ -1,0 +1,54 @@
+{
+  "kind": "diagnostic_not_definitive",
+  "scope": "Stopped experimental Kafka container before R2 configuration; no topic or record deleted",
+  "command": [
+    "CMD-SHELL",
+    "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list"
+  ],
+  "interval_seconds": 10,
+  "timeout_seconds": 5,
+  "cpu_limit": 1,
+  "memory_limit_mib": 1024,
+  "health_samples": [
+    {
+      "start": "2026-10-27T00:13:32.633267248-03:00",
+      "end": "2026-10-27T00:13:35.261645819-03:00",
+      "exit_code": 0
+    },
+    {
+      "start": "2026-10-27T00:13:45.26252441-03:00",
+      "end": "2026-10-27T00:13:47.940021453-03:00",
+      "exit_code": 0
+    },
+    {
+      "start": "2026-10-27T00:13:57.941607082-03:00",
+      "end": "2026-10-27T00:14:03.029142346-03:00",
+      "exit_code": -1
+    },
+    {
+      "start": "2026-10-27T00:14:13.030036655-03:00",
+      "end": "2026-10-27T00:14:18.065943951-03:00",
+      "exit_code": -1
+    },
+    {
+      "start": "2026-10-27T00:14:28.067287375-03:00",
+      "end": "2026-10-27T00:14:28.087511568-03:00",
+      "exit_code": -1
+    }
+  ],
+  "observed_resource_summary": {
+    "cpu_mean_percent": 33.966727272727276,
+    "cpu_p95_percent": 97.54,
+    "cpu_max_percent": 102.53,
+    "memory_mean_mib": 496.4218181818182,
+    "memory_max_mib": 555.5
+  },
+  "failed_reference_run": "bedbd896-c279-475a-94f1-712c88b7f904",
+  "causality_limit": "Evidence establishes administrative JVMs share measured container resources; it does not establish sole causation of the transient backlog peak.",
+  "rejected_reference_criteria": {
+    "max_pending_observed": 21,
+    "max_pending_allowed": 12,
+    "tail_slope_observed": 0.016260551043159738,
+    "tail_slope_allowed": 0.01
+  }
+}

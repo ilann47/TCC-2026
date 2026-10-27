@@ -183,6 +183,8 @@ Ensaio de **26/10/2026 no horário de São Paulo**; os manifestos usam UTC e com
 
 O [exemplo JSON versionado](exemplos/2026-10-26-postgres-stop.json) preserva as 45 linhas, os identificadores e as limitações do relatório original, sem caminhos pessoais. As evidências brutas continuam locais, fora do Git; o snapshot não as substitui. O checkout estava modificado durante a coleta, como registrado nos manifestos. É **validação/demonstração**, não uma repetição definitiva da campanha congelada.
 
+Esse exemplo usou a sonda administrativa Java anterior. A revisão experimental R2, posterior, passa a usar sonda TCP leve no Kafka; não atribua seus números de CPU/memória ao novo ambiente nem compare versões de configuração como se fossem repetições idênticas.
+
 | Métrica | Síncrona | Assíncrona |
 |---|---:|---:|
 | Resposta HTTP média | 438,51 ms | 11,67 ms |

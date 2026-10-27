@@ -5,10 +5,12 @@ import assert from 'node:assert/strict';
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const json=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 export function verifyReduced(frozen) {
-  assert.equal(frozen.schema_version,2);assert.equal(frozen.status,'ready_for_definitive_runs');
+  assert.equal(frozen.schema_version,2);assert.ok(['pilot_pending','ready_for_definitive_runs'].includes(frozen.status));
+  const ready=frozen.status==='ready_for_definitive_runs';
   assert.equal(frozen.repetitions_per_variant_condition,5);assert.equal(frozen.measure_seconds,180);
   const report=frozen.report;
-  for(const [key,file] of [['plan_sha256',`${report}/plan.csv`],['base_compose_sha256','docker-compose.yml'],['observer_compose_sha256','experimento/compose.yml'],['policy_sha256','experimento/calibration-policy.json'],['reduced_policy_sha256',`${report}/policy.json`],['pilot_catalog_sha256',`${report}/pilot-catalog.json`],['controller_sha256','experimento/reduced_campaign.py']])assert.equal(sha(fs.readFileSync(file)),frozen[key],file);
+  for(const [key,file] of [['plan_sha256',`${report}/plan.csv`],['base_compose_sha256','docker-compose.yml'],['observer_compose_sha256','experimento/compose.yml'],['policy_sha256','experimento/calibration-policy.json'],['reduced_policy_sha256',`${report}/policy.json`],['controller_sha256','experimento/reduced_campaign.py'],['previous_protocol_sha256',frozen.previous_protocol]])assert.equal(sha(fs.readFileSync(file)),frozen[key],file);
+  if(ready)assert.equal(sha(fs.readFileSync(`${report}/pilot-catalog.json`)),frozen.pilot_catalog_sha256);
   const java='experimento/analyzer/src/main/java/br/com/ilan/tcc/experiment';
   const files=['experimento/run.sh','experimento/load.js',...fs.readdirSync(java).filter(n=>n.endsWith('.java')).sort().map(n=>`${java}/${n}`)];
   assert.equal(sha(Buffer.from(files.map(p=>`${sha(fs.readFileSync(p))}  ${p}\n`).join(''))),frozen.instrument_source_sha256);
@@ -33,7 +35,8 @@ export function verifyReduced(frozen) {
   for(const value of first.values())assert.deepEqual(Object.values(value).sort(),[2,3]);
   assert.equal([...first.values()].reduce((s,v)=>s+v.sync,0),15);
   if(process.argv.includes('--require-unused'))assert.equal(present,0,'planned run folder already exists');
-  const pilot=json(`${report}/pilot-catalog.json`);assert.equal(pilot.ready,true);assert.equal(pilot.records.length,9);
+  const pilot=ready?json(`${report}/pilot-catalog.json`):{ready:false,records:[]};
+  if(ready){assert.equal(pilot.ready,true);assert.equal(pilot.records.length,9);}
   const pilotIds=new Set();
   for(const run of pilot.records){
     assert.ok(!pilotIds.has(run.run_id));pilotIds.add(run.run_id);
@@ -41,9 +44,9 @@ export function verifyReduced(frozen) {
     const s=json(file);assert.equal(s.instrument_valid,true);assert.notEqual(s.kind,'definitive');
   }
   for(const r of rows)assert.ok(!pilotIds.has(r.run));
-  assert.deepEqual(json(`${report}/model-comparison.json`),pilot.model);assert.equal(pilot.model.same_ids_fields_payload_hash,true);
+  if(ready){assert.deepEqual(json(`${report}/model-comparison.json`),pilot.model);assert.equal(pilot.model.same_ids_fields_payload_hash,true);}
   const calibration=json(`${frozen.calibration_report}/catalog.json`);
   assert.equal(calibration.runs.length,20);
   for(const run of calibration.runs)assert.equal(sha(fs.readFileSync(`${frozen.calibration_report}/runs/${run.run_id}-${run.variant}.json`)),run.summary_sha256);
-  console.log(JSON.stringify({revision:frozen.protocol_revision,reference:frozen.reference_rate,original_calibration_runs:20,reduced_validation_runs:9,planned_runs:65,conditions:13,repetitions:5,measure_seconds:180,paired_first_variant:'3/2 or 2/3 per condition; 15/15 overall',planned_output_folders_present:present,source_and_file_hashes:'match'},null,2));
+  console.log(JSON.stringify({revision:frozen.protocol_revision,status:frozen.status,definitive_execution_authorized:ready,reference:frozen.reference_rate,original_calibration_runs:20,reduced_validation_runs:pilot.records.length,planned_runs:65,conditions:13,repetitions:5,measure_seconds:180,paired_first_variant:'3/2 or 2/3 per condition; 15/15 overall',planned_output_folders_present:present,source_and_file_hashes:'match'},null,2));
 }

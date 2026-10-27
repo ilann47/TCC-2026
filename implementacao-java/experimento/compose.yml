@@ -20,6 +20,14 @@ services:
     ports: !reset []
   kafka:
     ports: !reset []
+    # A Java admin CLI every 10s otherwise competes with the broker's 1-CPU quota
+    # and is included in its resource samples. This is only a transport probe;
+    # topic creation and API readiness still exercise the actual Kafka protocol.
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/9092'"]
+      interval: 10s
+      timeout: 2s
+      retries: 20
   sync-api:
     image: tcc-java-2026-sync-api:latest
     ports: !reset []

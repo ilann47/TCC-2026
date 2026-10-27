@@ -2,12 +2,19 @@ import copy
 import importlib.util
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location('reduced', Path(__file__).parents[1] / 'reduced_campaign.py')
 reduced = importlib.util.module_from_spec(spec);spec.loader.exec_module(reduced)
 
 
 class ReducedTests(unittest.TestCase):
+    def test_pending_protocol_cannot_authorize_execution(self):
+        checker_spec = importlib.util.spec_from_file_location('check_reduced', Path(__file__).parents[1] / 'check_reduced_plan.py')
+        checker = importlib.util.module_from_spec(checker_spec);checker_spec.loader.exec_module(checker)
+        with patch.object(checker.reduced, 'read', return_value={'schema_version': 2, 'status': 'pilot_pending'}), patch('sys.argv', ['check', 'plan.csv', '--require-unused']):
+            with self.assertRaisesRegex(ValueError, 'execução definitiva proibida'): checker.main()
+
     def test_plan_has_65_unique_runs_and_five_repetitions(self):
         rows = reduced.make_plan({'seed': 20261026});reduced.validate_plan(rows)
         self.assertEqual(len(rows), 65)

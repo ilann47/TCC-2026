@@ -35,6 +35,14 @@ Cinco tentativas anteriores foram preservadas como inválidas por falha de conci
 
 O intervalo nativo de resposta HTTP do k6 é separado do intervalo instrumentado entre envio e retorno. A conclusão da persistência é observada pelo marco \texttt{commit\_completed}, emitido após o retorno da transação. O campo \texttt{persisted\_at}, preenchido no INSERT, não é utilizado como substituto desse marco. Uma resposta 202 confirma publicação no Kafka e não gravação no PostgreSQL.
 
+\subsection{Calibração e validação da revisão reduzida}
+
+A calibração de 26 de outubro de 2026 explorou taxas progressivas e confirmou 48 eventos por segundo em ambas as variantes, por 300 segundos medidos após aquecimento. Essa referência é local e não representa capacidade máxima. O relatório técnico preserva vinte coletas de calibração e validação, controles de instrumentação e identificação das tentativas rejeitadas; nenhuma constitui repetição definitiva.
+
+O primeiro piloto reduzido, de 180 segundos, concluiu duas verificações funcionais de cinquenta registros. Na primeira referência assíncrona, foram enviados, aceitos e persistidos ao fim 8.641 registros, sem erros HTTP, iterações não iniciadas, DLQ ou ausência conciliada. Desses, 8.619 tiveram commit dentro da janela. Apesar da conciliação final completa, o pico de aceites ainda não gravados foi 21, acima do limite predeclarado de 12; o lag máximo amostrado foi 15 e o indicador de crescimento de cauda foi 0,01626 evento por segundo, acima do limite de 0,01. A coleta foi instrumentalmente íntegra, mas não elegível para liberar a referência naquele piloto. Ela foi preservada com identificador \texttt{bedbd896-c279-475a-94f1-712c88b7f904}.
+
+A investigação identificou uma sonda administrativa Java periódica dentro da quota de CPU do broker, que também integra suas amostras de recursos. Essa constatação não demonstra causalidade exclusiva do pico. A revisão R2 preserva 48 eventos por segundo e os critérios, mas utiliza a sonda leve descrita no método e nove novos UUIDs de validação. Sua aprovação e a campanha definitiva ainda estão pendentes; esses números não confirmam hipóteses comparativas.
+
 \section{Modelo comum de registros: objetivo a}
 \label{sec:resultado-modelo}
 \input{Capitulos/resultados-modelo}

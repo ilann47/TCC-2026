@@ -1,0 +1,39 @@
+# Experimental project only; never apply this override to the interactive stack.
+services:
+  observer:
+    image: ${EXPERIMENT_ANALYZER_IMAGE:-tcc-pilot-analyzer:local}
+    profiles: [observation]
+    command: [observe, /evidence]
+    user: ${EXPERIMENT_UID:-1000}:${EXPERIMENT_GID:-1000}
+    environment:
+      RUN_ID: ${EXPERIMENT_RUN_ID:-unused}
+      DATASET_ID: ${EXPERIMENT_DATASET_ID:-unused}
+      VARIANT: ${EXPERIMENT_VARIANT:-sync}
+      OBSERVER_POSTGRES_HOST: ${OBSERVER_POSTGRES_HOST:-127.0.0.1}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Local database password required}
+    volumes:
+      - ${EXPERIMENT_OUTPUT:-./.runtime}:/evidence
+    cpus: "0.25"
+    mem_limit: 256m
+    restart: "no"
+  postgres:
+    ports: !reset []
+  kafka:
+    ports: !reset []
+  sync-api:
+    image: tcc-java-2026-sync-api:latest
+    ports: !reset []
+    restart: "no"
+  async-api:
+    image: tcc-java-2026-async-api:latest
+    ports: !reset []
+    restart: "no"
+    environment:
+      KAFKA_TOPIC: ${EXPERIMENT_TOPIC:?Experimental topic required}
+  consumer:
+    image: tcc-java-2026-consumer:latest
+    restart: "no"
+    environment:
+      KAFKA_TOPIC: ${EXPERIMENT_TOPIC:?Experimental topic required}
+      KAFKA_DLQ_TOPIC: ${EXPERIMENT_TOPIC:?Experimental topic required}-dlq
+      KAFKA_GROUP_ID: ${EXPERIMENT_TOPIC:?Experimental topic required}-group

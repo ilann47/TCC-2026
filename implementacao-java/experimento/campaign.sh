@@ -8,7 +8,7 @@ plan=${1:?Usage: bash experimento/campaign.sh [--check] experimento/calibracao/D
 frozen=experimento/FROZEN-PROTOCOL.json
 [[ -f $frozen && -f $plan ]] || exit 1
 if python3 -c 'import json,sys;sys.exit(0 if json.load(open("experimento/FROZEN-PROTOCOL.json"))["schema_version"]==2 else 1)';then
-  if ((check_only));then python3 experimento/check_reduced_plan.py "$plan";exit 0;fi
+  if ((check_only));then python3 experimento/check_reduced_plan.py "$plan" --allow-pending;exit 0;fi
   python3 experimento/check_reduced_plan.py "$plan" --require-unused
   exec python3 experimento/reduced_campaign.py campaign
 fi
