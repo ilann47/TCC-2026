@@ -113,11 +113,18 @@ wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/i
 ```
 
 Abra [http://localhost:5666](http://localhost:5666), clique em **Verificar serviços**
-e use **Executar síncrono** ou **Executar assíncrono**. Ajuste taxa (1–10 eventos/s)
+e use **Executar os dois e comparar**, ou **Somente síncrono/assíncrono**. A sequência
+executa síncrono → assíncrono, sem sobreposição, com tabela e gráfico lado a lado.
+Ajuste taxa (1–10 eventos/s)
 e duração (1–30 s); o padrão é 5/s por 20 s. O painel permanece disponível depois
 de cada teste e conserva histórico, métricas e console, inclusive falhas.
 Mantenha o processo do painel aberto; fechar a aba não o encerra nem cancela a carga.
 **Interromper teste** cancela somente o teste atual, que fica marcado como interrompido.
+Em uma sequência, **Interromper sequência** também impede que a próxima variante
+comece. Resultados incluem percentis HTTP, erros, checks, códigos HTTP, VUs,
+tráfego e amostras de CPU/memória por serviço. HTTP 202 continua sendo aceite no
+Kafka, não tempo até commit. A comparação é descritiva, com uma tentativa por
+variante; [fontes e limitações das métricas](demo/README.md#comparar-as-duas-variantes-pelo-painel).
 
 Os cinco serviços e a imagem k6 devem estar preparados: se a verificação falhar,
 use a opção **1** do menu abaixo antes de testar. O painel não baixa imagens,

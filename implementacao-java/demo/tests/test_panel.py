@@ -288,8 +288,17 @@ class HttpTests(unittest.TestCase):
         self.assertEqual(self.request("/api/jobs/" + RUN + "/stop", {})[0], 404)
 
     def test_only_fixed_assets(self):
-        for path in ("/", "/panel.js", "/panel.css"):
+        for path in ("/", "/panel.js", "/panel.css", "/dashboard.css"):
             self.assertEqual(self.request(path)[0], 200)
+
+    def test_compare_api_retains_origin_guards_and_reservation(self):
+        self.assertEqual(self.request("/api/compare", {"rate": 5, "seconds": 20}, {"Origin": "http://evil.test"})[0], 403)
+        status, _, body = self.request("/api/compare", {"rate": 5, "seconds": 20})
+        self.assertEqual(status, 202)
+        identity = json.loads(body)["id"]
+        self.assertEqual(self.request("/api/run", CONFIG)[0], 409)
+        self.assertEqual(self.request("/api/comparisons/"+identity)[0], 200)
+        self.assertEqual(self.request("/api/comparisons/"+identity+"/stop", {})[0], 200)
 
 
 if __name__ == "__main__":

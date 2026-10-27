@@ -3,23 +3,21 @@
 import argparse
 import hmac
 import json
-import math
 import os
 import re
 import secrets
 import signal
-import statistics
 import subprocess
 import threading
 import time
 import uuid
-import zlib
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
 
 from json_helper import canonical_uuid, verify_k6
+from panel_metrics import enrich, finite, read_samples, resource_snapshot, resource_summary
 
 APP = Path(__file__).resolve().parent.parent
 ASSETS = Path(__file__).resolve().parent / "panel"
@@ -44,6 +42,13 @@ def parameters(value):
     return dict(value)
 
 
+def comparison_parameters(value):
+    if not isinstance(value, dict) or set(value) != {"rate", "seconds"}:
+        raise ValueError("A comparação aceita somente rate e seconds.")
+    parameters(dict(value, variant="sync"))
+    return dict(value)
+
+
 def read_json(path):
     if path.stat().st_size > 256_000:
         raise ValueError("JSON excede limite.")
@@ -60,61 +65,7 @@ def tail(path):
 
 
 def samples(path):
-    """Read a bounded, possibly unfinished gzip stream; never infer missing zeros."""
-    result = {"sent": None, "errors": None, "dropped_iterations": None,
-              "http_p95_ms": None, "series": [], "provisional": True}
-    try:
-        with path.open("rb") as stream:
-            compressed = stream.read(4_000_000)
-        data = zlib.decompressobj(16 + zlib.MAX_WBITS).decompress(compressed, 16_000_000)
-    except (OSError, zlib.error):
-        return result
-    counters, timings, buckets = {}, [], {}
-    for line in data.split(b"\n")[:-1]:
-        try:
-            point = json.loads(line)
-            item = point.get("data", {})
-            metric, value = point.get("metric"), item.get("value")
-            if point.get("type") != "Point" or type(value) not in (int, float) or not math.isfinite(value) or value < 0:
-                continue
-            if metric == "dropped_iterations":
-                counters[metric] = counters.get(metric, 0) + value
-            if item.get("tags", {}).get("phase") != "demo":
-                continue
-            if metric in ("demo_sent", "demo_errors"):
-                counters[metric] = counters.get(metric, 0) + value
-            if metric == "http_req_duration":
-                timings.append(value)
-                stamp = datetime.fromisoformat(item.get("time", "").replace("Z", "+00:00"))
-                if stamp.tzinfo is not None:
-                    second = stamp.astimezone(timezone.utc).replace(microsecond=0).isoformat()
-                    buckets.setdefault(second, []).append(value)
-        except (ValueError, TypeError, AttributeError):
-            continue
-    # k6 custom counters inherit global tags, not necessarily phase. Count them
-    # separately only when this demo's exact metric names are present.
-    for line in data.split(b"\n")[:-1]:
-        try:
-            point = json.loads(line)
-            if point.get("type") == "Point" and point.get("metric") in ("demo_sent", "demo_errors"):
-                value = point["data"]["value"]
-                if type(value) in (int, float) and math.isfinite(value) and value >= 0:
-                    key = point["metric"]
-                    # Rebuild rather than double count phase-tagged counters.
-                    counters.setdefault("all_" + key, 0)
-                    counters["all_" + key] += value
-        except (ValueError, KeyError, TypeError, AttributeError):
-            continue
-    result.update(sent=counters.get("all_demo_sent"), errors=counters.get("all_demo_errors"),
-                  dropped_iterations=counters.get("dropped_iterations"))
-    if timings:
-        ordered = sorted(timings)
-        index = (len(ordered) - 1) * .95
-        low, high = math.floor(index), math.ceil(index)
-        result["http_p95_ms"] = ordered[low] + (ordered[high] - ordered[low]) * (index - low)
-    result["series"] = [{"time": key, "avg_ms": statistics.mean(values), "count": len(values)}
-                        for key, values in sorted(buckets.items())][-60:]
-    return result
+    return read_samples(path)
 
 
 class BusyError(Exception):
@@ -122,19 +73,24 @@ class BusyError(Exception):
 
 
 class Manager:
-    def __init__(self, app=APP, popen=subprocess.Popen):
+    def __init__(self, app=APP, popen=subprocess.Popen, collect_resources=True):
         self.app = Path(app)
         self.root = self.app / ".runtime/demonstracao/painel/jobs"
         self.root.mkdir(parents=True, exist_ok=True)
         self.lock = threading.RLock()
         self.jobs = {}
+        self.comparisons = {}
+        self.active_comparison_id = None
+        self.collect_resources = collect_resources
+        self.resource_records = {}
+        self.resource_errors = {}
         self.process = None
         self.active_id = None
         self.checking = False
         self.check = None
         self.popen = popen
         self.metric_cache = {}
-        for path in sorted(self.root.glob("*.json"), key=lambda item: item.stat().st_mtime)[-100:]:
+        for path in sorted(self.root.glob("*.json"), key=lambda item: item.stat().st_mtime):
             try:
                 job = read_json(path)
                 canonical_uuid(path.stem)
@@ -148,11 +104,34 @@ class Manager:
                 self.jobs[job["id"]] = job
             except (OSError, ValueError, KeyError, TypeError):
                 continue
+        pairs = self.root.parent / "comparisons"
+        pairs.mkdir(exist_ok=True)
+        (self.root.parent / "resources").mkdir(exist_ok=True)
+        for path in sorted(pairs.glob("*.json"), key=lambda item: item.stat().st_mtime)[-100:]:
+            try:
+                pair = read_json(path)
+                canonical_uuid(path.stem)
+                comparison_parameters(pair["parameters"])
+                if pair["id"] != path.stem or pair["status"] not in STATES:
+                    continue
+                if pair["status"] in ACTIVE:
+                    pair.update(status="interrupted", finished_at=now(),
+                                message="Servidor reiniciado; a sequência não foi retomada.")
+                    self.save_pair(pair)
+                self.comparisons[pair["id"]] = pair
+            except (OSError, ValueError, KeyError, TypeError):
+                continue
 
     def save(self, job):
         path = self.root / (job["id"] + ".json")
         temporary = path.with_suffix(".tmp")
         temporary.write_text(json.dumps(job, ensure_ascii=False, indent=2), encoding="utf-8")
+        temporary.replace(path)
+
+    def save_pair(self, pair):
+        path = self.root.parent / "comparisons" / (pair["id"] + ".json")
+        temporary = path.with_suffix(".tmp")
+        temporary.write_text(json.dumps(pair, ensure_ascii=False, indent=2), encoding="utf-8")
         temporary.replace(path)
 
     def environment(self, config=None):
@@ -166,18 +145,108 @@ class Manager:
     def run(self, config):
         config = parameters(config)
         with self.lock:
-            if self.active_id or self.checking:
+            if self.active_id or self.active_comparison_id or self.checking:
                 raise BusyError("Aguarde o teste ou a verificação em andamento.")
-            identity = str(uuid.uuid4())
-            job = {"id": identity, "parameters": config, "status": "queued",
-                   "started_at": now(), "finished_at": None, "session": None,
-                   "summary": None, "exit_code": None, "k6_exit": None,
-                   "message": "Verificando o ambiente; nenhuma campanha será iniciada."}
-            self.jobs[identity] = job
-            self.active_id = identity
-            self.save(job)
-            threading.Thread(target=self.worker, args=(identity,), daemon=True).start()
+            job = self.new_job(config)
+            threading.Thread(target=self.worker, args=(job["id"],), daemon=True).start()
             return dict(job)
+
+    def new_job(self, config, comparison_id=None):
+        identity = str(uuid.uuid4())
+        job = {"id": identity, "parameters": config, "status": "queued",
+               "started_at": now(), "finished_at": None, "session": None,
+               "summary": None, "exit_code": None, "k6_exit": None,
+               "comparison_id": comparison_id,
+               "message": "Verificando o ambiente; nenhuma campanha será iniciada."}
+        self.jobs[identity] = job
+        self.active_id = identity
+        self.save(job)
+        return job
+
+    def compare(self, config):
+        config = comparison_parameters(config)
+        with self.lock:
+            if self.active_id or self.active_comparison_id or self.checking:
+                raise BusyError("Aguarde a execução em andamento.")
+            identity = str(uuid.uuid4())
+            pair = {"id": identity, "parameters": config, "status": "queued",
+                    "started_at": now(), "finished_at": None, "jobs": {"sync": None, "async": None},
+                    "message": "Sequência reservada: síncrono → assíncrono. Mesma taxa/duração, UUIDs distintos."}
+            self.comparisons[identity] = pair
+            self.active_comparison_id = identity
+            self.save_pair(pair)
+            threading.Thread(target=self.comparison_worker, args=(identity,), daemon=True).start()
+            return dict(pair)
+
+    def comparison_worker(self, identity):
+        pair = self.comparisons[identity]
+        try:
+            for variant in ("sync", "async"):
+                with self.lock:
+                    if pair.get("stop_reason"):
+                        break
+                    pair.update(status="running", message=f"Executando {'1/2 síncrono' if variant == 'sync' else '2/2 assíncrono'}; sem cargas simultâneas.")
+                    job = self.new_job(dict(pair["parameters"], variant=variant), identity)
+                    pair["jobs"][variant] = job["id"]
+                    self.save_pair(pair)
+                # Synchronous call is deliberate: never overlap the two workloads.
+                self.worker(job["id"])
+                with self.lock:
+                    if job["status"] == "interrupted":
+                        pair["stop_reason"] = "Sequência interrompida; a próxima variante não foi iniciada."
+                    if not job.get("comparison_evidence_ready") or job.get("k6_exit") not in (0, 99):
+                        pair["message"] = "Sequência parou por bloqueio/ausência de evidência íntegra. Não houve reposição ou repetição."
+                        break
+            with self.lock:
+                both = [self.jobs.get(pair["jobs"].get(variant), {}) for variant in ("sync", "async")]
+                if pair.get("stop_reason"):
+                    pair.update(status="interrupted", message=pair["stop_reason"])
+                elif all(job.get("status") == "passed" for job in both):
+                    pair.update(status="passed", message="As duas demonstrações terminaram. Compare HTTP e recursos observados; não tempo até commit.")
+                else:
+                    pair["status"] = "failed"
+                    if all(job.get("finished_at") for job in both):
+                        pair["message"] = "As duas execuções foram preservadas; ao menos uma falhou. Não há repetição automática."
+        except Exception as error:
+            pair.update(status="failed", message=f"Falha na sequência: {type(error).__name__}: {error}")
+        finally:
+            with self.lock:
+                if pair.get("stop_reason"):
+                    pair.update(status="interrupted", message=pair["stop_reason"])
+                pair["finished_at"] = now()
+                self.save_pair(pair)
+                self.active_comparison_id = None
+
+    def stop_comparison(self, identity, reason="Sequência interrompida; não iniciar a próxima variante."):
+        with self.lock:
+            pair = self.comparisons[identity]
+            if self.active_comparison_id != identity:
+                return dict(pair)
+            pair.update(status="stopping", stop_reason=reason, message=reason)
+            self.save_pair(pair)
+            if self.active_id:
+                self.stop(self.active_id, reason)
+            return dict(pair)
+
+    def resources_worker(self, identity, stopped):
+        while not stopped.is_set():
+            try:
+                with self.lock:
+                    job = dict(self.jobs[identity])
+                folder = self.folder(job)
+                if folder and (folder / "amostras.jsonl.gz").exists():
+                    snapshot = resource_snapshot()
+                    if not stopped.is_set():
+                        with self.lock:
+                            records = self.resource_records.setdefault(identity, [])
+                            records.append(snapshot)
+                            path = self.root.parent / "resources" / (identity + ".json")
+                            temporary = path.with_suffix(".tmp")
+                            temporary.write_text(json.dumps(records[-40:], ensure_ascii=False), encoding="utf-8")
+                            temporary.replace(path)
+            except (OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
+                self.resource_errors[identity] = f"Amostra indisponível: {type(error).__name__}"
+            stopped.wait(3)
 
     def folder(self, job):
         if not job.get("session"):
@@ -193,6 +262,8 @@ class Manager:
         job = self.jobs[identity]
         process = None
         timer = None
+        resources_stopped = threading.Event()
+        resources_thread = None
         try:
             with self.lock:
                 if job["status"] == "stopping":
@@ -208,6 +279,9 @@ class Manager:
             timer = threading.Timer(150, lambda: self.stop(identity, "Tempo limite do executor excedido."))
             timer.daemon = True
             timer.start()
+            if self.collect_resources:
+                resources_thread = threading.Thread(target=self.resources_worker, args=(identity, resources_stopped), daemon=True)
+                resources_thread.start()
             with (self.root / (identity + ".log")).open("wb") as output:
                 total = 0
                 for raw in iter(process.stdout.readline, b""):
@@ -239,6 +313,12 @@ class Manager:
                             or manifest.get("variant") != summary["variant"]):
                         raise ValueError("Identidade do resumo não corresponde ao teste.")
                     job["summary"] = summary
+                    job["comparison_evidence_ready"] = (
+                        summary.get("kind") == "presentation_demo_not_definitive"
+                        and all(finite(summary.get(key)) for key in ("sent", "errors", "dropped_iterations"))
+                        and summary.get("sent", 0) > 0
+                        and all(finite(summary.get("http_duration_ms", {}).get(key))
+                                for key in ("avg", "med", "p(95)", "p(99)", "max")))
                     verify_k6(summary)
                     if code != 0 or job["k6_exit"] != 0:
                         raise ValueError("O executor/k6 terminou com falha; confira o console.")
@@ -253,6 +333,9 @@ class Manager:
             if job["status"] != "stopping":
                 job.update(status="failed", message=f"Falha do executor: {type(error).__name__}: {error}")
         finally:
+            resources_stopped.set()
+            if resources_thread:
+                resources_thread.join(timeout=10)
             if timer:
                 timer.cancel()
             if process and process.poll() is None:
@@ -277,6 +360,10 @@ class Manager:
             if self.active_id != identity or job["status"] not in ACTIVE:
                 return dict(job)
             job.update(status="stopping", stop_reason=reason, message="Interrompendo somente este teste…")
+            if job.get("comparison_id"):
+                pair = self.comparisons[job["comparison_id"]]
+                pair.update(status="stopping", stop_reason=reason, message=reason)
+                self.save_pair(pair)
             self.save(job)
             process = self.process
             if process and process.poll() is None:
@@ -300,7 +387,7 @@ class Manager:
 
     def readiness(self):
         with self.lock:
-            if self.active_id or self.checking:
+            if self.active_id or self.active_comparison_id or self.checking:
                 raise BusyError("Verificação indisponível durante outro teste/verificação.")
             self.checking = True
         try:
@@ -330,20 +417,43 @@ class Manager:
             job["evidence"] = str(folder.relative_to(self.app))
         else:
             job["metrics"] = samples(Path("/nonexistent"))
-        if job.get("summary"):
-            summary = job["summary"]
-            job["metrics"].update(sent=summary.get("sent"), errors=summary.get("errors"),
-                                  dropped_iterations=summary.get("dropped_iterations"),
-                                  http_p95_ms=summary.get("http_duration_ms", {}).get("p(95)"),
-                                  provisional=False)
+        native = None
+        if folder and job.get("summary"):
+            try:
+                native = read_json(folder / "k6-summary.json")
+            except (OSError, ValueError):
+                pass
+        job["metrics"] = enrich(job["metrics"], job.get("summary"), native, job["parameters"]["seconds"])
+        if identity not in self.resource_records:
+            try:
+                loaded_resources = read_json(self.root.parent / "resources" / (identity + ".json"))
+            except (OSError, ValueError):
+                loaded_resources = []
+            with self.lock:
+                self.resource_records.setdefault(identity, loaded_resources)
+        with self.lock:
+            records = list(self.resource_records.get(identity, []))
+        job["resources"] = {"rows": resource_summary(records), "snapshots": len(records),
+                            "message": self.resource_errors.get(identity),
+                            "scope": "Amostras Docker enquanto o k6 está ativo, incluindo prontidão/drenagem. Não são resultados da campanha nem custo financeiro."}
         job["console"] = tail(self.root / (identity + ".log"))
         return job
+
+    def comparison_detail(self, identity):
+        with self.lock:
+            pair = dict(self.comparisons[identity])
+            jobs = dict(pair["jobs"])
+        pair["results"] = {variant: self.detail(job_id) if job_id in self.jobs else None
+                           for variant, job_id in jobs.items()}
+        return pair
 
     def snapshot(self):
         with self.lock:
             jobs = sorted(self.jobs.values(), key=lambda value: value["started_at"], reverse=True)[:100]
-            return {"active_id": self.active_id, "checking": self.checking, "check": self.check,
-                    "jobs": [dict(job) for job in jobs]}
+            comparisons = sorted(self.comparisons.values(), key=lambda value: value["started_at"], reverse=True)[:100]
+            return {"active_id": self.active_id, "active_comparison_id": self.active_comparison_id,
+                    "checking": self.checking, "check": self.check,
+                    "comparisons": [dict(pair) for pair in comparisons], "jobs": [dict(job) for job in jobs]}
 
 
 class Server(ThreadingHTTPServer):
@@ -395,6 +505,7 @@ class Handler(BaseHTTPRequestHandler):
         try:
             route = self.route()
             assets = {"/": ("index.html", "text/html"), "/panel.css": ("panel.css", "text/css"),
+                      "/dashboard.css": ("dashboard.css", "text/css"),
                       "/panel.js": ("panel.js", "text/javascript")}
             if route in assets:
                 name, mime = assets[route]
@@ -404,6 +515,9 @@ class Handler(BaseHTTPRequestHandler):
             match = re.fullmatch("/api/jobs/(" + UUID_PATTERN + ")", route)
             if match:
                 return self.respond(200, self.server.manager.detail(match[1]))
+            match = re.fullmatch("/api/comparisons/(" + UUID_PATTERN + ")", route)
+            if match:
+                return self.respond(200, self.server.manager.comparison_detail(match[1]))
             return self.respond(404, {"error": "Rota não encontrada."})
         except KeyError:
             return self.respond(404, {"error": "Teste não encontrado."})
@@ -429,6 +543,8 @@ class Handler(BaseHTTPRequestHandler):
             route = self.route()
             if route == "/api/run":
                 return self.respond(202, self.server.manager.run(value))
+            if route == "/api/compare":
+                return self.respond(202, self.server.manager.compare(value))
             if value != {}:
                 raise ValueError("Esta operação exige JSON vazio {}.")
             if route == "/api/check":
@@ -436,6 +552,9 @@ class Handler(BaseHTTPRequestHandler):
             match = re.fullmatch("/api/jobs/(" + UUID_PATTERN + ")/stop", route)
             if match:
                 return self.respond(200, self.server.manager.stop(match[1]))
+            match = re.fullmatch("/api/comparisons/(" + UUID_PATTERN + ")/stop", route)
+            if match:
+                return self.respond(200, self.server.manager.stop_comparison(match[1]))
             return self.respond(404, {"error": "Rota não encontrada."})
         except BusyError as error:
             return self.respond(409, {"error": str(error)})
@@ -470,10 +589,13 @@ def main():
         try:
             server.serve_forever()
         except KeyboardInterrupt:
-            if manager.active_id:
+            if manager.active_comparison_id:
+                manager.stop_comparison(manager.active_comparison_id, "Painel encerrado; sequência interrompida.")
+            elif manager.active_id:
                 manager.stop(manager.active_id, "Painel encerrado; teste interrompido, não aprovado.")
+            if manager.active_id or manager.active_comparison_id:
                 deadline = time.monotonic() + 15
-                while manager.active_id and time.monotonic() < deadline:
+                while (manager.active_id or manager.active_comparison_id) and time.monotonic() < deadline:
                     time.sleep(.1)
         finally:
             server.server_close()

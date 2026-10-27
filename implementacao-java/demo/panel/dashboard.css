@@ -1,0 +1,67 @@
+main { max-width: 1440px; }
+.dashboard-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.dashboard-nav a { padding: 9px 12px; border: 1px solid #dce3ee; border-radius: 6px; background: white; font-size: 11px; color: #415b83; }
+.dashboard-nav a:hover { background: #eaf0ff; text-decoration: none; }
+.card, .workspace { scroll-margin-top: 18px; }
+.intro { padding: 30px 0 24px; }
+h1 { font-size: 37px; }
+.intro-note .note-number { font-size: 38px; letter-spacing: -2px; }
+.workspace { grid-template-columns: 300px minmax(0, 1fr); align-items: start; }
+.controls { position: sticky; top: 18px; }
+.compare-button { background: #172c54; border-color: #172c54; color: #fff; }
+.pair-path { font-size: 10px; color: #64748b; line-height: 1.8; padding: 8px 0 15px; border-bottom: 1px solid #e2e7ee; margin-bottom: 20px; }
+.metrics strong { font-size: 25px; }
+.extra-metrics { border-top: 0; padding-top: 0; }
+.extra-metrics strong { font-size: 21px; }
+.monitor-title { margin-top: 22px; }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; border-top: 1px solid #e2e7ee; padding: 20px 0; }
+.detail-grid h4 { margin: 0 0 12px; font-size: 12px; }
+.data-list { margin: 0; font-size: 11px; }
+.data-list div { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid #f0f3f7; }
+.data-list dt { color: #64748b; }
+.data-list dd { margin: 0; font-variant-numeric: tabular-nums; text-align: right; }
+.sub-details { border-top: 1px solid #e2e7ee; padding: 14px 0; font-size: 11px; }
+.sub-details summary { cursor: pointer; font-weight: 600; }
+.sub-details .data-list { padding-top: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; font-size: 11px; color: #64748b; }
+.chip { padding: 7px 10px; border: 1px solid #dbe5f4; border-radius: 5px; background: #f5f8ff; color: #38537f; }
+.comparison, .resources { margin-top: 22px; }
+.comparison[hidden] { display: none; }
+.comparison { border-top: 3px solid #224fd4; }
+.pair-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px 0 20px; font-size: 12px; }
+.pair-steps span { background: #f4f7fc; border: 1px solid #e3e9f2; padding: 14px; border-radius: 7px; }
+.comparison-table th { font-size: 12px; color: #244272; }
+.comparison-table th small { display: block; font-size: 10px; color: #64748b; margin-top: 5px; font-weight: 400; }
+.comparison-table th:nth-child(2), .comparison-table td:nth-child(2) { background: #f3f6ff; }
+.comparison-table th:nth-child(3), .comparison-table td:nth-child(3) { background: #f0faf8; }
+.comparison-table td { font-variant-numeric: tabular-nums; }
+.comparison-table tr.group td { background: #eaf0f8; color: #516885; font-size: 10px; font-weight: 700; letter-spacing: .04em; padding: 10px 12px; }
+.comparison-warning { margin-top: 14px; background: #fff7e8; color: #806138; border: 1px solid #f0e3c5; padding: 13px 16px; font-size: 11px; line-height: 1.7; border-radius: 7px; }
+.key { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin: 0 5px 0 12px; }
+.key.sync { background: #224fd4; }.key.async { background: #12877c; }
+.resources thead small { display: block; font-weight: 400; margin-top: 4px; }
+.resources td { font-size: 11px; }
+.muted code { font-size: 10px; }
+@media (max-width: 1050px) { .workspace { grid-template-columns: 260px minmax(0,1fr); } }
+@media (max-width: 700px) {
+  .workspace { grid-template-columns: 1fr; }
+  .controls { position: static; }
+  .intro { padding: 22px 0; }
+  h1 { font-size: 29px; }
+  .lead { font-size: 13px; }
+  .pair-path { grid-column: 1 / -1; }
+  .metrics { gap: 18px 12px; }
+  .metrics strong { font-size: 24px; }
+  .extra-metrics strong { font-size: 21px; }
+  .detail-grid { grid-template-columns: 1fr; gap: 20px; }
+  .pair-steps { grid-template-columns: 1fr; gap: 8px; }
+  .comparison, .resources { padding: 18px; }
+  .comparison-table th, .comparison-table td { padding: 12px 10px; font-size: 11px; }
+  .comparison-table { table-layout: fixed; }
+  .comparison-table th, .comparison-table td { white-space: normal; overflow-wrap: anywhere; padding: 10px 6px; font-size: 10px; }
+  .comparison-table th:first-child { width: 32%; }
+  .comparison-table th small { font-size: 9px; }
+  .resources th, .resources td { white-space: normal; overflow-wrap: anywhere; padding: 10px 6px; font-size: 10px; }
+  .resources table { table-layout: fixed; }
+  .resources th:first-child { width: 20%; }
+}

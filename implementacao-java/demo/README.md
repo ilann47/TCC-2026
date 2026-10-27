@@ -17,7 +17,8 @@ wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/i
 2. Mantenha o processo acima aberto e acesse [http://localhost:5666](http://localhost:5666).
 3. Clique em **Verificar serviços**. É uma conferência de leitura; não envia eventos.
 4. Escolha taxa **1–10 eventos/s** e duração **1–30 s**. Padrão: **5/s por 20 s**.
-5. Clique em **Executar síncrono** ou **Executar assíncrono**. Isso envia dados sintéticos.
+5. Clique em **Executar os dois e comparar** para a sequência síncrona → assíncrona,
+   ou em **Somente síncrono/assíncrono** para uma execução individual. Isso envia dados sintéticos.
 6. Observe as amostras disponíveis, erros e iterações não iniciadas. Ao encerrar,
    o resumo final substitui os valores provisórios. Consulte o console e o histórico.
 7. Inicie outro teste quando o anterior terminar. Não é preciso fechar a aba.
@@ -46,7 +47,56 @@ As métricas são **HTTP dos eventos**, excluindo prontidão. O 201 síncrono ve
 após a transação; o 202 assíncrono confirma publicação no Kafka, não commit no
 PostgreSQL. O gráfico mostra média por segundo, o cartão p95 mostra o percentil
 do teste; não são a mesma medida. Sem amostras significa desconhecido, não zero.
-Não há medição de CPU/memória ou de latência até commit neste teste curto.
+Não há medição de latência até commit neste teste curto. A seção de CPU/memória
+contém snapshots Docker da demonstração, explicados abaixo, não resultados científicos.
+
+### Comparar as duas variantes pelo painel
+
+**Executar os dois e comparar** reserva uma sequência com a taxa/duração escolhidas:
+primeiro síncrona, depois assíncrona, com UUIDs diferentes. Não existe carga
+simultânea pelo painel nem um pedido de confirmação entre as etapas. O botão
+**Interromper sequência** encerra seu teste atual e impede que o próximo comece.
+
+A tabela lado a lado mostra resultado, contagens, erros HTTP/contrato, checks,
+iterações não iniciadas, envios por janela, mínimo observado, média/mediana e
+p95/p99/máximo HTTP, VUs e tráfego. A coluna **A − S** é a diferença aritmética
+observada, não uma classificação de superioridade. O gráfico sobrepõe as médias
+por segundo, alinhadas à primeira amostra HTTP de cada execução. O painel guarda
+a sequência e seus dois testes para consulta posterior, sem nova carga.
+
+Caso haja reprovação de threshold com resumo íntegro (k6 99), o resultado
+desfavorável fica preservado, a outra variante é executada uma vez e a sequência
+fica reprovada. Bloqueio operacional, ausência de resumo íntegro ou identidade
+inválida impede a próxima etapa. Não existe repetição automática para conseguir
+aprovação. Reiniciar o painel também não retoma sequências.
+
+Os novos dados têm escopos distintos:
+
+| Dados | Fonte e cuidado |
+| --- | --- |
+| HTTP dos eventos | `resumo.json` final e amostras `phase=demo`. Prontidão excluída. Status 0 significa sem resposta, não HTTP 0 real. |
+| Envios por janela | `sent / duração programada`. Não é vazão de persistência; a borda da janela pode produzir 101 envios em vez de 100 no padrão. |
+| Tempos de bloqueio/conexão/envio/espera/recepção | Médias das amostras HTTP; etapas podem se sobrepor. Não devem ser somadas como tempo de commit. |
+| Checks e falha HTTP | Check inclui UUID/corpo/status; uma resposta HTTP 2xx com corpo incorreto pode falhar no contrato sem ser falha HTTP nativa do k6. |
+| Tráfego e VUs | Resumo total do gerador k6, incluindo prontidão. VUs reservados não são concorrência fixa; o pico amostrado pode perder atividade breve. |
+| CPU/memória | `docker stats --no-stream` dos cinco serviços verificados, enquanto o k6 está ativo, inclusive prontidão/drenagem. Média simples/máximo das amostras e n observados; sem interpolação ou integral de CPU/energia. |
+
+Amostras de recursos são consultadas com intervalo mínimo de 3 s após cada
+leitura e podem acrescentar carga de observação. Todos os serviços ficam visíveis,
+inclusive os ociosos na variante síncrona. O painel não calcula custo financeiro,
+não infere eficiência a partir de processo ocioso e não usa a CPU do gerador como
+se fosse CPU da aplicação. Falha na coleta de recursos aparece separadamente;
+não transforma o veredito HTTP. Testes antigos continuam sem amostras, não com zero.
+
+É **uma execução por variante**, com ordem fixa e dados sintéticos diferentes,
+não os datasets pareados da campanha. Cache, aquecimento e outros processos
+podem influenciar. Não alegue significância, equivalência ou vencedor geral.
+Lembre: 201 vem após persistir; 202 confirma Kafka, não persistência final.
+
+Metadados de pares: `.runtime/demonstracao/painel/comparisons/`; amostras de
+recursos: `.runtime/demonstracao/painel/resources/`. Brutos k6, campanha e
+instrumentos congelados permanecem intactos. Não reexecuta testes antigos para
+preencher os novos indicadores.
 
 Segurança: servidor somente em `127.0.0.1`, destinos fixos, sem shell interpolado,
 token CSRF/origem local, corpos limitados, lock e apenas uma execução por vez.

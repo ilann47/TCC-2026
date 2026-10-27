@@ -5,14 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Demonstração TCC · testes com k6</title>
   <link rel="stylesheet" href="/panel.css">
+  <link rel="stylesheet" href="/dashboard.css">
   <script src="/panel.js" defer></script>
 </head>
 <body>
   <main>
     <header class="topbar"><a class="brand" href="/" aria-label="Início">TCC<span> / laboratório local</span></a><span class="local"><i></i>Somente nesta máquina</span></header>
-    <section class="intro"><div><p class="eyebrow">JAVA · REST · KAFKA · POSTGRESQL</p><h1>Execute. Observe.<br>Compare os caminhos.</h1><p class="lead">Controle os testes curtos com k6 pelo navegador.<br>O painel permanece disponível entre as execuções.</p></div><div class="intro-note"><span class="note-number">02</span><p>variantes, um contrato comum</p><a href="http://localhost:18002/swagger-ui/index.html" target="_blank" rel="noreferrer">Abrir Swagger ↗</a></div></section>
+    <section class="intro"><div><p class="eyebrow">LABORATÓRIO DE DESEMPENHO · JAVA / REST / KAFKA</p><h1>Dois caminhos.<br>Resultados, lado a lado.</h1><p class="lead">Execute uma sequência com k6 e explore os dados reais de cada variante.</p></div><div class="intro-note"><span class="note-number">S / A</span><p>HTTP · carga · recursos</p><a href="http://localhost:18002/swagger-ui/index.html" target="_blank" rel="noreferrer">Abrir Swagger ↗</a></div></section>
     <div class="notice"><span>DEMONSTRAÇÃO</span> Envia dados sintéticos ao ambiente local. Não inicia nem altera a campanha científica de 65 tentativas.</div>
-    <section class="workspace">
+    <nav class="dashboard-nav" aria-label="Seções do painel"><a href="#new-test">Novo teste</a><a href="#monitor">Métricas HTTP</a><a href="#comparison">Comparação</a><a href="#resources">CPU / memória</a><a href="#sequences">Sequências salvas</a></nav>
+    <section class="workspace" id="new-test">
       <aside class="card controls"><div class="section-heading"><h2>Novo teste</h2><span>01</span></div>
         <p class="muted">Escolha a carga e depois a variante.</p>
         <form id="test-form">
@@ -21,16 +23,18 @@
           <label for="seconds">Duração <small>janela de geração</small></label>
           <div class="input-unit"><input id="seconds" name="seconds" type="number" min="1" max="30" step="1" value="20" required><span>segundos</span></div>
           <p class="estimate" id="estimate">≈ 100 eventos programados</p>
-          <button class="run primary" id="run-sync" type="button"><span>Executar síncrono</span><span>→</span></button>
+          <button class="run compare-button" id="run-both" type="button"><span>Executar os dois e comparar</span><span>⇄</span></button>
+          <p class="pair-path">1. Síncrono → 2. Assíncrono<br>Mesma taxa e duração · execuções separadas</p>
+          <button class="run secondary" id="run-sync" type="button"><span>Somente síncrono</span><span>→</span></button>
           <p class="path">REST → PostgreSQL → <strong>201</strong></p>
-          <button class="run secondary" id="run-async" type="button"><span>Executar assíncrono</span><span>→</span></button>
+          <button class="run secondary" id="run-async" type="button"><span>Somente assíncrono</span><span>→</span></button>
           <p class="path">REST → Kafka → <strong>202</strong> · consumidor grava depois</p>
         </form>
         <div class="service-check"><button class="text-button" id="check" type="button">Verificar serviços</button><p class="muted" id="check-result">Serviços e imagem k6 precisam estar preparados no WSL.</p></div>
         <p class="limits">Máximo: 10 eventos/s · 30 s · um teste por vez.<br>Nenhum serviço é reiniciado por este painel.</p>
       </aside>
-      <section class="card monitor"><div class="section-heading"><h2>Acompanhamento</h2><span class="status" id="status">Aguardando</span></div>
-        <div class="monitor-title"><div><p class="eyebrow" id="run-label">NENHUM TESTE SELECIONADO</p><h3 id="run-title">Seu próximo teste começa aqui.</h3></div><button id="stop" class="stop" type="button" hidden>Interromper teste</button></div>
+      <section class="card monitor" id="monitor"><div class="section-heading"><h2>Acompanhamento</h2><span class="status" id="status">Aguardando</span></div>
+        <div class="monitor-title"><div><p class="eyebrow" id="run-label">NENHUM TESTE SELECIONADO</p><h3 id="run-title">Seu próximo teste começa aqui.</h3></div><button id="stop" class="stop" type="button" hidden>Interromper teste atual</button></div>
         <p class="message" id="message" role="status">Escolha uma variante à esquerda. Nenhuma carga está em execução.</p>
         <div class="progress"><div id="progress"></div></div><p id="progress-label" class="muted">O teste termina sozinho; fechar a aba não o cancela.</p>
         <div class="metrics">
@@ -39,11 +43,31 @@
           <div><span>Não iniciadas</span><strong id="drops">—</strong><small>dropped iterations</small></div>
           <div><span>HTTP p95</span><strong id="p95">—</strong><small id="metric-note">aguardando amostras</small></div>
         </div>
+        <div class="metrics extra-metrics">
+          <div><span>Envios / janela</span><strong id="send-rate">—</strong><small>tentativas ÷ duração programada</small></div>
+          <div><span>HTTP médio</span><strong id="lat-avg">—</strong><small>eventos, sem prontidão</small></div>
+          <div><span>HTTP mediana</span><strong id="lat-med">—</strong><small>percentil 50</small></div>
+          <div><span>HTTP p99</span><strong id="lat-p99">—</strong><small>cauda da distribuição</small></div>
+        </div>
         <div class="chart-heading"><h4>Tempo de resposta HTTP</h4><span>Média por segundo · ms</span></div>
         <div class="chart-wrap"><svg id="chart" viewBox="0 0 720 150" role="img" aria-label="Média de tempo HTTP por segundo"></svg><p id="chart-empty">Os pontos aparecem quando o k6 disponibiliza as amostras.</p></div>
-        <p class="interpretation"><strong>O que este tempo significa?</strong> Na síncrona, o 201 vem após persistir. Na assíncrona, o 202 confirma a publicação no Kafka — não a gravação no PostgreSQL. Este teste não mede envio até commit nem CPU/memória.</p>
+        <div class="detail-grid"><div><h4>Códigos HTTP dos eventos</h4><div id="http-statuses" class="chips">Aguardando amostras</div><p class="muted" id="coverage">Cobertura das amostras ainda desconhecida.</p></div><div><h4>Qualidade e gerador</h4><dl id="generator-data" class="data-list"></dl></div></div>
+        <details class="sub-details"><summary>Tempos HTTP e etapas da requisição</summary><dl id="timing-data" class="data-list"></dl><p class="muted">Bloqueio/conexão podem se sobrepor; não some essas etapas. Não representam tempo até commit.</p></details>
+        <p class="interpretation"><strong>Compare o que foi medido.</strong> 201 síncrono: após persistir. 202 assíncrono: publicação confirmada no Kafka, antes da gravação pelo consumidor. HTTP menor não prova conclusão mais rápida. CPU/memória são amostras Docker da demonstração, não resultados da campanha.</p>
       </section>
     </section>
+    <section class="card comparison" id="comparison" hidden>
+      <div class="section-heading"><h2>Comparação síncrono × assíncrono</h2><span class="status" id="pair-status">Aguardando</span></div>
+      <p id="pair-label" class="eyebrow"></p><p id="pair-message" class="muted" role="status"></p>
+      <div class="pair-steps"><span id="sync-step">1 · Síncrono: não iniciado</span><span id="async-step">2 · Assíncrono: não iniciado</span></div>
+      <div class="table-wrap"><table class="comparison-table"><thead><tr><th>Métrica</th><th>Síncrona <small>201 após PostgreSQL</small></th><th>Assíncrona <small>202 após Kafka</small></th><th>A − S <small>diferença observada</small></th></tr></thead><tbody id="comparison-body"></tbody></table></div>
+      <div class="chart-heading"><h4>HTTP nas duas execuções</h4><span><i class="key sync"></i>Síncrona <i class="key async"></i>Assíncrona</span></div>
+      <div class="chart-wrap"><svg id="comparison-chart" viewBox="0 0 720 170" role="img" aria-label="Tempo HTTP médio por segundo, nas duas execuções"></svg></div>
+      <p class="muted">Eixo horizontal: segundos desde a primeira amostra HTTP de cada execução. As cargas são sequenciais, não simultâneas.</p>
+      <div class="comparison-warning">Uma execução por variante: comparação descritiva, sem significância estatística, equivalência ou “vencedor geral”. Ordem fixa, aquecimento, cache e carga compartilhada podem influenciar. Não usa os datasets pareados da campanha.</div>
+    </section>
+    <section class="card resources" id="resources"><div class="section-heading"><h2>Recursos dos serviços</h2><span id="resource-scope">Amostras Docker</span></div><p class="muted">Média e máximo das amostras, não medição contínua. Coleta enquanto o k6 está ativo, incluindo sua prontidão e drenagem. Todos os cinco serviços ficam visíveis; não some componentes ociosos como evidência de eficiência.</p><div class="table-wrap"><table><thead id="resource-head"></thead><tbody id="resource-body"></tbody></table></div><p class="muted" id="resource-note">Testes anteriores a esta versão não possuem essas amostras. Não serão reexecutados para preenchê-las.</p></section>
+    <section class="card history" id="sequences"><div class="section-heading"><h2>Sequências salvas</h2><span id="pair-count">0 testes em sequência</span></div><div class="table-wrap"><table><thead><tr><th>Início</th><th>Carga por variante</th><th>Resultado</th><th>Detalhes</th></tr></thead><tbody id="pair-history"></tbody></table></div><p id="pair-empty" class="empty">Use “Executar os dois e comparar” para criar uma sequência.</p></section>
     <section class="card history"><div class="section-heading"><h2>Histórico deste painel</h2><span id="history-count">0 testes</span></div><p class="muted">Selecione uma execução para consultar métricas e console. Falhas e interrupções também ficam preservadas.</p><div class="table-wrap"><table><thead><tr><th>Início</th><th>Variante</th><th>Carga</th><th>Resultado</th><th>Detalhes</th></tr></thead><tbody id="history-body"></tbody></table></div><p id="history-empty" class="empty">Nenhuma execução iniciada por este painel ainda.</p></section>
     <details class="card console"><summary>Console e evidências do teste selecionado</summary><p id="evidence" class="muted">As evidências serão salvas em .runtime/demonstracao/.</p><pre id="console">Aguardando execução…</pre></details>
     <p id="error" class="error" role="alert" hidden></p>
