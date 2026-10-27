@@ -39,6 +39,13 @@ jobs:
           node experimento/verify-frozen.mjs
           plan_folder=$(awk -F '"' '$2 == "report" {print $4}' experimento/FROZEN-PROTOCOL.json)
           bash experimento/campaign.sh --check "$plan_folder/plan.csv"
+      - name: Verificações do menu de apresentação
+        working-directory: implementacao-java
+        run: |
+          bash -n demo/apresentacao.sh
+          bash demo/tests/test_menu.sh
+          python3 -m unittest discover -s demo/tests -v
+          node --input-type=module --check < demo/load.js
 
   integration-smoke:
     runs-on: ubuntu-latest
@@ -144,6 +151,9 @@ jobs:
           else: raise AssertionError('PostgreSQL recovery was not observed by synchronous API')
           print('PostgreSQL recovery smoke passed')
           PY
+      - name: Demonstração curta do menu com serviços reais
+        working-directory: implementacao-java
+        run: bash demo/apresentacao.sh --smoke
       - name: Diagnóstico em falha
         if: failure()
         working-directory: implementacao-java

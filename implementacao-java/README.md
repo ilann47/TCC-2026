@@ -97,6 +97,12 @@ O consumidor é **at-least-once**. Reentrega pode ocorrer após falha de commit 
 
 As variáveis principais são `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, `KAFKA_BOOTSTRAP_SERVERS`, `KAFKA_TOPIC`, `KAFKA_DLQ_TOPIC`, `KAFKA_GROUP_ID`, `DELIVERY_TIMEOUT_MS`, `RETRY_ATTEMPTS`, `RETRY_BACKOFF_MS`, `RETRY_BACKOFF_MAX_MS` e `RECONNECT_MS`. O header opcional `X-Run-ID` deve ser UUID; ele identifica uma execução experimental e não participa do hash. Logs JSON emitem `request_received`, `broker_acknowledged`, `commit_completed`, `persistence_confirmed`, `dlq_acknowledged` e `offset_committed`, sem registrar payload ou credenciais.
 
+## Demonstração com menu para a apresentação
+
+No WSL/Linux, dentro desta pasta, execute `bash demo/apresentacao.sh`. O menu inicia/confere os serviços, envia eventos nas duas variantes, guarda o UUID, consulta a persistência, pausa/retoma o consumidor, mostra lag Kafka, roda k6 por 20 segundos e exibe falas sugeridas. Leia o [passo a passo da demonstração](demo/README.md) antes da banca.
+
+O menu não recompila imagens, não apaga dados e não inicia a campanha definitiva. As cargas são pequenas e demonstrativas; os arquivos ficam em `.runtime/demonstracao/`, separados dos experimentos. Se houver ensaio isolado ativo, as ações de demonstração são recusadas. Para uma conferência somente de leitura: `bash demo/apresentacao.sh --check`.
+
 ## Medição e campanha experimental
 
 Os [instrumentos com k6 e analisador Java](experimento/README.md) medem resposta HTTP e persistência separadamente, conciliam conteúdo/hash e acompanham throughput, pendências, lag Kafka, CPU/memória do sistema e dos coletores e recuperação sustentada. A [calibração de 26/10/2026](experimento/calibracao/2026-10-26-529e0349/README.md) confirmou **48 eventos/s** em cinco minutos por variante; os dois ensaios salvaram todos os 14.401 registros medidos, sem erros ou drops. Não são repetições definitivas nem conclusões para os capítulos 5 e 6.
