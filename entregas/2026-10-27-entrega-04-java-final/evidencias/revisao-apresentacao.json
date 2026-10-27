@@ -1,0 +1,21 @@
+{
+  "revision_id": "apresentacao-parcial-clara-2026-10-27",
+  "date": "2026-10-27",
+  "scope": "Esclarecimento da evidência temporal incompleta nos slides e nas notas de fala, sem novas medições ou mudanças de resultados.",
+  "base_commit": "526b19e3de074801ed32513d0d7ab68ab01c5bd9",
+  "base_pptx_sha256": "43e8b0ea342d3f550c16465d0020f4a68380e5c296e68abb5e95fc0a1d64e247",
+  "pptx_sha256": "71be8450168428ef77c447068c0b22e21bd51eeaec329194b0a96aefcbe77f33",
+  "slide_count": 10,
+  "changed_slides": [6, 8],
+  "changed_speaker_notes": [1, 6, 8],
+  "other_eight_slide_renders_unchanged": true,
+  "native_table_slides": [4, 5, 6, 7, 8, 9],
+  "results_and_classifications_unchanged": true,
+  "pdf_unchanged_sha256": "56431f7482c5f90eec7a4501dabc70da1a965fceed49e660913b8495e4aed1e5",
+  "source_sha256": {
+    "fontes-apresentacao/build.mjs": "bbeff99509e8a9b896e56dcdf5cce96a462f66de3a2286fa943c394d2b444f00",
+    "fontes-apresentacao/explicacao-parcial.mjs": "e4b8e6e64ed565fcf34b94137526ccf525f774d9c6aa114c132cd6fe033a03d5",
+    "fontes-apresentacao/revisar_parcial.mjs": "377f69cd4233c92d77682e6071360d7c0a648a998d47e0d6afe4a6f458598023"
+  },
+  "native_powerpoint_application_tested": false
+}

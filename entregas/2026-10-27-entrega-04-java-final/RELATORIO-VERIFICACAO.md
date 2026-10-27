@@ -19,6 +19,8 @@
 - Resultados adversos presentes: 14 DLQ e indicador sustentado atingido em 1/5 dos casos assíncronos de banco parado, com explicação da influência da DLQ no construto.
 - Validação estrutural passou, reimportação pelo runtime passou, dimensões/fontes/títulos/tabelas passaram. Relatório final de geometria com zero achados e zero avisos. Os relatórios internos e rascunhos ficam fora da entrega pública.
 - Renderização e inspeção visual individual dos dez slides. Corrigida sobreposição entre tabela e nota no slide 6 antes de publicar o arquivo final.
+- Revisão posterior da explicação da parcial: edição pontual dos slides 6 e 8 e notas 1, 6 e 8. Mantidos os dez slides, seis tabelas editáveis, dimensões, fontes, dados e PDF. As dez páginas foram renderizadas novamente. Comparação dos pixels confirmou renderização idêntica nos outros oito slides, e os dois alterados foram inspecionados lado a lado com os anteriores.
+- O roteiro de fala corresponde às dez notas incorporadas. A explicação distingue a parada planejada do banco da ausência imprevista de um horário de commit, preserva HTTP 503 como erro e informa quatro pares completos, sem estimar o instante ausente. O hash atual e as fontes estão em `evidencias/revisao-apresentacao.json`.
 
 ## Limites da verificação
 

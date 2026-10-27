@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
@@ -36,24 +37,49 @@ def verify():
         require(sha(REPO / name) == digest, 'abstract source differs from reviewed revision')
     require(sha(ROOT / 'evidencias/catalogo-campanha.json') == scientific['catalog_sha256'] == sha(REPORT / 'resultados-a1/catalog.json'), 'catalog copy differs')
     require(sha(ROOT / 'evidencias/validacao-cientifica.json') == sha(REPORT / 'VALIDACAO-FINAL.json'), 'scientific validation copy differs')
-    require(sha(ROOT / 'Apresentacao-Entrega04-final.pptx') == '43e8b0ea342d3f550c16465d0020f4a68380e5c296e68abb5e95fc0a1d64e247', 'PPTX differs from visually reviewed version')
+    deck_revision = json.loads((ROOT / 'evidencias/revisao-apresentacao.json').read_text(encoding='utf-8'))
+    require(deck_revision['base_pptx_sha256'] == '43e8b0ea342d3f550c16465d0020f4a68380e5c296e68abb5e95fc0a1d64e247',
+            'presentation revision lost original provenance')
+    require(sha(ROOT / 'Apresentacao-Entrega04-final.pptx') == deck_revision['pptx_sha256'], 'PPTX differs from visually reviewed revision')
+    require(deck_revision['pdf_unchanged_sha256'] == revision['pdf_sha256'], 'presentation revision changed PDF provenance')
+    require(deck_revision['changed_slides'] == [6, 8] and deck_revision['changed_speaker_notes'] == [1, 6, 8]
+            and deck_revision['slide_count'] == 10 and deck_revision['native_table_slides'] == [4, 5, 6, 7, 8, 9],
+            'unexpected presentation revision scope')
+    require(deck_revision['results_and_classifications_unchanged'] and deck_revision['other_eight_slide_renders_unchanged'],
+            'presentation revision must preserve results and unrelated slide renders')
+    require(set(deck_revision['source_sha256']) == {'fontes-apresentacao/build.mjs', 'fontes-apresentacao/explicacao-parcial.mjs',
+                                                   'fontes-apresentacao/revisar_parcial.mjs'}, 'unexpected presentation revision sources')
+    for name, digest in deck_revision['source_sha256'].items():
+        require(sha(ROOT / name) == digest, 'presentation source differs from reviewed revision')
     with ZipFile(ROOT / 'Apresentacao-Entrega04-final.pptx') as archive:
         require(archive.testzip() is None, 'invalid PPTX archive')
         owners = []
         texts = []
+        speaker_notes = []
         for number in range(1, 11):
             xml = ET.fromstring(archive.read(f'ppt/slides/slide{number}.xml'))
             if xml.findall('.//a:tbl', NS): owners.append(number)
             texts.append(' '.join(node.text or '' for node in xml.findall('.//a:t', NS)))
             note = ET.fromstring(archive.read(f'ppt/notesSlides/notesSlide{number}.xml'))
-            require(len(' '.join(node.text or '' for node in note.findall('.//a:t', NS))) > 100, 'speaker notes absent')
+            speaker_notes.append(' '.join(node.text or '' for node in note.findall('.//a:t', NS)))
+            require(len(speaker_notes[-1]) > 100, 'speaker notes absent')
         require(owners == [4, 5, 6, 7, 8, 9], 'editable table owners changed')
         size = ET.fromstring(archive.read('ppt/presentation.xml')).find('p:sldSz', NS)
         require(size.attrib['cx'] == '12192000' and size.attrib['cy'] == '6858000', 'slide size changed')
         require('4,34' in texts[3] and '2,60' in texts[3] and '3,92' in texts[3] and '5,83' in texts[3], 'latency table differs')
         require('8.352' in texts[5] and '10.790' in texts[5] and '14' in texts[5] and '2.452' in texts[5], 'destination table differs')
-        require('4 pares' in texts[7] and '1 de 1.667' in texts[7], 'A1 caveat absent')
+        require('Evento no banco apesar de HTTP 503' in texts[7] and 'Horário de um commit ausente' in texts[7]
+                and '4 pares completos' in texts[7] and '1 de 1.667' in texts[7], 'clear partial evidence explanation absent')
+        require('A parada do banco era planejada.' in texts[7] and 'falta do horário de commit foi imprevista' in texts[7],
+                'planned outage and missing timing must remain distinct')
+        require(all(phrase in speaker_notes[7] for phrase in ['limitação não planejada da medição',
+                'O 503 continua contado como erro HTTP.', 'quatro pares completos', 'Não estimamos o horário ausente.']),
+                'partial evidence explanation missing from speaker notes')
         require('1 de 5' in texts[8] and '38,71' in texts[8] and 'DLQ' in texts[8], 'recovery caveat absent')
+        guide = (ROOT / 'ROTEIRO-APRESENTACAO.md').read_text(encoding='utf-8')
+        sections = re.split(r'^## Slide \d+ \(\d+ s\)\n\n', guide, flags=re.MULTILINE)[1:]
+        require(len(sections) == 10 and all(section.strip() == note.strip() for section, note in zip(sections, speaker_notes)),
+                'written guide differs from embedded speaker notes')
     catalog = json.loads((ROOT / 'evidencias/catalogo-campanha.json').read_text(encoding='utf-8'))
     require((catalog['planned_runs'], catalog['complete_original_evidence'], catalog['partial_commit_timing']) == (65, 64, 1), 'campaign classification changed')
     inventory = {}
@@ -66,6 +92,7 @@ def verify():
     require(set(inventory) == actual, 'delivery checksum inventory incomplete')
     return {'delivery_files_hashed': len(inventory), 'slides': 10, 'notes': 10, 'native_table_slides': owners,
             'pdf_identical_to_reviewed_abstract_revision': True,
+            'presentation_partial_explanation_verified': True,
             'original_scientific_validation_preserved': True, 'campaign': {'complete': 64, 'partial': 1},
             'native_powerpoint_application_tested': False}
 

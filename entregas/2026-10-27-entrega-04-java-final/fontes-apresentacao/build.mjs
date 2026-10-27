@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import {pathToFileURL} from 'node:url';
+import {partialExplanation} from './explicacao-parcial.mjs';
 const repo=path.resolve(process.argv[2]??'.');
 const modules=process.env.RUNTIME_NODE_MODULES;
 const skill=process.env.PRESENTATIONS_SKILL_DIR;
@@ -77,7 +78,7 @@ const notes=[];
 function speak(i,value){notes[i]=value;note(i,value);}
 
 shape(0,e=>e.kind==='textbox'&&e.position.top===590).text='Resultados da campanha R2/A1 em 27/10/2026';
-speak(0,'Nesta apresentação eu mostro os resultados finais da comparação entre as duas implementações Java de registros de auditoria. A campanha terminou com todos os 65 identificadores planejados. O resultado científico tem uma ressalva importante: 64 coletas têm evidência completa e uma é parcial, porque falta o horário de um commit. Essa observação foi preservada e recebeu tratamento por métrica após revisão autorizada. O objetivo não é escolher uma tecnologia vencedora de antemão, mas mostrar os compromissos que apareceram nas condições medidas. '+sourceNote);
+speak(0,partialExplanation.openingNotes+sourceNote);
 
 title(1,'Pergunta e modelo comum de auditoria');
 shape(1,e=>e.kind==='textbox'&&e.position.top===470).text='Mesmo contrato, validação, hash e PostgreSQL.\nPiloto funcional: 50 registros equivalentes por variante.';
@@ -99,18 +100,18 @@ speak(4,'Em carga constante de 12 eventos por segundo, a síncrona apresentou me
 
 title(5,'PostgreSQL parado: aceites e destinos finais');
 table(5,[['Totais das cinco tentativas','Síncrona','Assíncrona'],['Enviados',integer(SPG.totals.offered),integer(APG.totals.offered)],['Aceitos com 201 ou 202',integer(SPG.totals.accepted),integer(APG.totals.accepted)],['Persistidos ao fim',integer(SPG.totals.stored_final),integer(APG.totals.stored_final)],['DLQ terminal',integer(SPG.totals.dlq_terminal),integer(APG.totals.dlq_terminal)],['Respostas HTTP 503',integer(SPG.totals.offered-SPG.totals.accepted),'0']],[540,298,298],175,390,25);
-footer(5,'Um 503 síncrono deixou registro no banco, sem marco de commit.\nNa assíncrona, 14 aceites terminaram na DLQ e não no PostgreSQL.',24);
-speak(5,'Durante as interrupções do banco, a síncrona retornou 2.452 erros 503. Seus 8.351 aceites foram persistidos, mas houve uma requisição adicional com erro que também deixou registro no banco. Isso gerou o caso de confirmação incerta que explico a seguir. A assíncrona aceitou os 10.804 envios com 202, porém somente 10.790 chegaram ao banco. Quatorze foram para a DLQ ao esgotar tentativas, em quantidades de três, três, três, três e dois por bloco. Elas ficaram com destino terminal conhecido, sem replay automático. DLQ significa não persistência no banco, não desaparecimento da mensagem. Não houve aceite sem destino conciliado ou UUID duplicado no banco. '+sourceNote+'group-summary.json: postgres-stop, rate=12.');
+footer(5,partialExplanation.postgresFooter,24);
+speak(5,partialExplanation.postgresNotes+sourceNote+'group-summary.json: postgres-stop, rate=12.');
 
 title(6,'Consumidor parado: retenção e recuperação');
 table(6,[['Indicador nas cinco execuções','Resultado'],['Aceitos durante a medição',integer(AC.totals.accepted)],['Persistidos ao fim',integer(AC.totals.stored_final)],['DLQ terminal',integer(AC.totals.dlq_terminal)],['Recuperação sustentada',AC.stable_recovery_observed_n+' de 5 execuções']],[580,556],180,380,26);
 footer(6,'Backlog integral: 12,55 a 24,16 s após comando de retomada.\nP95 de conclusão por execução: 46,95 a 57,80 s.',24);
 speak(6,'A parada do consumidor foi diferente da parada do banco. Com o consumidor parado, o Kafka continuou recebendo os eventos e o banco não era a dependência indisponível. Todos os 10.801 aceites medidos acabaram persistidos e não houve DLQ. Em cada uma das cinco execuções, verificamos aceites ocorridos entre a confirmação da parada e o comando de retomada, com registros no banco e commits observados depois da retomada. O backlog anterior foi integralmente salvo entre 12,55 e 24,16 segundos após o comando. Os p95 de conclusão ficaram entre 46,95 e 57,80 segundos. Essa retenção confirma o comportamento local, mas não demonstra tolerância à perda física do broker ou da máquina. '+sourceNote+'per-run-details.json: consumer_pause.');
 
-title(7,'A1: uma coleta parcial preservada');
-table(7,[['Aspecto','Tratamento','Cobertura'],['Veredito original','Inválido, sem alteração','1 coleta'],['HTTP, destinos e recursos','Elegíveis após auditoria','5 por condição'],['Conclusão primária com banco parado','Exclusão do par do bloco 3','4 pares'],['Horário do commit ausente','Sem preenchimento','1 de 1.667 registros']],[380,470,286],180,365,24);
-footer(7,'A1: revisão após as primeiras 37 tentativas, antes das 28 restantes.\nVazão da parcial limitada a [9,25556; 9,26111] eventos/s.',24);
-speak(7,'A campanha parou na tentativa 37. Um evento síncrono retornou 503 e apareceu corretamente no banco, mas faltava seu marco pós-commit. O resumo bruto continua inválido. Após revisão formal e autorização, adotamos a A1 por métrica. Conservamos HTTP, destinos e recursos auditados, sem inventar o horário do commit. Excluímos a coleta e sua contraparte do bloco três da comparação primária de latência de conclusão, restando quatro pares nessa condição. Para a vazão parcial, apresentamos limites de contagem, não intervalo de confiança. A revisão é pós-hoc nas primeiras 37 e anterior às 28 restantes. Não repetimos UUIDs nem substituímos resultados. O catálogo final registra 64 completas e uma parcial. '+sourceNote+'emenda-a1/README.md e strict-sensitivity.json.');
+title(7,partialExplanation.title);
+table(7,partialExplanation.rows,[380,470,286],180,365,24);
+footer(7,partialExplanation.footer,24);
+speak(7,partialExplanation.notes+sourceNote+'emenda-a1/README.md e strict-sensitivity.json.');
 
 title(8,'Recuperação sustentada e limite do indicador');
 body(8,[]);
