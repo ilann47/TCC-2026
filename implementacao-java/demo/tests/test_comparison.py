@@ -52,6 +52,13 @@ class ComparisonTests(unittest.TestCase):
         report = REPORT.build_report(pair, 'normal')
         self.assertEqual(self.row(report, 'Respostas por código HTTP')['sync'], '201: 3; 503: 2')
 
+    def test_eighty_column_terminal_keeps_metrics_side_by_side(self):
+        report = REPORT.build_report(self.pair(), 'normal')
+        table = REPORT.as_text(report, width=80)
+        self.assertTrue(all(len(line) < 80 for line in table.splitlines()))
+        self.assertIn('Síncrona', table);self.assertIn('Assíncrona', table)
+        self.assertTrue(any(line.count(' | ') == 2 for line in table.splitlines()))
+
     def test_different_business_components_and_missing_resource(self):
         pair = self.pair();report = REPORT.build_report(pair, 'normal')
         row = self.row(report, 'CPU média — soma dos serviços do fluxo')

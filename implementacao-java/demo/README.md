@@ -166,7 +166,7 @@ Limites do menu: 1..10 eventos/s e 1..30 s. Fontes técnicas: [k6 e resumos cust
 
 ## 8. Comparação lado a lado — opções 13 e 14
 
-**Para mostrar as métricas na banca:** execute **13 → 1** antes da apresentação. Depois, use **14** para consultar a tabela já pronta e abra `relatorio.html` no navegador pelo caminho exibido. O HTML funciona offline, tem colunas síncrona/assíncrona e permite imprimir/salvar PDF. A opção 14 não repete os testes. Use zoom ou tela cheia do navegador ao projetar.
+**Para mostrar as métricas na banca:** execute **13 → 1** antes da apresentação. Depois, use **14** para consultar a tabela já pronta e abra `relatorio.html` no navegador pelo caminho exibido. A tabela do terminal adapta as três colunas à largura da janela; o HTML funciona offline e permite imprimir/salvar PDF. A opção 14 não repete os testes. Use zoom ou tela cheia do navegador ao projetar.
 
 O comparador reutiliza `experimento/run.sh` e o analisador Java existente, **sem modificar a instrumentação congelada**. k6 gera a carga; logs de marcos/commit, exportação do PostgreSQL, Kafka e amostras de Docker alimentam o relatório. Não é apenas um cronômetro de HTTP nem uma tabela com valores estimados. Todos os arquivos ficam locais e são identificados como `presentation_comparison_not_definitive`.
 

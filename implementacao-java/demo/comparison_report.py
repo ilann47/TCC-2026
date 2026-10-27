@@ -3,10 +3,12 @@ import argparse
 import csv
 import html
 import json
+from itertools import zip_longest
 import math
 from pathlib import Path
 import shutil
 import subprocess
+import textwrap
 
 APP = Path(__file__).resolve().parents[1]
 RUNTIME = APP / '.runtime' / 'demonstracao'
@@ -167,15 +169,30 @@ def build_report(summaries, scenario):
             'rows': rows, 'warnings': warnings}
 
 
-def as_text(report):
-    lines = [f"COMPARAÇÃO: {report['title']}", f"{report['rate']} eventos/s | {report['measure_seconds']} s medidos | DEMONSTRAÇÃO, NÃO DEFINITIVA", '',
-             f"{'Métrica':54} | {'Síncrona':37} | Assíncrona", '-' * 132]
+def as_text(report, width=132):
+    width = max(54, min(width - 1, 160))
+    value_width = max(12, width * 24 // 100)
+    label_width = width - 2 * value_width - 6
+
+    def wrapped(value, limit):
+        return textwrap.wrap(str(value).replace(' | ', '; '), width=limit, break_on_hyphens=False) or ['']
+
+    def table_line(label, sync, asynchronous):
+        for a, b, c in zip_longest(wrapped(label, label_width), wrapped(sync, value_width), wrapped(asynchronous, value_width), fillvalue=''):
+            lines.append(f'{a:<{label_width}} | {b:<{value_width}} | {c:<{value_width}}'.rstrip())
+
+    lines = wrapped(f"COMPARAÇÃO: {report['title']}", width)
+    lines += wrapped(f"{report['rate']} eventos/s | {report['measure_seconds']} s medidos | DEMONSTRAÇÃO, NÃO DEFINITIVA", width) + ['']
+    table_line('Métrica', 'Síncrona', 'Assíncrona')
+    lines.append('-' * width)
     group = None
     for row in report['rows']:
         if row['group'] != group:
             group = row['group']; lines.append(f'\n[{group}]')
-        lines.append(f"{row['metric']:54} | {row['sync']:37} | {row['async']}")
-    lines.extend(['', 'LEITURA CORRETA:'] + [f'- {w}' for w in report['warnings']])
+        table_line(row['metric'], row['sync'], row['async'])
+    lines.extend(['', 'LEITURA CORRETA:'])
+    for warning in report['warnings']:
+        lines.extend(textwrap.wrap('- ' + warning, width=width, subsequent_indent='  ', break_on_hyphens=False))
     return '\n'.join(lines) + '\n'
 
 
@@ -208,7 +225,7 @@ def show_latest():
     folder = Path(pointer['folder']).resolve()
     if folder.parent != RUNTIME.resolve() or not folder.name.startswith('comparacao-'):
         raise ValueError('Ponteiro de comparação inválido')
-    print((folder / 'comparacao.txt').read_text(encoding='utf-8'))
+    print(as_text(read_json(folder / 'comparacao.json'), shutil.get_terminal_size(fallback=(132, 24)).columns))
     print('Relatório HTML:', folder / 'relatorio.html')
     if shutil.which('wslpath'):
         converted = subprocess.run(['wslpath', '-w', str(folder / 'relatorio.html')], capture_output=True, text=True, check=False, timeout=3)
@@ -242,7 +259,7 @@ def main():
         temporary = pointer.with_suffix('.tmp')
         temporary.write_text(json.dumps({'folder': str(output)}), encoding='utf-8')
         temporary.replace(pointer)
-        print(as_text(report))
+        print(as_text(report, shutil.get_terminal_size(fallback=(132, 24)).columns))
     except (ValueError, OSError, KeyError, TypeError) as error:
         parser.exit(1, f'Comparação não publicada: {error}\n')
 
