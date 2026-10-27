@@ -103,6 +103,30 @@ As variáveis principais são `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNA
 
 ## Demonstração com menu para a apresentação
 
+### Executar os testes pelo painel local
+
+Para iniciar as cargas **pelo navegador**, use o painel de controle próprio da
+demonstração. No PowerShell:
+
+```powershell
+wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java -- python3 demo/panel.py
+```
+
+Abra [http://localhost:5666](http://localhost:5666), clique em **Verificar serviços**
+e use **Executar síncrono** ou **Executar assíncrono**. Ajuste taxa (1–10 eventos/s)
+e duração (1–30 s); o padrão é 5/s por 20 s. O painel permanece disponível depois
+de cada teste e conserva histórico, métricas e console, inclusive falhas.
+Mantenha o processo do painel aberto; fechar a aba não o encerra nem cancela a carga.
+**Interromper teste** cancela somente o teste atual, que fica marcado como interrompido.
+
+Os cinco serviços e a imagem k6 devem estar preparados: se a verificação falhar,
+use a opção **1** do menu abaixo antes de testar. O painel não baixa imagens,
+não reinicia serviços, não compila Java e não inicia a campanha científica.
+O servidor escuta apenas em `127.0.0.1`; não exponha sua porta na rede.
+No WSL, dentro desta pasta, o comando é `python3 demo/panel.py`. Para encerrar,
+use Ctrl+C no terminal desse processo. Os serviços de negócio continuam ligados.
+Veja [guia do painel e diferenças em relação ao painel nativo](demo/README.md#painel-de-controle-local-permanente).
+
 ### Abrir pelo PowerShell no Windows
 
 Abra o Windows Terminal/PowerShell e cole o comando abaixo. Ele entra no WSL e abre o menu Bash no terminal atual:

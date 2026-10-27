@@ -403,9 +403,11 @@ smoke() {
 }
 
 usage() {
-  printf 'Uso no WSL/Linux: bash demo/apresentacao.sh [--check|--smoke|--dashboard-sync|--dashboard-async|--help]\n'
+  printf 'Uso no WSL/Linux: bash demo/apresentacao.sh [--check|--smoke|--dashboard-sync|--dashboard-async|--run-sync|--run-async|--help]\n'
   printf 'Sem argumento: menu interativo. --check: somente leitura. --smoke: validação curta com escrita/pausa.\n'
   printf '%s\n' '--dashboard-sync/--dashboard-async: abrir menu interativo e iniciar uma carga curta nessa variante, com painel.'
+  printf '%s\n' '--run-sync/--run-async: uma carga curta sem menu/TTY, para o painel local; não prepara nem reinicia serviços.'
+  printf 'Painel de controle permanente: python3 demo/panel.py (localhost:5666).\n'
   printf 'Painel das opções 9/10: localhost:%s. Feche a aba após o teste para voltar ao menu.\n' "$TCC_DEMO_DASHBOARD_PORT"
   printf 'TCC_DEMO_DASHBOARD=0 desativa o painel. A porta local pode ser ajustada com TCC_DEMO_DASHBOARD_PORT.\n'
   printf 'Não executa campaign.sh nem recompila imagens. Comparação 13 reinicia somente a tabela experimental isolada.\n'
@@ -414,16 +416,22 @@ usage() {
 main() {
   local choice mode=${1:-menu}
   if [[ $mode == --help ]];then usage;return 0;fi
-  [[ $mode == menu || $mode == --check || $mode == --smoke || $mode == --dashboard-sync || $mode == --dashboard-async ]] || { usage;return 1; }
+  [[ $mode == menu || $mode == --check || $mode == --smoke || $mode == --dashboard-sync || $mode == --dashboard-async || $mode == --run-sync || $mode == --run-async ]] || { usage;return 1; }
+  [[ $mode != --run-sync && $mode != --run-async ]] || TCC_DEMO_DASHBOARD=0
   [[ $mode != --dashboard-sync && $mode != --dashboard-async ]] || TCC_DEMO_DASHBOARD=1
   validate_settings && dependencies && no_experiment || return 1
   if [[ $mode == --check ]];then check_ready;return $?;fi
-  if [[ $mode != --smoke && ! -t 0 ]];then demo_error 'O menu precisa de terminal interativo. Use --check ou --smoke para validação.';return 1;fi
+  if [[ $mode != --smoke && $mode != --run-sync && $mode != --run-async && ! -t 0 ]];then demo_error 'O menu precisa de terminal interativo. Use --check ou --run-sync/--run-async sem menu.';return 1;fi
   trap cleanup EXIT
   trap 'exit 130' INT
   trap 'exit 143' TERM
   if [[ $mode == --smoke ]];then smoke;return $?;fi
   session || return 1
+  if [[ $mode == --run-sync || $mode == --run-async ]];then
+    printf 'PANEL_SESSION=%s\n' "$TCC_DEMO_SESSION"
+    check_ready && run_k6 "${mode#--run-}"
+    return $?
+  fi
   if [[ $mode == --dashboard-sync ]];then run_k6 sync || demo_error 'Demonstração k6 não aprovada.'
   elif [[ $mode == --dashboard-async ]];then run_k6 async || demo_error 'Demonstração k6 não aprovada.';fi
   while true;do

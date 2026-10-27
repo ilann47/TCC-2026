@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demonstração TCC · testes com k6</title>
+  <link rel="stylesheet" href="/panel.css">
+  <script src="/panel.js" defer></script>
+</head>
+<body>
+  <main>
+    <header class="topbar"><a class="brand" href="/" aria-label="Início">TCC<span> / laboratório local</span></a><span class="local"><i></i>Somente nesta máquina</span></header>
+    <section class="intro"><div><p class="eyebrow">JAVA · REST · KAFKA · POSTGRESQL</p><h1>Execute. Observe.<br>Compare os caminhos.</h1><p class="lead">Controle os testes curtos com k6 pelo navegador.<br>O painel permanece disponível entre as execuções.</p></div><div class="intro-note"><span class="note-number">02</span><p>variantes, um contrato comum</p><a href="http://localhost:18002/swagger-ui/index.html" target="_blank" rel="noreferrer">Abrir Swagger ↗</a></div></section>
+    <div class="notice"><span>DEMONSTRAÇÃO</span> Envia dados sintéticos ao ambiente local. Não inicia nem altera a campanha científica de 65 tentativas.</div>
+    <section class="workspace">
+      <aside class="card controls"><div class="section-heading"><h2>Novo teste</h2><span>01</span></div>
+        <p class="muted">Escolha a carga e depois a variante.</p>
+        <form id="test-form">
+          <label for="rate">Taxa de envio <small>eventos por segundo</small></label>
+          <div class="input-unit"><input id="rate" name="rate" type="number" min="1" max="10" step="1" value="5" required><span>/s</span></div>
+          <label for="seconds">Duração <small>janela de geração</small></label>
+          <div class="input-unit"><input id="seconds" name="seconds" type="number" min="1" max="30" step="1" value="20" required><span>segundos</span></div>
+          <p class="estimate" id="estimate">≈ 100 eventos programados</p>
+          <button class="run primary" id="run-sync" type="button"><span>Executar síncrono</span><span>→</span></button>
+          <p class="path">REST → PostgreSQL → <strong>201</strong></p>
+          <button class="run secondary" id="run-async" type="button"><span>Executar assíncrono</span><span>→</span></button>
+          <p class="path">REST → Kafka → <strong>202</strong> · consumidor grava depois</p>
+        </form>
+        <div class="service-check"><button class="text-button" id="check" type="button">Verificar serviços</button><p class="muted" id="check-result">Serviços e imagem k6 precisam estar preparados no WSL.</p></div>
+        <p class="limits">Máximo: 10 eventos/s · 30 s · um teste por vez.<br>Nenhum serviço é reiniciado por este painel.</p>
+      </aside>
+      <section class="card monitor"><div class="section-heading"><h2>Acompanhamento</h2><span class="status" id="status">Aguardando</span></div>
+        <div class="monitor-title"><div><p class="eyebrow" id="run-label">NENHUM TESTE SELECIONADO</p><h3 id="run-title">Seu próximo teste começa aqui.</h3></div><button id="stop" class="stop" type="button" hidden>Interromper teste</button></div>
+        <p class="message" id="message" role="status">Escolha uma variante à esquerda. Nenhuma carga está em execução.</p>
+        <div class="progress"><div id="progress"></div></div><p id="progress-label" class="muted">O teste termina sozinho; fechar a aba não o cancela.</p>
+        <div class="metrics">
+          <div><span>Eventos enviados</span><strong id="sent">—</strong><small>tentativas HTTP</small></div>
+          <div><span>Respostas inválidas</span><strong id="errors">—</strong><small>HTTP ou contrato</small></div>
+          <div><span>Não iniciadas</span><strong id="drops">—</strong><small>dropped iterations</small></div>
+          <div><span>HTTP p95</span><strong id="p95">—</strong><small id="metric-note">aguardando amostras</small></div>
+        </div>
+        <div class="chart-heading"><h4>Tempo de resposta HTTP</h4><span>Média por segundo · ms</span></div>
+        <div class="chart-wrap"><svg id="chart" viewBox="0 0 720 150" role="img" aria-label="Média de tempo HTTP por segundo"></svg><p id="chart-empty">Os pontos aparecem quando o k6 disponibiliza as amostras.</p></div>
+        <p class="interpretation"><strong>O que este tempo significa?</strong> Na síncrona, o 201 vem após persistir. Na assíncrona, o 202 confirma a publicação no Kafka — não a gravação no PostgreSQL. Este teste não mede envio até commit nem CPU/memória.</p>
+      </section>
+    </section>
+    <section class="card history"><div class="section-heading"><h2>Histórico deste painel</h2><span id="history-count">0 testes</span></div><p class="muted">Selecione uma execução para consultar métricas e console. Falhas e interrupções também ficam preservadas.</p><div class="table-wrap"><table><thead><tr><th>Início</th><th>Variante</th><th>Carga</th><th>Resultado</th><th>Detalhes</th></tr></thead><tbody id="history-body"></tbody></table></div><p id="history-empty" class="empty">Nenhuma execução iniciada por este painel ainda.</p></section>
+    <details class="card console"><summary>Console e evidências do teste selecionado</summary><p id="evidence" class="muted">As evidências serão salvas em .runtime/demonstracao/.</p><pre id="console">Aguardando execução…</pre></details>
+    <p id="error" class="error" role="alert" hidden></p>
+    <footer>Controle local do projeto TCC · k6 executado em contêiner · sem Grafana Cloud<br>Este painel próprio não é o Web Dashboard nativo da Grafana.</footer>
+  </main>
+</body>
+</html>

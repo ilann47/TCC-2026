@@ -150,4 +150,23 @@ ok 'HTTP code remains separate from body'
 ok 'transport failure is not success'
 bash "$TCC_DEMO_APP/demo/apresentacao.sh" --help >/dev/null
 ok 'help does not need Docker or start services'
+(
+  dependencies() { return 0; }
+  no_experiment() { return 0; }
+  session() { TCC_DEMO_SESSION=11111111-2222-4333-8444-555555555555; }
+  check_ready() { return 0; }
+  prepare() { echo 'unexpected service mutation' >&2;exit 1; }
+  run_k6() { [[ $1 == sync && $TCC_DEMO_DASHBOARD == 0 ]]; }
+  main --run-sync </dev/null
+) >/dev/null
+ok 'headless sync is bounded, has no dashboard/TTY and does not prepare services'
+(
+  dependencies() { return 0; }
+  no_experiment() { return 0; }
+  session() { TCC_DEMO_SESSION=11111111-2222-4333-8444-555555555555; }
+  check_ready() { return 1; }
+  run_k6() { echo 'unexpected unready load' >&2;exit 1; }
+  if main --run-async </dev/null;then exit 1;fi
+) >/dev/null
+ok 'headless async refuses an unready service environment'
 printf '%s shell checks passed; no live service was called.\n' "$passed"

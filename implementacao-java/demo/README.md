@@ -4,6 +4,65 @@ Este roteiro permite apresentar o protótipo sem depender de uma IA para executa
 
 Para entender cada linha da tabela e ensaiar a explicação, leia o [guia completo das 45 métricas e falas para a banca](METRICAS-E-FALAS.md). Ele inclui unidades, cálculos, cuidados, exemplo real versionado, perguntas frequentes e roteiro de dez minutos.
 
+## Painel de controle local permanente
+
+Para **executar os testes pelo navegador**, e não apenas observar o gráfico do k6,
+abra o novo painel próprio da demonstração. No PowerShell:
+
+```powershell
+wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java -- python3 demo/panel.py
+```
+
+1. Prepare os cinco serviços e a imagem k6 pela opção **1** do menu, se necessário.
+2. Mantenha o processo acima aberto e acesse [http://localhost:5666](http://localhost:5666).
+3. Clique em **Verificar serviços**. É uma conferência de leitura; não envia eventos.
+4. Escolha taxa **1–10 eventos/s** e duração **1–30 s**. Padrão: **5/s por 20 s**.
+5. Clique em **Executar síncrono** ou **Executar assíncrono**. Isso envia dados sintéticos.
+6. Observe as amostras disponíveis, erros e iterações não iniciadas. Ao encerrar,
+   o resumo final substitui os valores provisórios. Consulte o console e o histórico.
+7. Inicie outro teste quando o anterior terminar. Não é preciso fechar a aba.
+
+O painel fica em pé **enquanto `python3 demo/panel.py` estiver em execução**, mesmo
+sem teste ativo. Não é um serviço instalado para iniciar junto com o Windows.
+Fechar/reabrir a aba mantém o teste e o histórico; reiniciar o servidor não repete
+testes. Pedidos ainda pendentes ficam interrompidos, sem presumir aprovação.
+Ctrl+C no terminal encerra o painel e interrompe somente seu teste ativo.
+O botão **Interromper teste** não para Kafka, PostgreSQL, APIs ou consumidor.
+
+O painel não é o Web Dashboard nativo da Grafana. Ele executa a imagem k6 fixada,
+o mesmo `demo/load.js` e as proteções do menu através de
+`apresentacao.sh --run-sync/--run-async`, sem terminal interativo. Nesses filhos,
+o dashboard nativo é desativado para o k6 terminar independentemente das abas.
+O menu 9/10 e seu dashboard temporário em **5665** continuam disponíveis à parte.
+
+O histórico próprio fica em `.runtime/demonstracao/painel/jobs/`; console e resumo
+original de cada teste permanecem em
+`.runtime/demonstracao/<sessão>/k6-<UUID>-<variante>/`. O painel não serve arquivos
+arbitrários ou HTML exportado. Execuções antigas iniciadas pelo menu não são
+importadas automaticamente para esse histórico. Falha, interrupção ou dropped
+iteration não são ocultados, não geram repetição automática e não alteram a campanha.
+
+As métricas são **HTTP dos eventos**, excluindo prontidão. O 201 síncrono vem
+após a transação; o 202 assíncrono confirma publicação no Kafka, não commit no
+PostgreSQL. O gráfico mostra média por segundo, o cartão p95 mostra o percentil
+do teste; não são a mesma medida. Sem amostras significa desconhecido, não zero.
+Não há medição de CPU/memória ou de latência até commit neste teste curto.
+
+Segurança: servidor somente em `127.0.0.1`, destinos fixos, sem shell interpolado,
+token CSRF/origem local, corpos limitados, lock e apenas uma execução por vez.
+Campanha/carga concorrente bloqueia o início; nenhum projeto alheio é parado.
+Não publica na rede nem envia métricas para a nuvem. Se 5666 estiver ocupada,
+use `python3 demo/panel.py --port 5667` e abra o endereço correspondente;
+não encerre processos desconhecidos. Contrato detalhado em [panel/API.md](panel/API.md).
+
+Testes offline, sem Docker real nem geração de carga:
+
+```bash
+python3 -m unittest discover -s demo/tests -v
+bash demo/tests/test_menu.sh
+bash demo/tests/test_comparison.sh
+```
+
 ## 1. Abrir o menu
 
 O menu executa em **WSL/Ubuntu ou Linux com Bash**. No Windows, você pode abri-lo pelo PowerShell usando `wsl`, ou entrar primeiro em um terminal Ubuntu/WSL.
@@ -170,7 +229,7 @@ wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/i
 
 Para iniciar pela assíncrona, use `--dashboard-async` em vez de `--dashboard-sync`. Esses modos exigem terminal interativo e, depois do encerramento do k6, deixam o menu disponível. Não iniciam a campanha científica nem fazem build. Serviços e imagem devem estar prontos; use a opção 1 antes se necessário.
 
-Se precisar apenas da saída do terminal, inicie o menu no WSL com `TCC_DEMO_DASHBOARD=0 bash demo/apresentacao.sh`. Para uma porta alternativa escolhida por você, use `TCC_DEMO_DASHBOARD_PORT=5666 bash demo/apresentacao.sh`. Os limites de taxa e duração não mudam. Porta ocupada, outra carga ou painel ainda ativo causam recusa; o script não encerra processos alheios para liberar a porta. Ctrl+C pode interromper o fechamento dos arquivos, portanto prefira terminar a carga e fechar a aba.
+Se precisar apenas da saída do terminal, inicie o menu no WSL com `TCC_DEMO_DASHBOARD=0 bash demo/apresentacao.sh`. Para uma porta alternativa escolhida por você, use `TCC_DEMO_DASHBOARD_PORT=5667 bash demo/apresentacao.sh` (5666 é a porta padrão do controle permanente). Os limites de taxa e duração não mudam. Porta ocupada, outra carga ou painel ainda ativo causam recusa; o script não encerra processos alheios para liberar a porta. Ctrl+C pode interromper o fechamento dos arquivos, portanto prefira terminar a carga e fechar a aba.
 
 Fonte técnica: [painel web nativo do k6 e exportação HTML](https://grafana.com/docs/k6/latest/results-output/web-dashboard/).
 
