@@ -1,0 +1,823 @@
+{
+  "kind": "post_hoc_exploratory_sensitivity_not_campaign_reclassification",
+  "date": "2026-10-30",
+  "change": "Only pending count subtracts measured events with observed DLQ ACK by the window end; throughput/errors/fresh health/lag/3x10s/active-input bounds unchanged.",
+  "original_observed": 1,
+  "exploratory_observed": 5,
+  "runs": [
+    {
+      "block": 1,
+      "run_id": "4d7ff998-e613-43ed-842d-0898bd211c69",
+      "raw_inventory_sha256": "4fc8fb2bd13bdbd04be53d9944f17596895a7632382396696b2e7407a3b35fca",
+      "verified_files": 23,
+      "dlq_terminal": 3,
+      "original": {
+        "observed": false,
+        "timing": null,
+        "windows": [
+          {
+            "start_second": 110,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 120,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 130,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 140,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 150,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 160,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 170,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          }
+        ]
+      },
+      "exploratory": {
+        "observed": true,
+        "timing": {
+          "start_after_restore_s": 8.771224019,
+          "confirmed_after_restore_s": 38.771224019
+        },
+        "windows": [
+          {
+            "start_second": 110,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 120,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 130,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 140,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 150,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 160,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 170,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          }
+        ]
+      }
+    },
+    {
+      "block": 2,
+      "run_id": "cdc37329-4ab6-454d-99b9-2aac40d65d97",
+      "raw_inventory_sha256": "650399f4c1eacb4c887680886a8f2cac81496802f41ce001a73ed8815f7ee4c9",
+      "verified_files": 23,
+      "dlq_terminal": 3,
+      "original": {
+        "observed": false,
+        "timing": null,
+        "windows": [
+          {
+            "start_second": 110,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 120,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 130,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 140,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 150,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 160,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 170,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          }
+        ]
+      },
+      "exploratory": {
+        "observed": true,
+        "timing": {
+          "start_after_restore_s": 7.777026449,
+          "confirmed_after_restore_s": 37.777026449
+        },
+        "windows": [
+          {
+            "start_second": 110,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 120,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 130,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 140,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 150,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 160,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 170,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          }
+        ]
+      }
+    },
+    {
+      "block": 3,
+      "run_id": "c62a44a5-5e5c-426e-944d-f5b2e6a26dce",
+      "raw_inventory_sha256": "796dd7113e6ce361744c65378b0cb4ae0b537edefaee3fbe69d4d57823eb2f6d",
+      "verified_files": 23,
+      "dlq_terminal": 3,
+      "original": {
+        "observed": false,
+        "timing": null,
+        "windows": [
+          {
+            "start_second": 110,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 120,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 130,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 140,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 150,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 160,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 170,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          }
+        ]
+      },
+      "exploratory": {
+        "observed": true,
+        "timing": {
+          "start_after_restore_s": 8.519486165,
+          "confirmed_after_restore_s": 38.519486165
+        },
+        "windows": [
+          {
+            "start_second": 110,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 120,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 130,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 140,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 150,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 160,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 170,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          }
+        ]
+      }
+    },
+    {
+      "block": 4,
+      "run_id": "e1447d96-0afb-4946-b7bd-effa25dedea1",
+      "raw_inventory_sha256": "306ac18506183152461017ab424d0301104ca5dcd29604937bab08a463513b26",
+      "verified_files": 23,
+      "dlq_terminal": 3,
+      "original": {
+        "observed": false,
+        "timing": null,
+        "windows": [
+          {
+            "start_second": 110,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 120,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 130,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 140,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 150,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 160,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          },
+          {
+            "start_second": 170,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 3,
+            "healthy": true,
+            "qualifies": false
+          }
+        ]
+      },
+      "exploratory": {
+        "observed": true,
+        "timing": {
+          "start_after_restore_s": 8.260271559,
+          "confirmed_after_restore_s": 38.260271559
+        },
+        "windows": [
+          {
+            "start_second": 110,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 120,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 130,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 140,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 150,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 160,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 170,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 3,
+            "dlq_acknowledged": 3,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          }
+        ]
+      }
+    },
+    {
+      "block": 5,
+      "run_id": "44011b5e-4a2d-4e33-9604-75432ddebab5",
+      "raw_inventory_sha256": "e29a9051083e0d2cc67df4f633eed5c3443d1b5cf9e1b0b60f398a16fc2c19a5",
+      "verified_files": 23,
+      "dlq_terminal": 2,
+      "original": {
+        "observed": true,
+        "timing": {
+          "start_after_restore_s": 8.710268772,
+          "confirmed_after_restore_s": 38.710268772
+        },
+        "windows": [
+          {
+            "start_second": 110,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 2,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 120,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 2,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 130,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 2,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 140,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 2,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 150,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 2,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 160,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 2,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 170,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 2,
+            "healthy": true,
+            "qualifies": true
+          }
+        ]
+      },
+      "exploratory": {
+        "observed": true,
+        "timing": {
+          "start_after_restore_s": 8.710268772,
+          "confirmed_after_restore_s": 38.710268772
+        },
+        "windows": [
+          {
+            "start_second": 110,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 120,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 130,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 140,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 150,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 160,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          },
+          {
+            "start_second": 170,
+            "commits": 120,
+            "errors": 0,
+            "accepted_without_commit": 2,
+            "dlq_acknowledged": 2,
+            "pending_for_criterion": 0,
+            "healthy": true,
+            "qualifies": true
+          }
+        ]
+      }
+    }
+  ],
+  "caveat": "Terminal DLQ is resolved as a destination, not persisted. This does not meet the original audit-storage objective and does not replace the frozen 1/5 verdict."
+}

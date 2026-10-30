@@ -2,14 +2,15 @@
 !include tema.puml
 left to right direction
 actor Pesquisador as P
-rectangle "Camada de avaliação planejada" {
+rectangle "Camada de avaliação implementada" {
  usecase "UC05\nExecutar cenário de avaliação" as U5
  usecase "UC06\nConsolidar e consultar indicadores" as U6
 }
 P -- U5
 P -- U6
 note bottom of U5
- A CI verifica apenas um smoke de falha.
- O executor quantitativo não está implementado.
+ k6 e executor: carga, falha e coleta.
+ Analisador Java e agregadores: conciliação e relatórios.
+ Pilotos e demonstrações não substituem a campanha.
 end note
 @enduml

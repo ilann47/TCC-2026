@@ -1,0 +1,388 @@
+{
+  "revision_date": "2026-10-30",
+  "review_source": {
+    "name": "Parecer de correções – ilan.docx",
+    "sha256": "1ba2ca16f2de1e8fc35ba6db62caf345878c8519d4014687fd08409f3f1c7ba5",
+    "items": 17,
+    "original_not_redistributed": true
+  },
+  "base_git_commit": "0830849df7008b3fbcbbf0f9c9fd8999fd65abab",
+  "pdf": {
+    "path": "TCC-Entrega04-correcoes.pdf",
+    "sha256": "ba2ff74ba5e2f85b1662b85c26723b539b99f027a9d0da6d3b16efbe64273463",
+    "pages": 86,
+    "conclusion_pdf_pages": [
+      79,
+      80,
+      81,
+      82
+    ],
+    "reviewed_page_images": 86,
+    "final_render_changed_pages_since_reviewed_candidate": [
+      23,
+      24,
+      74,
+      75
+    ],
+    "changed_pages_reviewed_again": true
+  },
+  "compilation": {
+    "engine": "MiKTeX 25.12 pdfTeX 1.40.28",
+    "isolated_clean_source_copy": true,
+    "automatic_package_installation_disabled": true,
+    "latex_passes": 4,
+    "bibtex_passes": 1,
+    "undefined_references": false,
+    "overfull_boxes": false,
+    "duplicate_page_anchors": false,
+    "remaining_template_warnings": [
+      "deprecated brazil language name",
+      "deprecated memoir command",
+      "breakurl under pdfLaTeX",
+      "old subfig package",
+      "unused template options",
+      "MiKTeX update reminder"
+    ]
+  },
+  "original_campaign": {
+    "planned_runs": 65,
+    "complete_original_evidence": 64,
+    "partial": 1,
+    "primary_postgres_completion_pairs": 4,
+    "reclassified": false,
+    "repeated_or_replaced": false,
+    "new_load_executed": false
+  },
+  "exploratory_recovery": {
+    "scope": "five postgres-stop async runs only",
+    "original_observed": 1,
+    "exploratory_observed": 5,
+    "terminal_dlq_events": 14,
+    "raw_files_verified_before_and_after": 115,
+    "changed_criterion": "subtract events with DLQ acknowledgement observed by each window end from pending only",
+    "original_verdict_preserved": true,
+    "tests_passed": 6
+  },
+  "pending": {
+    "personal_author_review": true,
+    "institutional_date_examiners_signatures": true,
+    "approval_claimed": false,
+    "master_document_not_supplied": true
+  },
+  "historical_delivery_pdf_sha256": "56431f7482c5f90eec7a4501dabc70da1a965fceed49e660913b8495e4aed1e5",
+  "source_files": [
+    {
+      "path": "projeto-latex-java/abnt-UDC-CC.cls",
+      "sha256": "c9c14e24759e3ca3161e140b7e5010386f7817c7f5e06c2486ed0e2c462cfbd9"
+    },
+    {
+      "path": "projeto-latex-java/cvs-id.def",
+      "sha256": "ef1a200dd9c8693b9f3c4928f053ac36eb3f6b7dad17ea7ab6767f367ff188a4"
+    },
+    {
+      "path": "projeto-latex-java/modelo.tex",
+      "sha256": "02c97718a78dae06216a04c414e65347c90a9019a34b895ac99ef4bb21dfbe6d"
+    },
+    {
+      "path": "projeto-latex-java/Apresentacao/agradecimentos.tex",
+      "sha256": "79bfd928f39b75d86e43d34301cd8a5cce891d979e66332fe158bcea21c0587f"
+    },
+    {
+      "path": "projeto-latex-java/Apresentacao/declaracao_uso_ia.tex",
+      "sha256": "3129fc22b1926b39e575265c164183f9ab6b69b00ce6d9245e8e1bfd63fc8205"
+    },
+    {
+      "path": "projeto-latex-java/Apresentacao/dedicatoria.tex",
+      "sha256": "0af5f86c3d92700399cc06577c0b0e3a97758e7404a3b8776fb16dae0503c7b2"
+    },
+    {
+      "path": "projeto-latex-java/Apresentacao/epigrafe.tex",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "projeto-latex-java/Apresentacao/folha_aprovacao.tex",
+      "sha256": "a9c9a1a596d7b1ce66aad2bfedf31e90742256dbaebea5846dea078ae780f9ef"
+    },
+    {
+      "path": "projeto-latex-java/Apresentacao/resumo_ingles.tex",
+      "sha256": "37b99955677ffb7809622be7579f5b7e116917d0df8d3337dd794c7619c66dcc"
+    },
+    {
+      "path": "projeto-latex-java/Apresentacao/resumo_portugues.tex",
+      "sha256": "a99c7d8e9c985182ae6c03ba09f21b92c3f4f780fe2f69bb68c41290c29802c9"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/apendice-rastreabilidade.tex",
+      "sha256": "bbbe30c39f50c165e53183b85ac2a9a299514268bd05b3f0d9f6abe65c835e12"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/apresentacao.tex",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/cap4-banco.tex",
+      "sha256": "895bc5c9427a9da5b1ee893d8842f97aa7dd42b537641ea89c11fcf3466001da"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/cap4-implementacao.tex",
+      "sha256": "9f4a4ea587ce215cd82e1f7e46185ae6040900c61e3324dafc05abecdf07a219"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/cap4-interface.tex",
+      "sha256": "82673bede831b2f7c70389eeeb62feb103caf5a2e68a78e8763f0df5b1a39e0d"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/cap4-requisitos.tex",
+      "sha256": "f87f646198b8bf4f6c3107bae2339a5f0ede7776765123cc8aea171f12fee801"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/cap4-uml.tex",
+      "sha256": "9556c653205c560bbf977fb55d5f4f85e70dd3edaf23737c529aae75393ae55e"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/cap4-visao.tex",
+      "sha256": "ddf29363d290c940b9064d30b31e9f374d2f436a548761ec4329a16aef5a3f57"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/conclusao.tex",
+      "sha256": "5277bc3a0ea1b2efdff2c7edf45f90527d11d5706ff137676a8126daee8a2567"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/fundamento_teorico.tex",
+      "sha256": "c9d6b7d23470f5dec2e0b1b88e45ac5d2b2b512c0bc45604994b19565e4d223f"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/implementacao.tex",
+      "sha256": "05c5fc3caea6996ea063ec3054152affc0717e2130b2dd96f8f6ed9d6c3c1f74"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/introducao.tex",
+      "sha256": "c766334dd94bb89fcf16e6f0505c76d2251435cef0e523c102f9e31dc7cd5c95"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/materiais_metodo.tex",
+      "sha256": "e4a9d5dc5e32df7e348cdff0a536a1efe0e4af4fb805f8282a163e3ec1682721"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/metodo-termos.tex",
+      "sha256": "461c8ebe1626a72d0d77cf3a0b011d3015f18f0bf1c0188b26bb292558f36c33"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/resultados-destinos.tex",
+      "sha256": "d0e7d1ce9ed39bf56c232fbb61df6047408a91cd7b268b6b42cdbfd2c248567f"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/resultados-exploratoria.tex",
+      "sha256": "764ae05db7dfdac6a62d5c28cf5101fd210f263a25b87e5fc2a19733e9716ec1"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/resultados-latencia.tex",
+      "sha256": "e4f87ac5392a708aa189e2be4cb0e52b2b9a62be27654226c4bf4d1812178e08"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/resultados-literatura.tex",
+      "sha256": "83fe5979b61c62f9202d76b5b2f244912a0f16d63fa66b63d543e4a79e136cca"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/resultados-modelo.tex",
+      "sha256": "8c1a843726852becf144b9ae0d349595a5dde929b8c407164d4accf5e9259d12"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/resultados-pares.tex",
+      "sha256": "004fa4aaac17ecf935c4cf246d5664322b0f91778c41a45b28973f1ff5d7b37c"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/resultados-recuperacao.tex",
+      "sha256": "883b7b24110b387e1e23c2cdc7cbb58c374973b7c66509c6fea62acb92a56ef5"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/resultados-recursos.tex",
+      "sha256": "d04df5021e238c41ba2e768610204dbd3a93bc1fed7aaca6f6473224aef3e905"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/resultados-requisitos.tex",
+      "sha256": "b384bdaba2a1b7debf7ee5e214eb6b1d4989a9faf5131f927be8f7f5b553627c"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/resultados-validacao.tex",
+      "sha256": "d38937d126c9daf586c9d78a6e2ef6ef55679c92dea4510a8604829418c95f65"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/resultados-vazao.tex",
+      "sha256": "2abec2afe6a0d8c58c3ac23577e7f2af13be530c7ea89c362fe22182f2e77e6a"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/resultados.tex",
+      "sha256": "6c232fe1cb9a73ae170d7c6d5756ff61b630a5276f5e14698b3c113344b2ce24"
+    },
+    {
+      "path": "projeto-latex-java/Capitulos/revisa_bib.tex",
+      "sha256": "f72f2900b22c29e39a7722a3791f8b1df45176c5da6933624de76d08955f84ff"
+    },
+    {
+      "path": "projeto-latex-java/Configuracoes/abntex2-alf-tcc.bst",
+      "sha256": "836bc2d92ce52d6f50e82f8ebbef1cb48191cd9036b5dfee1279283445279df6"
+    },
+    {
+      "path": "projeto-latex-java/Configuracoes/bibliografia.bib",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Configuracoes/citacoes.bib",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Configuracoes/dados_documento.tex",
+      "sha256": "4597d2a2cca0cadaff7bd872c25750981095cbdd89ed7428e85daeeb875c2a06"
+    },
+    {
+      "path": "projeto-latex-java/Configuracoes/entrega01.bib",
+      "sha256": "862065aa373fd8e799dd9c569a7de7e8f22cd46941228a29fe79443268a10cd4"
+    },
+    {
+      "path": "projeto-latex-java/Configuracoes/siglas.tex",
+      "sha256": "647112c14577e21c03105ec56faf86da9ca2834602f51433fea86f0bc4a8a7fa"
+    },
+    {
+      "path": "projeto-latex-java/Configuracoes/simbolos.tex",
+      "sha256": "a5da7ed73fe78a9d9f56e6dc7731f00004d1a2db076e2cf7aaf2ca5a707078a4"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/arquitetura-assincrona.tex",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/arquitetura-sincrona.tex",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/atividade-assincrona.tex",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/atividade-sincrona.tex",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/casos-de-uso.tex",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/classes.tex",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/componentes.tex",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/der-simplificado.tex",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/sequencia-assincrona.tex",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/sequencia-sincrona.tex",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/visao-geral.tex",
+      "sha256": "1f841ea551adcf939ce390c0758f2f7f76dee3607fdc2ebaa95a9121b602be95"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/arquitetura-assincrona.png",
+      "sha256": "2160f03b877c9d8b866f5994448fcbcf4d5eab7baa8e553d492d9f433179dc2b"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/arquitetura-sincrona.png",
+      "sha256": "1aa6dc441691f0e18a0fdf25f37d4aa52fd40347d59bf62e2fd9c10421c726aa"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/atividade-assincrona.png",
+      "sha256": "e0c5472617957f56170456ef8574ed504fe703dab1fc9fe81f261ac95d0754f6"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/atividade-consumidor.png",
+      "sha256": "7140380f5d019dde1a4d49c6ff2f97b4f3f7dc68939e4caf88cc4422a511464b"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/atividade-sincrona.png",
+      "sha256": "c2f575199e51c4c0f16385d27bd3ac3c18470660dd0c2977af06e02963255da2"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/casos-de-uso.png",
+      "sha256": "4c08682d91becfb13c8ced8b4a6f573a0410d3d37303bc2863b59c65e5c4b42a"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/casos-experimento.png",
+      "sha256": "7d90b23d076f27fe222adf6f68962636e1440cc8e4f3099c611a04b20e8a4623"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/classes-dados.png",
+      "sha256": "b21501134783707ef687f148a06caa81760f07fc3bcdfb4a718402388d139da4"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/classes.png",
+      "sha256": "f14665c071320950c517a5bdfc4c2de308dbdd8582f1d736764f6c2a93e5a734"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/componentes.png",
+      "sha256": "e01c926328213e748fed4988b1f11cf668f384d38c238280b1b22d508356a5d3"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/der-simplificado.png",
+      "sha256": "aecc8fc74f95c546052659ebf3f04e7832297b8da3cb3037363d6e14faea230c"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/implantacao.png",
+      "sha256": "c0b64d5ff74dd9de832e6ea05d3fe728dd6b625e469a4ab0b1e6f0eec243d9f2"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/mer-atual.png",
+      "sha256": "2ee065333bbdb25df6476c2c774a7ee042eaed0475e2f1520fd51910ed96c6b1"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/mer-proposto.png",
+      "sha256": "611eef7c4a4d77400cdb52a54581c80c1b2fe67c7e3af07e10c89faf3a3079c5"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/modelo-logico-atual.png",
+      "sha256": "e94d209bcabb999926c979cc34f5d72e86f40cbcab659bf271b551da4a6c5b32"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/modelo-logico.png",
+      "sha256": "810d5db482b8de1ace1c2fc3e62f8682b8e33d3f55e0ef99c3f9e0ca9e08012b"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/sequencia-assincrona.png",
+      "sha256": "a67cb65691cd187c46ffccdeae6222e1fb7cf19575567862f599171ba651062d"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/sequencia-sincrona.png",
+      "sha256": "0e5589aa50d314468ab4289fe374daa8473bbb288805b881ef24cc83a178aa15"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/visao-geral.png",
+      "sha256": "40c62ffbbced2c4883f50066ae18d22c90d1dbbdf1dabca9f34f628214013284"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/wf-backlog.png",
+      "sha256": "764d427dfe751cbeadac3554559b5f221c8e196d01f079fe35df5fed325f8c39"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/wf-comparacao.png",
+      "sha256": "8e839d81a3a442764408d956bfbe642533e1844ef0bcdf39f8ed8503daa0bea6"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/wf-envio.png",
+      "sha256": "ef0ee82d20cb7558e49242188cb7397aff8e0420bc6458645999f482ccb944b3"
+    },
+    {
+      "path": "projeto-latex-java/Diagramas/plantuml/wf-metricas.png",
+      "sha256": "67b1da0e9b3630381ebd1cde37d017a3a29b799714b08e26573f790d59fb369d"
+    }
+  ],
+  "source_hash_mode": "Text hashed after CRLF-to-LF normalization; PNG hashed byte-for-byte"
+}

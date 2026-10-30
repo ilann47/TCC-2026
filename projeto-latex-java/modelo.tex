@@ -161,6 +161,8 @@
 
     \hypersetup{pageanchor=true}
 
+    \input{Apresentacao/folha_aprovacao}
+
     \input{Apresentacao/declaracao_uso_ia}
 
     % Elementos institucionais/opcionais não emitidos sem dados confirmados:
@@ -168,7 +170,7 @@
 
     \imprimirresumo
 
-    % O resumo em inglês foi retirado por solicitação para esta entrega.
+    \imprimirabstract
 
     %==============================================================================
     %% Observação
@@ -180,6 +182,8 @@
     \imprimirlistafiguras	% inserir lista de figuras
 
     \imprimirlistatabelas
+
+    \imprimirlistaquadros
 
     \imprimirsumario
 
@@ -200,7 +204,6 @@
     \input{Capitulos/implementacao}
     \input{Capitulos/resultados}
     \input{Capitulos/conclusao}
-    % Conclusão científica permanece reservada até a coleta completa.
 
     %\bookmarksetup{startatroot}
 
@@ -218,8 +221,9 @@
     %==============================================================================
     % APÊNDICES
     %==============================================================================
-    % Apêndices e anexos do modelo foram desabilitados nesta entrega para não
-    % incorporar conteúdo demonstrativo sem relação com a pesquisa.
+    \begin{apendicesenv}
+    \input{Capitulos/apendice-rastreabilidade}
+    \end{apendicesenv}
 
     %==============================================================================
     % ANEXOS

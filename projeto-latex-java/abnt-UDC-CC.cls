@@ -535,7 +535,7 @@
 	\vspace{\onelineskip}
 
 	\noindent
-	\textbf{Palavras-chaves}: \ifnotempty{\imprimirpalavrachaveum}{\imprimirpalavrachaveum.
+	\textbf{Palavras-chave}: \ifnotempty{\imprimirpalavrachaveum}{\imprimirpalavrachaveum.
 		\ifnotempty{\imprimirpalavrachavedois}{\ \imprimirpalavrachavedois.
 			\ifnotempty{\imprimirpalavrachavetres}{\ \imprimirpalavrachavetres.
 				\ifnotempty{\imprimirpalavrachavequatro}{\ \imprimirpalavrachavequatro.
@@ -582,7 +582,7 @@
 }
 
 \newcommand{\imprimirlistaquadros}{
-	\pdfbookmark[0]{\listofquadros}{loqd}	% inserir lista de quadros
+	\pdfbookmark[0]{Lista de Quadros}{loqd}	% inserir lista de quadros
 %	\counterwithout{listofquadros}{chapter}
 	\begin{KeepFromToc}
 		\listofquadros
@@ -883,7 +883,7 @@
 %    \renewcommand{\anexotocname}{ANEXO}
 	%% ajusta nomes
 	\renewcommand{\folhadeaprovacaoname}{Termo de Aprovação}
-	\renewcommand{\orientadorname}{Orientador:}
+	\renewcommand{\orientadorname}{Orientadora:}
 	\renewcommand{\coorientadorname}{Coorientador:}
 	\renewcommand{\figurename}{FIGURA}
 	\renewcommand{\tablename}{TABELA}

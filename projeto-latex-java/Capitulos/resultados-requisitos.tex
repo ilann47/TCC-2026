@@ -1,0 +1,43 @@
+\section{Avaliação dos requisitos esperados e obtidos}
+As Tabelas~\ref{tab:rf} e~\ref{tab:rnf} definem os critérios, não metas de vitória arquitetural. A Tabela~\ref{tab:requisitos-obtidos} confronta esses critérios com a evidência disponível. ``Atendido no escopo'' não significa prova exaustiva de todos os modos de falha. ``Parcial'' mantém uma restrição relevante; ``não demonstrado'' indica ausência de ensaio para a propriedade.
+
+{\small
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{p{0.15\textwidth}p{0.25\textwidth}p{0.37\textwidth}p{0.14\textwidth}}
+\caption{Requisitos esperados, resultados e situação no escopo entregue}\label{tab:requisitos-obtidos}\\
+\hline ID & Critério esperado & Resultado observado ou verificação & Situação\\ \hline
+\endfirsthead
+\hline ID & Critério esperado & Resultado observado ou verificação & Situação\\ \hline
+\endhead
+RF01 & Entrada equivalente e identificador na resposta & Contrato compartilhado; fluxos 201/202 verificados em integração. & Atendido\\ \hline
+RF02 & Rejeitar contrato inválido com 422 & Validação e testes de campos inválidos; não houve prova exaustiva de todos os limites HTTP. & Parcialmente verificado\\ \hline
+RF03 & 201 depois da transação ou duplicata & Ordem implementada e caminho normal verificado. O 503 da coleta parcial não foi tratado como prova de rollback. & Atendido no sucesso\\ \hline
+RF04 & 202 somente após confirmação de publicação & Publicador aguarda ACK individual; aceite é distinto de gravação no banco. Timeout permanece incerto. & Atendido no escopo\\ \hline
+RF05 & Consumir e usar o repositório comum & Testes e campanha observaram consumo e persistência do conteúdo esperado. & Atendido\\ \hline
+RF06 & Hash determinístico & Fixtures e comparação independente verificaram conteúdo e hash; não é certificação universal de canonicalização. & Atendido no escopo\\ \hline
+RF07 & Preservar campos, hash e chave única & Migração e exportações conciliadas; zero divergências nos dados examinados. & Atendido\\ \hline
+RF08 & Reentrega igual não duplica nem sobrescreve & Reenvio sequencial verificado; proteção implementada por chave e hash. Concorrência adversarial real não foi demonstrada. & Atendido com limite\\ \hline
+RF09 & Confirmar origem somente após resolução & Testes verificam persistência ou ACK da DLQ antes do offset; não é prova de transação única entre sistemas. & Atendido por testes de decisão\\ \hline
+RF10 & Distinguir vivacidade de prontidão & Endpoints distintos; testes observam falha e retomada da dependência. Sem garantia de disponibilidade futura. & Atendido\\ \hline
+RF11 & Métricas conciliáveis, com unidade e janela & Instrumentos utilizados nas 65 coletas; uma não possui um dos tempos de conclusão. & Parcial na cobertura temporal\\ \hline
+RF12 & Carga e falha com parâmetros registrados & Plano, fases, taxa, configuração, falha e retomada registrados e auditados. & Atendido\\ \hline
+RF13 & Observar backlog, drenagem e recuperação & Critério original medido em todos os casos: 5/5, 1/5 e 5/5; medir não significa recuperar em todos. & Atendido como observação\\ \hline
+RF14 & Comparar sem confundir HTTP e conclusão & Relatórios e tabelas offline separados por indicador, variante e elegibilidade. & Atendido\\ \hline
+RF15 & Envio manual e formulário próprio & Swagger oferece envio interativo; o formulário dedicado dos wireframes não foi construído. & Parcial\\ \hline
+RF16 & Retry limitado e DLQ antes do offset & Política testada; 14 destinos terminais reais na campanha com banco parado. & Atendido no escopo\\ \hline
+RF17 & Consultar registro por identificador & Consulta e respostas previstas implementadas; consulta após envio verificada em integração. & Atendido no escopo\\ \hline
+RNF01 & Equivalência funcional & Contrato, serialização e armazenamento comuns; conteúdo pareado. Topologias distintas permanecem parte do objeto. & Atendido\\ \hline
+RNF02 & Registrar e auditar configuração e dados & Manifestos, versões, imagens e inventários verificados, sem garantir reprodução bit a bit em outra máquina. & Atendido quanto ao registro\\ \hline
+RNF03 & Isolamento e dados sintéticos & Portas locais e dados sintéticos. Não há autenticação ou avaliação de segurança de produção. & Restrito ao ambiente local\\ \hline
+RNF04 & Build e inicialização documentados & Empacotamento e versões registrados; não houve ensaio em outro computador ou sistema operacional. & Não ensaiado em outro ambiente\\ \hline
+RNF05 & Integridade e correlação & Identidades e hashes conciliados, sem duplicatas no banco. Testes reais de concorrência adversarial permanecem fora do recorte. & Atendido nos dados examinados\\ \hline
+RNF06 & Medir resposta, conclusão e vazão & Métricas separadas e carga efetiva registrada. Uma comparação primária utiliza quatro pares, não cinco. & Atendido com ressalva temporal\\ \hline
+RNF07 & Conciliar destinos após a falha & Zero duplicatas e aceites sem destino conciliado; 14 eventos em DLQ, não persistidos. Não houve garantia de gravação de todo aceite. & Atendido como conciliação\\ \hline
+RNF08 & Marcos e recursos completos por coleta & Instrumentação e recursos coletados; um marco pós-transação está ausente. & Parcial\\ \hline
+RNF09 & Registrar configuração sem inferir escala & Broker, partição e consumidores registrados; escala horizontal não foi ensaiada. & Registro atendido; escala não demonstrada\\ \hline
+RNF10 & Variante, unidade e ausência legíveis & Relatórios identificam populações e unidades; interface operacional completa permanece proposta. & Atendido nos relatórios\\ \hline
+\end{longtable}
+\noindent{\footnotesize Fonte: Elaborado pelo autor a partir do código, testes e campanha (2026).}
+}
+
+O núcleo e a camada experimental foram construídos, mas isso não autoriza somar todos os requisitos como integralmente comprovados. Permanecem o formulário dedicado, a cobertura temporal incompleta e propriedades não ensaiadas fora do ambiente local. A implementação dos instrumentos foi atendida mesmo quando seu resultado foi desfavorável à hipótese.

@@ -1,0 +1,26 @@
+\chapter{Rastreabilidade técnica da campanha}
+\label{ap:rastreabilidade}
+
+Este apêndice concentra os identificadores internos necessários à auditoria. No corpo do trabalho, coleta designa uma execução experimental e evento designa um registro enviado. Um UUID pode identificar qualquer um deles conforme seu campo; por isso, a expressão ``65 UUIDs'' não é utilizada para descrever o tamanho da campanha.
+
+\section{Versões e evidência parcial}
+O protocolo reduzido R2 foi publicado no commit \texttt{f5d77b5} antes das coletas definitivas. A primeira revisão de piloto, R1, permaneceu não elegível e não foi retomada nem incorporada à campanha. A coleta de referência rejeitada é \path{bedbd896-c279-475a-94f1-712c88b7f904}. R2 substituiu apenas a sonda administrativa periódica de Kafka por uma sonda TCP no ambiente experimental, mantendo a verificação semântica antes da carga; isso não prova que a sonda anterior fosse a causa única do problema.
+
+A coleta parcial é \texttt{8733a7d2-89b5-4a5e-be22-0e4ed6e6b29b}, síncrona com PostgreSQL parado, no terceiro bloco. Seu resumo mantém \texttt{instrument\_valid=false}. O parecer formal foi publicado em \texttt{effa20b}; a emenda de qualificação por métrica, denominada A1, em \texttt{cb3e9b3}. Ela foi posterior às primeiras 37 tentativas e anterior às 28 restantes. Nenhuma coleta foi repetida ou substituída, nem foi estimado o instante de commit ausente.
+
+\section{Arquivos e verificadores}
+O repositório é \url{https://github.com/ilann47/TCC-2026}. O diretório público é \path{implementacao-java/experimento/campanhas/2026-10-27-reduzida65-r2/resultados-a1/}. O catálogo identifica 65 coletas, sendo 64 completas e uma parcial; o índice \texttt{SHA256SUMS} permite verificar os arquivos publicados. Os brutos integrais permanecem preservados localmente, com inventários públicos, sem exposição indiscriminada de logs e caminhos pessoais.
+
+\begin{description}
+\item[\texttt{per-run.csv} e \texttt{per-run.json}] Valores de cada repetição, classificação e elegibilidade.
+\item[\texttt{group-summary.json}] Média, mediana, desvio-padrão amostral, mínimo e máximo por condição.
+\item[\texttt{paired.json}] Diferenças entre variantes para os mesmos blocos e conjuntos de dados.
+\item[\texttt{strict-sensitivity.json}] Exclusão do par afetado de todos os indicadores pareados, como análise estrita de sensibilidade.
+\item[\texttt{partial-latency-sensitivity.json}] Distribuição apenas dos 1.666 tempos observados para 1.667 registros persistidos na coleta parcial, sem imputação.
+\item[\texttt{verify\_final\_results.py}] Verificação offline dos dados públicos e agregações; não executa nova carga.
+\end{description}
+
+Os manifestos registram versões, imagens e configuração. Foram verificados 1.495 arquivos brutos e 268 arquivos do conjunto público. A auditoria não alterou os resumos originais. O controlador \texttt{reduced\_campaign.py} aplica plano, exclusão mútua e recusa de sobrescrita; \texttt{run.sh} e \texttt{load.js} executam as fases; o analisador Java concilia resposta, transação, banco e destinos. O marco \texttt{commit\_completed} ocorre após o retorno da transação. O campo \texttt{persisted\_at}, preenchido no INSERT, não é equivalente a esse marco.
+
+\section{Revisão documental e análise exploratória}
+A entrega de 30 de outubro de 2026 registra a correspondência entre parecer e correções. A leitura exploratória da recuperação separa pendência ativa de destino terminal e usa somente os dados preservados. Seu script e seu relatório ficam em \path{entregas/2026-10-30-entrega-04-correcao-parecer/}. Eles não integram os instrumentos congelados nem reclassificam as coletas originais.

@@ -3,7 +3,7 @@
 As vistas representam o contrato, as responsabilidades e os caminhos de execução. A fronteira operacional é a implementação Java, com duas APIs Spring Boot e um consumidor independente; Kafka e PostgreSQL são sistemas externos de suporte. Na visão de implantação, esses serviços integram a infraestrutura do ambiente experimental. As bibliotecas Maven compartilhadas não são atores nem processos independentes.
 
 \subsection{Diagrama de casos de uso}
-A aplicação cliente inicia UC01 e UC02; Kafka fornece mensagens a UC03; o pesquisador consulta prontidão e registros em UC04 e UC07. A Figura~\ref{fig:casos-uso} apresenta essas interações. A Figura~\ref{fig:casos-exp} reúne os casos planejados de avaliação quantitativa, cujo executor ainda não integra o projeto Java.
+A aplicação cliente inicia UC01 e UC02; Kafka fornece mensagens a UC03; o pesquisador consulta prontidão e registros em UC04 e UC07. A Figura~\ref{fig:casos-uso} apresenta essas interações. A Figura~\ref{fig:casos-exp} reúne os casos de avaliação quantitativa implementados por k6, executor e analisadores, separados dos módulos operacionais.
 
 \capfig{casos-de-uso}{Casos de uso da aplicação operacional}{fig:casos-uso}{0.44}
 \capfig{casos-experimento}{Casos de uso da camada de avaliação}{fig:casos-exp}{0.25}
@@ -74,23 +74,23 @@ A aplicação cliente inicia UC01 e UC02; Kafka fornece mensagens a UC03; o pesq
 \textbf{Exceção:} dependência sem prontidão produz 503; processo parado causa falha de conexão.
 \textbf{Pós-condição:} resultado de uma verificação pontual, sem garantia de disponibilidade futura ou de conclusão de todos os eventos. Relaciona-se a RF10.
 
-\subsubsection{UC05 --- Executar cenário de avaliação (planejado)}
+\subsubsection{UC05 --- Executar cenário de avaliação}
 \textbf{Ator:} pesquisador.
 \textbf{Pré-condições:} ambiente isolado preparado, dados sintéticos e configuração identificada; protocolo congelado para coleta definitiva.
-\textbf{Ativação prevista:} comando do executor e seleção do perfil.
-\textbf{Fluxo previsto:} criar diretório exclusivo; registrar manifesto; preparar eventos; executar aquecimento e carga; coletar logs, recursos e offsets; interromper o PostgreSQL em C4; registrar a retomada; aguardar drenagem; consolidar arquivos.
+\textbf{Ativação:} comando do executor e seleção do perfil.
+\textbf{Fluxo principal:} criar diretório exclusivo; registrar manifesto; preparar eventos; executar aquecimento e carga; coletar logs, recursos e offsets; interromper o PostgreSQL em C4; registrar a retomada; aguardar drenagem; consolidar arquivos.
 \textbf{Alternativas:} teste dos instrumentos ou execução conforme protocolo definitivo.
-\textbf{Exceção prevista:} configuração incompleta ou falha de coleta deve ser registrada; validação funcional não vira resultado definitivo.
-\textbf{Pós-condição esperada:} artefatos verificáveis da execução, com indicação de completude. O projeto Java atual contém apenas \textit{smokes} de CI, sem esse executor. Relaciona-se a RF12, RF13 e RN10.
+\textbf{Exceção:} configuração incompleta ou falha de coleta deve ser registrada; validação funcional não vira resultado definitivo.
+\textbf{Pós-condição:} artefatos verificáveis da execução, com indicação de completude. O executor foi utilizado na campanha definitiva; seu controle recusa sobrescrita e coleta concorrente. Relaciona-se a RF12, RF13 e RN10.
 
-\subsubsection{UC06 --- Consolidar e consultar indicadores (planejado)}
+\subsubsection{UC06 --- Consolidar e consultar indicadores}
 \textbf{Ator:} pesquisador.
 \textbf{Pré-condição:} arquivos brutos de execução disponíveis.
-\textbf{Ativação prevista:} execução de um normalizador ainda não adaptado ao Java.
-\textbf{Fluxo previsto:} verificar arquivos; correlacionar UUIDs; separar fases; calcular métricas e unidades; registrar inconsistências; produzir tabelas e relatório.
+\textbf{Ativação:} execução do analisador Java e dos agregadores offline.
+\textbf{Fluxo principal:} verificar arquivos; correlacionar UUIDs; separar fases; calcular métricas e unidades; registrar inconsistências; produzir tabelas e relatório.
 \textbf{Alternativa:} inspecionar lag, reentregas, retry, DLQ e recuperação.
 \textbf{Exceção:} ausência de instrumentação é sinalizada e não substituída por medição zero.
-\textbf{Pós-condição esperada:} indicadores rastreáveis aos dados brutos. A interface dedicada dos wireframes permanece proposta. Relaciona-se a RF11, RF14 e RN10.
+\textbf{Pós-condição:} indicadores rastreáveis aos dados brutos. A consulta é realizada por relatórios e tabelas; o formulário gráfico completo permanece evolução proposta. Relaciona-se a RF11, RF14 e RN10.
 
 \subsubsection{UC07 --- Consultar registro por UUID}
 \textbf{Ator:} pesquisador ou aplicação cliente.
@@ -136,7 +136,7 @@ A Figura~\ref{fig:implantacao} localiza os cinco serviços permanentes na rede D
 
 \FloatBarrier
 \subsection{Rastreabilidade entre requisitos, regras e UML}
-A Tabela~\ref{tab:rastreabilidade} relaciona cada requisito funcional às regras e aos elementos que o representam. Os elementos planejados não indicam código já existente. A cobertura funcional verificada é delimitada na Seção~\ref{sec:validacao-funcional}.
+A Tabela~\ref{tab:rastreabilidade} relaciona cada requisito funcional às regras e aos elementos que o representam. As evoluções propostas não são apresentadas como funções concluídas. A cobertura funcional verificada é delimitada na Seção~\ref{sec:validacao-funcional}.
 {\small
 \begin{longtable}{p{0.20\textwidth}p{0.20\textwidth}p{0.51\textwidth}}
 \caption{Rastreabilidade funcional e comportamental}\label{tab:rastreabilidade}\\
@@ -150,8 +150,8 @@ RF04 & RN06, RN09 & UC02; KafkaPublisher; ACK na atividade e sequência assíncr
 RF05, RF09, RF16 & RN07, RN11 & UC03; retry, DLQ e confirmação de origem; atividade do consumidor.\\ \hline
 RF08 & RN04, RN05 & UC01 e UC03; decisões de hash e unicidade; tabela audit\_records.\\ \hline
 RF10 & RN10 & UC04; prontidão e vivacidade das APIs.\\ \hline
-RF11, RF14 & RN10 & UC06 planejado; normalizador e wireframes de métricas/comparação.\\ \hline
-RF12, RF13 & RN07, RN10 & UC05 planejado; protocolo e acompanhamento de backlog ainda incompletos.\\ \hline
+RF11, RF14 & RN10 & UC06; analisador Java, agregação e relatórios comparativos.\\ \hline
+RF12, RF13 & RN07, RN10 & UC05; executor, controlador, séries de backlog e conciliação.\\ \hline
 RF15 & RN01, RN02, RN06 & UC01 e UC02; Swagger UI para envio manual e wireframe de formulário próprio ainda proposto.\\ \hline
 RF17 & RN04, RN05 & UC07; consulta por UUID no repositório.\\ \hline
 \end{longtable}

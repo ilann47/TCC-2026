@@ -1,0 +1,21 @@
+\subsection{Leitura exploratória da recuperação operacional}
+\label{sec:recuperacao-exploratoria}
+Na revisão documental de 30 de outubro de 2026, foi feita uma análise exploratória posterior à campanha, sem nova carga. O critério original foi primeiro reproduzido nos cinco casos assíncronos com banco parado, mantendo o resultado de uma recuperação observada em cinco. Em seguida, alterou-se somente a contagem de pendência: ao fim de cada janela, subtraíram-se os eventos medidos que já possuíam confirmação observada de retenção na DLQ. Permaneceram os três intervalos completos de dez segundos, a vazão mínima, a ausência de erro HTTP, a observação recente e saudável de banco e lag e a restrição à entrada ativa.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Recuperação com banco parado assíncrono: leitura original e exploratória}\label{tab:recuperacao-exploratoria}
+\begin{tabular}{lrrrrr}
+\hline
+Repetição & 1 & 2 & 3 & 4 & 5\\ \hline
+Eventos terminais na DLQ & 3 & 3 & 3 & 3 & 2\\
+Critério original observado & Não & Não & Não & Não & Sim\\
+Critério exploratório observado & Sim & Sim & Sim & Sim & Sim\\
+Confirmação exploratória após retomada (s) & 38,77 & 37,78 & 38,52 & 38,26 & 38,71\\ \hline
+\end{tabular}
+\fonte{Elaborado pelo autor por reanálise offline das evidências preservadas (2026).}
+\end{table}
+
+A separação entre pendência ativa e destino terminal permitiu observar a sequência operacional nas cinco coletas. Isso não converteu os 14 eventos na DLQ em registros gravados, nem alterou o resultado do critério original, que continuou em uma de cinco. A nova leitura responde se o fluxo voltou a processar a entrada com pendência ativa limitada; a original inclui a obrigação de concluir os aceites no banco. São construtos diferentes. Os 115 arquivos das cinco pastas foram conferidos por hash antes e depois da leitura; o script e o relatório estão identificados no Apêndice~\ref{ap:rastreabilidade}.
+
+O resultado é exploratório e pós-hoc, não confirmação de uma hipótese predeclarada. Para nova campanha, recomenda-se especificar previamente dois indicadores: recuperação operacional com destino terminal separado e cumprimento da obrigação de persistência de cada aceite. Sua utilidade está em explicitar o limite da métrica, sem aprovar retrospectivamente os casos desfavoráveis.

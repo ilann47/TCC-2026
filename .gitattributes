@@ -17,3 +17,4 @@
 *.tex text eol=lf
 mvnw text eol=lf
 *.cmd text eol=crlf
+entregas/2026-10-30-entrega-04-correcao-parecer/fontes/*.ps1 text eol=lf
