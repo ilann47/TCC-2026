@@ -1,6 +1,6 @@
 # Entregas acadêmicas
 
-- [Entrega 04 — correções do parecer em 30/10/2026](2026-10-30-entrega-04-correcao-parecer/) — **documento atual**: PDF revisado, conferência dos 17 itens, requisitos esperados versus obtidos e recuperação exploratória separada dos resultados originais. Revisão pessoal do autor e dados institucionais da banca permanecem pendentes.
+- [Entrega 04 — correções do parecer em 30/10/2026](2026-10-30-entrega-04-correcao-parecer/) — **versão atual**: PDF revisado, apresentação editável com dez slides principais e sete de apoio, roteiro sugerido de cinco minutos, conferência dos 17 itens, requisitos esperados versus obtidos e recuperação exploratória separada dos resultados originais. Revisão pessoal do autor e dados institucionais da banca permanecem pendentes.
 
 - [Entrega 01](entrega-01/) — PDF e apresentação da etapa inicial.
 - [UML — parte 1](uml-parte-1/) — PDF da etapa de casos de uso e atividades.
