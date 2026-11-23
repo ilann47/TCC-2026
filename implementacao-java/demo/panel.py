@@ -18,9 +18,18 @@ from urllib.parse import urlsplit
 
 from json_helper import canonical_uuid, verify_k6
 from panel_metrics import enrich, finite, read_samples, resource_snapshot, resource_summary
+from results_report import get_report
+from container_runtime import panel_network
 
 APP = Path(__file__).resolve().parent.parent
 ASSETS = Path(__file__).resolve().parent / "panel"
+RESULTS_DIST = (Path(os.environ.get("TCC_PANEL_RESULTS_DIST", "/opt/tcc-results"))
+                if os.environ.get("TCC_PANEL_CONTAINER") == "1"
+                else Path(__file__).resolve().parent / "resultados-ui/dist")
+BUILD_ASSET = re.compile(r"assets/[A-Za-z0-9_-]+\.(js|css|svg|png|webp|ico|woff|woff2)")
+BUILD_MIMES = {"js": "text/javascript", "css": "text/css", "svg": "image/svg+xml",
+               "png": "image/png", "webp": "image/webp", "ico": "image/x-icon",
+               "woff": "font/woff", "woff2": "font/woff2"}
 ACTIVE = {"queued", "running", "stopping"}
 STATES = ACTIVE | {"passed", "failed", "interrupted"}
 UUID_PATTERN = r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}"
@@ -29,6 +38,12 @@ ANSI = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
 
 def now():
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def startup_message(port, container=False):
+    control = ("Gerenciado pelo Compose. Para parar a interface: docker compose stop painel."
+               if container else "Mantenha este terminal aberto. Ctrl+C encerra só o painel e seu teste ativo.")
+    return f"Painel local: http://localhost:{port}\n{control}"
 
 
 def parameters(value):
@@ -459,9 +474,11 @@ class Manager:
 class Server(ThreadingHTTPServer):
     daemon_threads = True
 
-    def __init__(self, address, manager):
+    def __init__(self, address, manager, results_dir=RESULTS_DIST, allowed_peers=None):
         super().__init__(address, Handler)
         self.manager = manager
+        self.results_dir = Path(results_dir)
+        self.allowed_peers = frozenset({"127.0.0.1"} if allowed_peers is None else allowed_peers)
         self.token = secrets.token_urlsafe(32)
         self.hosts = {f"localhost:{self.server_port}", f"127.0.0.1:{self.server_port}"}
 
@@ -489,7 +506,7 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def local(self):
-        return (self.client_address[0] == "127.0.0.1" and
+        return (self.client_address[0] in self.server.allowed_peers and
                 len(self.headers.get_all("Host", [])) == 1 and
                 self.headers.get("Host") in self.server.hosts)
 
@@ -498,6 +515,15 @@ class Handler(BaseHTTPRequestHandler):
         if parsed.scheme or parsed.netloc or parsed.query or parsed.fragment:
             raise ValueError("Parâmetros na URL não são aceitos.")
         return parsed.path
+
+    def built_asset(self, name, mime, missing_code=404):
+        root = self.server.results_dir.resolve()
+        path = (root / name).resolve()
+        if not path.is_relative_to(root) or not path.is_file():
+            if missing_code == 503:
+                return self.respond(503, {"error": "Interface de resultados não compilada. Em demo/resultados-ui, execute npm ci e npm run build; depois atualize esta página. Não é necessário iniciar o Vite."})
+            return self.respond(404, {"error": "Ativo não encontrado."})
+        return self.respond(200, path.read_bytes(), mime)
 
     def do_GET(self):
         if not self.local():
@@ -510,8 +536,21 @@ class Handler(BaseHTTPRequestHandler):
             if route in assets:
                 name, mime = assets[route]
                 return self.respond(200, (ASSETS / name).read_bytes(), mime + "; charset=utf-8")
+            if route in ("/resultados", "/resultados/"):
+                return self.built_asset("index.html", "text/html; charset=utf-8", 503)
+            if route.startswith("/resultados/assets/"):
+                name = route.removeprefix("/resultados/")
+                match = BUILD_ASSET.fullmatch(name)
+                if not match:
+                    return self.respond(404, {"error": "Ativo não encontrado."})
+                return self.built_asset(name, BUILD_MIMES[match[1]])
             if route == "/api/state":
                 return self.respond(200, dict(self.server.manager.snapshot(), csrf_token=self.server.token))
+            if route == "/api/campaign":
+                try:
+                    return self.respond(200, get_report())
+                except (OSError, ValueError, KeyError, subprocess.SubprocessError):
+                    return self.respond(503, {"error": "Resultados indisponíveis: a verificação da campanha não foi concluída/aprovada. Execute experimento/verify_final_results.py para o diagnóstico. Nenhum dado substituto foi inventado."})
             match = re.fullmatch("/api/jobs/(" + UUID_PATTERN + ")", route)
             if match:
                 return self.respond(200, self.server.manager.detail(match[1]))
@@ -572,6 +611,13 @@ def main():
         parser.error("Execute no WSL/Linux: wsl --cd .../implementacao-java -- python3 demo/panel.py")
     if not 1024 <= args.port <= 65535:
         parser.error("Porta deve estar entre 1024 e 65535.")
+    try:
+        bind, peers = panel_network(os.environ, Path("/.dockerenv").is_file())
+    except ValueError as error:
+        parser.error(str(error))
+    def terminate(_signum, _frame):
+        raise KeyboardInterrupt
+    signal.signal(signal.SIGTERM, terminate)
     import fcntl
     runtime = APP / ".runtime/demonstracao/painel"
     runtime.mkdir(parents=True, exist_ok=True)
@@ -582,10 +628,10 @@ def main():
             parser.exit(1, "Já existe um painel desta cópia em execução. Não iniciei outro.\n")
         manager = Manager()
         try:
-            server = Server(("127.0.0.1", args.port), manager)
+            server = Server((bind, args.port), manager, allowed_peers=peers)
         except OSError as error:
             parser.exit(1, f"Não foi possível abrir a porta local: {error}\n")
-        print(f"Painel local: http://localhost:{args.port}\nMantenha este terminal aberto. Ctrl+C encerra só o painel e seu teste ativo.", flush=True)
+        print(startup_message(args.port, os.environ.get("TCC_PANEL_CONTAINER") == "1"), flush=True)
         try:
             server.serve_forever()
         except KeyboardInterrupt:

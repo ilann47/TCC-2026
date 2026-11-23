@@ -104,11 +104,26 @@ running_service() {
 }
 
 refresh_addresses() {
+  if [[ ${TCC_PANEL_CONTAINER:-0} == 1 ]];then
+    [[ -f /.dockerenv && -n ${TCC_PANEL_HOST_APP:-} ]] || { demo_error 'Contexto do painel em contêiner inválido.'; return 1; }
+    TCC_DEMO_SYNC=http://sync-api:8080
+    TCC_DEMO_ASYNC=http://async-api:8081
+    return 0
+  fi
   local mapping
   mapping=$(dc port sync-api 8080) || return 1
   TCC_DEMO_SYNC=$(json_helper address "$mapping") || return 1
   mapping=$(dc port async-api 8081) || return 1
   TCC_DEMO_ASYNC=$(json_helper address "$mapping") || return 1
+}
+
+docker_bind_path() {
+  local path=$1 host_app=${TCC_PANEL_HOST_APP:-}
+  if [[ ${TCC_PANEL_CONTAINER:-0} != 1 ]];then printf '%s\n' "$path";return 0;fi
+  [[ $host_app == /* && $host_app != / && $host_app != *$'\n'* && $host_app != *$'\r'* && $host_app != *,* && $host_app != */../* && $host_app != */.. && $path == "$TCC_DEMO_APP/"* && $path != */../* ]] || {
+    demo_error 'Caminho do bind Docker fora do repositório da demonstração.';return 1;
+  }
+  printf '%s%s\n' "$host_app" "${path#"$TCC_DEMO_APP"}"
 }
 
 session() {
@@ -284,7 +299,7 @@ run_k6() {
 }
 
 run_k6_locked() {
-  local variant=$1 seconds=${2:-$TCC_DEMO_SECONDS} rate=${3:-$TCC_DEMO_RATE} target network id run folder code
+  local variant=$1 seconds=${2:-$TCC_DEMO_SECONDS} rate=${3:-$TCC_DEMO_RATE} target network id run folder code script_bind output_bind
   local pipeline_status=()
   validate_settings && no_experiment && no_demo_load && dashboard_port_available || return 1
   refresh_addresses && ensure_k6 && session || return 1
@@ -299,6 +314,8 @@ run_k6_locked() {
   run=$(demo_uuid) || return 1
   folder="$TCC_DEMO_OUTPUT/k6-$run-$variant"
   mkdir "$folder" || return 1
+  script_bind=$(docker_bind_path "$TCC_DEMO_APP/demo") || return 1
+  output_bind=$(docker_bind_path "$folder") || return 1
   TCC_DEMO_LOAD="tcc-demo-load-$run"
   printf '\nFALA: k6 enviará %s eventos/s por %s s. Oito VUs disponíveis sustentam a taxa, não são concorrência fixa.\n' "$rate" "$seconds"
   printf 'Esta demonstração mede HTTP; não mede latência até commit nem substitui a campanha.\n'
@@ -311,8 +328,8 @@ run_k6_locked() {
   docker run --rm --name "$TCC_DEMO_LOAD" --label "tcc.demo.session=$TCC_DEMO_SESSION" \
     --network "$network" --cpus 2 --memory 2g --user "$(id -u):$(id -g)" \
     "${TCC_DEMO_DASHBOARD_ARGS[@]}" \
-    --mount "type=bind,src=$TCC_DEMO_APP/demo,dst=/scripts,readonly" \
-    --mount "type=bind,src=$folder,dst=/output" \
+    --mount "type=bind,src=$script_bind,dst=/scripts,readonly" \
+    --mount "type=bind,src=$output_bind,dst=/output" \
     -e "RUN_ID=$run" -e "VARIANT=$variant" -e "TARGET_URL=$target" \
     -e "DEMO_RATE=$rate" -e "DEMO_SECONDS=$seconds" \
     "$TCC_DEMO_K6" run --out json=/output/amostras.jsonl.gz /scripts/load.js 2>&1 | tee "$folder/console.txt"

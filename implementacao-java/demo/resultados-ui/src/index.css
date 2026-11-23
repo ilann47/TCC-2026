@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: #fff;
+  --color-secondary: #edf0fa;
+  --color-secondary-foreground: #26365d;
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: #edf1ff;
+  --color-accent-foreground: #293678;
+  --color-destructive: #ad2927;
+  --color-border: var(--border);
+  --color-input: #ccd4e3;
+  --color-ring: #5870cd;
+  --radius-sm: 0.42rem;
+  --radius-md: 0.65rem;
+  --radius-lg: 0.9rem;
+  --radius-xl: 1.15rem;
+}
+
+:root {
+  color-scheme: light;
+  --background: #f6f7fb;
+  --foreground: #192544;
+  --card: #fff;
+  --muted: #f0f3fa;
+  --muted-foreground: #596781;
+  --border: #dfe4ef;
+  --primary: #3349a8;
+  --sync: #4058bc;
+  --async: #087b69;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+body { min-width: 320px; margin: 0; background: var(--background); color: var(--foreground); }
+button, a, select, summary { -webkit-tap-highlight-color: transparent; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid #5870cd; outline-offset: 3px; }
+.chart-tick { fill: #586782; font-size: 12px; font-variant-numeric: tabular-nums; }
+.chart-variant { font-size: 13px; font-weight: 680; }
+.tabnums { font-variant-numeric: tabular-nums; }
+.defense-finding {
+  background: linear-gradient(112deg, #18284d 0%, #233b73 100%);
+  box-shadow: 0 2px 7px #1b294928;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+}

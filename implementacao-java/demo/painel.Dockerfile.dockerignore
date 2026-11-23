@@ -1,0 +1,9 @@
+**
+!demo/
+!demo/container_runtime.py
+!demo/resultados-ui/
+!demo/resultados-ui/**
+demo/resultados-ui/node_modules/
+demo/resultados-ui/dist/
+demo/resultados-ui/.sites-runtime/
+**/__pycache__/

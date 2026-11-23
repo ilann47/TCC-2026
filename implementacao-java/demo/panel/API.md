@@ -1,12 +1,18 @@
 # Contrato do painel local de demonstração
 
-Aplicativo local em `127.0.0.1:5666`, executado no WSL. Não é o produto Web
+Aplicativo publicado em `127.0.0.1:5666`, normalmente pelo serviço Compose `painel`.
+O modo manual Python/WSL continua opcional e mutuamente exclusivo com o contêiner.
+Não é o produto Web
 Dashboard da Grafana: controla o k6 da demonstração já existente. Não executa a
 campanha, não aceita destinos/scripts/comandos arbitrários e não publica arquivos
 brutos nem HTML exportado pelo k6.
 
 | Método e rota | Contrato |
 | --- | --- |
+| `GET /` | Demonstração k6 com navegação para os resultados no mesmo servidor. |
+| `GET /resultados` ou `/resultados/` | React/shadcn compilado de `/opt/tcc-results` no contêiner ou `demo/resultados-ui/dist` no modo manual; 503 se ausente. |
+| `GET /resultados/assets/<nome>` | Somente ativos compilados permitidos; sem traversal, mapas, fontes do projeto ou symlinks para fora de `dist`. |
+| `GET /api/campaign` | Campanha e apêndice exploratório com hashes verificados, em cache após sucesso. Somente leitura; 503 se a verificação falhar, sem dados substitutos. |
 | `GET /api/state` | Token CSRF da instância, execução ativa e histórico de até 100 testes deste painel. Não inicia carga. |
 | `GET /api/jobs/<UUID>` | Detalhe registrado, console limitado e métricas; 404 se não pertencer ao painel. |
 | `POST /api/run` | JSON exato `{"variant":"sync" ou "async","rate":1..10,"seconds":1..30}`; inteiros, não booleanos. 202 com execução criada; 409 se já houver execução local ativa. |
@@ -19,7 +25,20 @@ brutos nem HTML exportado pelo k6.
 Toda escrita exige `Host` local exato, `Origin` local da mesma origem,
 `Content-Type: application/json` e `X-CSRF-Token` retornado por `/api/state`.
 Limite de corpo: 4 KiB; chaves desconhecidas são recusadas. Sem CORS. Ativos
-estáticos têm rotas fixas. Acesso não local e DNS rebinding são recusados.
+estáticos têm rotas fixas ou o prefixo restrito do build React. Acesso não local
+e DNS rebinding são recusados. O React usa `/api/campaign` na mesma origem;
+não depende de CORS, Vite ou outra porta durante a apresentação. CSP permanece
+sem scripts inline ou domínios externos liberados.
+
+No contêiner, o servidor escuta em `0.0.0.0:5666` internamente, mas a publicação
+do Docker é somente `127.0.0.1`. O bootstrap verifica essa publicação e restringe
+os peers a loopback e ao gateway privado da única rede Compose, sem confiar em
+`X-Forwarded-For`. O acesso ao socket Docker não é sandbox do daemon: concede
+poder administrativo e é permitido apenas para este ambiente local confiável.
+O socket é montado como read-only, mas chamadas Docker de escrita continuam possíveis.
+O código/repositório é read-only; só `.runtime/demonstracao/` permite escrita.
+Os binds usados pelo k6 são traduzidos para os caminhos reais do host, validados
+pela inspeção do próprio contêiner, não por parâmetros recebidos via HTTP.
 
 O executor reutiliza `apresentacao.sh --run-sync/--run-async` com argumentos fixos,
 sem shell interpolado, mantendo lock e bloqueios de campanha/carga concorrente.

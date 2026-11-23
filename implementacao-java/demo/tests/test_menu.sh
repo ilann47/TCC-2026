@@ -7,6 +7,19 @@ ok() { passed=$((passed+1));printf 'ok %s - %s\n' "$passed" "$1"; }
 
 validate_settings
 ok 'default bounded load'
+(
+  TCC_DEMO_APP=/workspace/implementacao-java
+  [[ $(docker_bind_path "$TCC_DEMO_APP/demo") == /workspace/implementacao-java/demo ]]
+  TCC_PANEL_CONTAINER=1
+  TCC_PANEL_HOST_APP='/mnt/c/project/TCC-2026/implementacao-java'
+  [[ $(docker_bind_path "$TCC_DEMO_APP/demo") == "$TCC_PANEL_HOST_APP/demo" ]]
+  [[ $(docker_bind_path "$TCC_DEMO_APP/.runtime/demonstracao/abc") == "$TCC_PANEL_HOST_APP/.runtime/demonstracao/abc" ]]
+  if docker_bind_path /another/project >/dev/null 2>&1;then exit 1;fi
+  if docker_bind_path "$TCC_DEMO_APP/../private" >/dev/null 2>&1;then exit 1;fi
+  TCC_PANEL_HOST_APP='/mnt/c/project,bad'
+  if docker_bind_path "$TCC_DEMO_APP/demo" >/dev/null 2>&1;then exit 1;fi
+)
+ok 'container bind paths stay within the mounted demo repository'
 if (TCC_DEMO_RATE=11;validate_settings) >/dev/null 2>&1;then exit 1;fi
 if (TCC_DEMO_SECONDS=31;validate_settings) >/dev/null 2>&1;then exit 1;fi
 if (TCC_DEMO_RATE='1+1';validate_settings) >/dev/null 2>&1;then exit 1;fi

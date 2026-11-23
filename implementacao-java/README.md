@@ -34,8 +34,65 @@ flowchart LR
 ## Requisitos
 
 - JDK 21 ou superior. O alvo de bytecode é Java 21.
-- Docker com Compose para execução integrada. As portas padrão exclusivas desta versão são `18002` (API síncrona), `18003` (API assíncrona), `15433` (PostgreSQL) e `19093` (Kafka).
+- Docker com Compose 2.24.4+ para execução integrada. O ambiente local completo usa `5666` (painel), `18002` (API síncrona), `18003` (API assíncrona), `15434` (PostgreSQL) e `19093` (Kafka). O Compose-base histórico continua com `15433`; a extensão local substitui essa publicação sem editar o protocolo.
 - Não é necessário instalar Maven globalmente: `mvnw.cmd`/`mvnw` baixa a versão fixada.
+
+## Iniciar tudo, incluindo o painel
+
+No PowerShell, nesta máquina:
+
+```powershell
+.\Iniciar-TCC.ps1
+```
+
+Ou, dentro de `implementacao-java` no WSL: `docker compose up -d`.
+Execute o iniciador na pasta `implementacao-java`. Ele resolve o caminho do clone,
+executa exatamente `docker compose up -d` e mantém uma sessão oculta de logs do
+Compose no WSL. Neste computador, serviços systemd sozinhos não mantêm a instância
+WSL ativa; o comando avulso via PowerShell permitia que ela encerrasse depois.
+O iniciador evita isso sem alterar `.wslconfig`, firewall, registro ou inicialização
+do Windows. Não é outro servidor do painel: a interface fica exclusivamente no
+contêiner. Chamadas repetidas reconhecem o próprio processo e não duplicam o iniciador.
+Logs/PID ficam em `.runtime/demonstracao/painel/compose-wsl.*.log` e `iniciador.json`.
+Referência: [ciclo de vida de serviços systemd no WSL](https://learn.microsoft.com/en-us/windows/wsl/systemd#how-does-enabling-systemd-affect-wsl-architecture).
+Abra [Demonstração k6](http://localhost:5666/) ou [Modo Banca](http://localhost:5666/resultados).
+**Não é necessário iniciar Python, Node ou Vite em outro terminal.** O Compose
+carrega automaticamente `docker-compose.override.yml`, que adiciona `painel` e usa
+a porta local 15434 do PostgreSQL. As cinco imagens Java/infra existentes não
+precisam ser reconstruídas; se faltar somente a imagem do painel, o Compose a constrói.
+
+São **seis contêineres permanentes** (cinco da aplicação + painel), três auxiliares
+que encerram (volume Kafka, tópicos Kafka e `k6-preparar`) e um k6 temporário
+somente ao clicar em executar. `k6-preparar` disponibiliza a imagem fixada e executa
+apenas `k6 version`, sem carga ou requisições à aplicação.
+A inicialização não gera eventos nem inicia campanha ou testes antigos.
+O histórico continua em `.runtime/demonstracao/`, não é substituído por um volume vazio.
+
+Para conferir no WSL: `docker compose ps`. Logs do painel: `docker compose logs --tail=50 painel`.
+Para parar só a interface: `docker compose stop painel`. Para parar o conjunto sem
+apagar dados: `docker compose stop`. Nunca use `down -v` para uma simples apresentação.
+Não pare/recrie o painel durante uma carga: um encerramento interrompe o teste, sem retomada automática.
+
+Depois de mudar a interface, com nenhum teste ativo:
+
+```bash
+docker compose build painel
+docker compose up -d --no-deps painel
+```
+
+Isso compila apenas a nova imagem de apresentação, não as imagens Java congeladas.
+O React é compilado dentro do build Docker e servido pelo Python no mesmo contêiner.
+O repositório é montado somente para leitura, exceto a pasta de histórico da demo.
+O Compose-base e os arquivos explícitos da campanha permanecem inalterados.
+
+**Segurança local:** para executar k6 e ler recursos, o painel monta o socket Unix
+do Docker. Esse acesso equivale a controle administrativo do daemon; montar o socket
+como `read_only` **não** torna sua API somente leitura. Não é isolamento contra uma
+eventual invasão do painel. Use somente código confiável, nesta máquina local, sem
+proxy/túnel público. A porta é publicada exclusivamente em `127.0.0.1`, com os controles
+de Host/Origin/CSRF mantidos. O processo Web perde o usuário root após validar seu
+contêiner e os binds; isso não elimina o poder concedido pelo socket.
+Veja [orientação oficial de acesso ao Docker](https://docs.docker.com/engine/security/protect-access/).
 
 ## Build e testes unitários
 
@@ -105,8 +162,20 @@ As variáveis principais são `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNA
 
 ### Executar os testes pelo painel local
 
-Para iniciar as cargas **pelo navegador**, use o painel de controle próprio da
-demonstração. No PowerShell:
+**Um único serviço Web, na porta 5666:** [Demonstração k6](http://localhost:5666/)
+e [Resultados da campanha / Modo Banca](http://localhost:5666/resultados).
+O servidor Python serve também o React compilado dentro do serviço `painel`; não é
+necessário manter Node/Vite na porta 5667. A navegação no topo alterna as duas telas.
+
+O uso normal é `docker compose up -d`, descrito acima. Para desenvolvimento opcional
+fora do Docker, compile a interface no PowerShell, dentro de `implementacao-java`:
+
+```powershell
+npm --prefix demo/resultados-ui ci
+npm --prefix demo/resultados-ui run build
+```
+
+Somente nessa alternativa manual, com o serviço `painel` parado, inicie no PowerShell:
 
 ```powershell
 wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java -- python3 demo/panel.py
@@ -118,7 +187,7 @@ executa síncrono → assíncrono, sem sobreposição, com tabela e gráfico lad
 Ajuste taxa (1–10 eventos/s)
 e duração (1–30 s); o padrão é 5/s por 20 s. O painel permanece disponível depois
 de cada teste e conserva histórico, métricas e console, inclusive falhas.
-Mantenha o processo do painel aberto; fechar a aba não o encerra nem cancela a carga.
+No modo Compose, o painel roda em segundo plano; fechar a aba não o encerra nem cancela a carga.
 **Interromper teste** cancela somente o teste atual, que fica marcado como interrompido.
 Em uma sequência, **Interromper sequência** também impede que a próxima variante
 comece. Resultados incluem percentis HTTP, erros, checks, códigos HTTP, VUs,
@@ -129,9 +198,15 @@ variante; [fontes e limitações das métricas](demo/README.md#comparar-as-duas-
 Os cinco serviços e a imagem k6 devem estar preparados: se a verificação falhar,
 use a opção **1** do menu abaixo antes de testar. O painel não baixa imagens,
 não reinicia serviços, não compila Java e não inicia a campanha científica.
-O servidor escuta apenas em `127.0.0.1`; não exponha sua porta na rede.
-No WSL, dentro desta pasta, o comando é `python3 demo/panel.py`. Para encerrar,
-use Ctrl+C no terminal desse processo. Os serviços de negócio continuam ligados.
+O resultado científico continua somente leitura e pode ser apresentado mesmo
+com os serviços Java/Kafka/PostgreSQL parados. Eles continuam separados no Docker
+e só são necessários para executar novas demonstrações; unificar o painel não
+altera a arquitetura medida nem os dados históricos. Se `/resultados` informar
+que a interface não foi compilada, reconstrua somente `painel` (ou use o build npm no modo manual); não há fallback silencioso
+para uma versão antiga da tela.
+A publicação no host é somente em `127.0.0.1`; não exponha sua porta na rede.
+No modo manual opcional, o comando é `python3 demo/panel.py`, encerrado com Ctrl+C.
+Não inicie o modo manual junto ao contêiner: ambos usam o mesmo lock/histórico.
 Veja [guia do painel e diferenças em relação ao painel nativo](demo/README.md#painel-de-controle-local-permanente).
 
 ### Abrir pelo PowerShell no Windows

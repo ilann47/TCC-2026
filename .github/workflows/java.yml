@@ -12,6 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: implementacao-java/demo/resultados-ui/package-lock.json
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -41,6 +46,8 @@ jobs:
           bash experimento/campaign.sh --check "$plan_folder/plan.csv"
       - name: Verificações do menu de apresentação
         working-directory: implementacao-java
+        env:
+          POSTGRES_PASSWORD: ci-only-${{ github.run_id }}
         run: |
           bash -n demo/apresentacao.sh
           bash -n demo/comparar.sh
@@ -49,6 +56,17 @@ jobs:
           python3 -m unittest discover -s demo/tests -v
           python3 -m unittest discover -s experimento/tests -v
           node --input-type=module --check < demo/load.js
+          python3 demo/tests/check_compose.py
+      - name: Identidade do iniciador PowerShell (sem processos reais)
+        working-directory: implementacao-java
+        shell: pwsh
+        run: ./demo/tests/test_launcher.ps1
+      - name: Testes e build do painel da banca
+        working-directory: implementacao-java/demo/resultados-ui
+        run: |
+          npm ci --no-audit --no-fund
+          npm test
+          npm run build
 
   integration-smoke:
     runs-on: ubuntu-latest

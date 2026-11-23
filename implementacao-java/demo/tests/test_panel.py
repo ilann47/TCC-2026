@@ -22,6 +22,11 @@ CONFIG = {"variant": "sync", "rate": 5, "seconds": 20}
 
 
 class ParameterTests(unittest.TestCase):
+    def test_compose_startup_does_not_require_a_second_terminal(self):
+        self.assertIn("docker compose stop painel", panel.startup_message(5666, True))
+        self.assertNotIn("Mantenha este terminal", panel.startup_message(5666, True))
+        self.assertIn("Mantenha este terminal", panel.startup_message(5666))
+
     def test_allowed_boundaries(self):
         for variant in ("sync", "async"):
             for rate in (1, 10):
@@ -215,7 +220,12 @@ class HttpTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.manager = WaitingManager(Path(self.temp.name))
         self.manager.gate = threading.Event()
-        self.server = panel.Server(("127.0.0.1", 0), self.manager)
+        self.dist = Path(self.temp.name) / "dist"
+        (self.dist / "assets").mkdir(parents=True)
+        (self.dist / "index.html").write_text('<div id="root"></div><script type="module" src="/resultados/assets/index-test.js"></script>', encoding="utf-8")
+        (self.dist / "assets/index-test.js").write_text("console.log('results')", encoding="utf-8")
+        (self.dist / "assets/index-test.css").write_text("body{color:blue}", encoding="utf-8")
+        self.server = panel.Server(("127.0.0.1", 0), self.manager, results_dir=self.dist)
         self.port = self.server.server_port
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
@@ -258,6 +268,12 @@ class HttpTests(unittest.TestCase):
     def test_foreign_get_host_refused(self):
         self.assertEqual(self.request("/api/state", headers={"Host": "evil.test"})[0], 403)
 
+    def test_unapproved_peer_is_rejected_even_with_local_host_and_token(self):
+        self.server.allowed_peers = frozenset({"172.28.0.1"})
+        self.assertEqual(self.request("/api/state")[0], 403)
+        self.assertEqual(self.request("/api/run", CONFIG)[0], 403)
+        self.assertEqual(self.manager.jobs, {})
+
     def test_run_and_concurrent_conflict(self):
         status, _, body = self.request("/api/run", CONFIG)
         self.assertEqual(status, 202)
@@ -288,8 +304,62 @@ class HttpTests(unittest.TestCase):
         self.assertEqual(self.request("/api/jobs/" + RUN + "/stop", {})[0], 404)
 
     def test_only_fixed_assets(self):
-        for path in ("/", "/panel.js", "/panel.css", "/dashboard.css"):
+        for path in ("/", "/panel.js", "/panel.css", "/dashboard.css", "/resultados"):
             self.assertEqual(self.request(path)[0], 200)
+        for path in ("/results.js", "/results.css", "/results.html"):
+            self.assertEqual(self.request(path)[0], 404)
+
+    def test_compiled_results_and_demo_share_the_server(self):
+        for path in ("/resultados", "/resultados/"):
+            status, headers, body = self.request(path)
+            self.assertEqual(status, 200)
+            self.assertIn(b'/resultados/assets/index-test.js', body)
+            self.assertEqual(dict(headers)["Content-Type"], "text/html; charset=utf-8")
+        for extension, mime in (("js", "text/javascript"), ("css", "text/css")):
+            status, headers, _ = self.request("/resultados/assets/index-test." + extension)
+            self.assertEqual(status, 200)
+            self.assertEqual(dict(headers)["Content-Type"], mime)
+            self.assertIn("script-src 'self'", dict(headers)["Content-Security-Policy"])
+        self.assertIn(b'aria-label="Painel local"', self.request("/")[2])
+        self.assertEqual(self.manager.jobs, {})
+
+    def test_missing_build_is_explicit_not_a_legacy_fallback(self):
+        self.server.results_dir = Path(self.temp.name) / "missing"
+        status, _, body = self.request("/resultados")
+        self.assertEqual(status, 503)
+        self.assertIn(b'npm run build', body)
+        self.assertEqual(self.request("/")[0], 200)
+
+    def test_build_asset_boundaries_and_same_origin_guards(self):
+        for path in ("/resultados/assets/missing.js", "/resultados/assets/../../panel.py",
+                     "/resultados/assets/%2e%2e/index-test.js", "/resultados/assets/.env",
+                     "/resultados/assets/index-test.js.map", "/resultados/src/main.jsx",
+                     "/resultados/other", "/resultados/assets/../index.html"):
+            with self.subTest(path=path):
+                self.assertEqual(self.request(path)[0], 404)
+        self.assertEqual(self.request("/resultados?x=1")[0], 400)
+        self.assertEqual(self.request("/resultados", {})[0], 404)
+        self.assertEqual(self.request("/resultados", headers={"Host": "evil.test"})[0], 403)
+        self.assertEqual(self.request("/resultados/assets/index-test.js", headers={"Host": "evil.test"})[0], 403)
+
+    def test_build_symlink_cannot_escape_dist(self):
+        outside = Path(self.temp.name) / "private.js"
+        outside.write_text("private", encoding="utf-8")
+        try:
+            (self.dist / "assets/outside.js").symlink_to(outside)
+        except OSError:
+            self.skipTest("OS does not permit symlink creation")
+        self.assertEqual(self.request("/resultados/assets/outside.js")[0], 404)
+
+    def test_campaign_view_is_verified_read_only(self):
+        with patch.object(panel,"get_report",return_value={"kind":"published_scientific_campaign_not_live_demo"}):
+            status,_,body=self.request('/api/campaign')
+            self.assertEqual(status,200)
+            self.assertIn(b'published_scientific',body)
+        self.assertEqual(self.request('/api/campaign',{})[0],404)
+        self.assertEqual(self.manager.jobs,{})
+        with patch.object(panel,"get_report",side_effect=ValueError('checksum')):
+            self.assertEqual(self.request('/api/campaign')[0],503)
 
     def test_compare_api_retains_origin_guards_and_reservation(self):
         self.assertEqual(self.request("/api/compare", {"rate": 5, "seconds": 20}, {"Origin": "http://evil.test"})[0], 403)

@@ -1,0 +1,55 @@
+# Local presentation only. The frozen campaign uses explicit -f files, not this override.
+services:
+  postgres:
+    ports: !override
+      - "127.0.0.1:${TCC_LOCAL_POSTGRES_PORT:-15434}:5432"
+
+  k6-preparar:
+    image: grafana/k6:2.3.0@sha256:9c2dee7f8ed74d317e4027c06a10f169b625638189de8d4555d0b3486a5aeb34
+    entrypoint: ["k6"]
+    command: ["version"]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+  painel:
+    image: tcc-java-2026-panel:local
+    build:
+      context: .
+      dockerfile: demo/painel.Dockerfile
+    init: true
+    depends_on:
+      k6-preparar:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    # The init process needs KILL to forward signals after Python drops its root UID.
+    cap_add: [SETUID, SETGID, CHOWN, KILL]
+    security_opt: ["no-new-privileges:true"]
+    ports:
+      - "127.0.0.1:5666:5666"
+    volumes:
+      - type: bind
+        source: ..
+        target: /workspace
+        read_only: true
+      - type: bind
+        source: ./.runtime/demonstracao
+        target: /workspace/implementacao-java/.runtime/demonstracao
+      # Read-only mount does NOT make the Docker API read-only. Local trusted use only.
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    stop_grace_period: 25s
+    cpus: "1.0"
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5666/api/state', timeout=3).read()"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s

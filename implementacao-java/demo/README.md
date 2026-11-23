@@ -6,15 +6,88 @@ Para entender cada linha da tabela e ensaiar a explicação, leia o [guia comple
 
 ## Painel de controle local permanente
 
-Para **executar os testes pelo navegador**, e não apenas observar o gráfico do k6,
-abra o novo painel próprio da demonstração. No PowerShell:
+O painel agora é **unificado em um único servidor Python na porta 5666**:
+
+- [Demonstração k6](http://localhost:5666/): controla testes locais.
+- [Resultados da campanha](http://localhost:5666/resultados): interface React/shadcn
+  com Modo Banca, gráficos pareados e evidências verificadas, somente leitura.
+
+Os links no topo alternam as telas na mesma origem. Não é preciso iniciar Vite
+ou manter um segundo serviço Web na porta 5667. A separação entre dados científicos
+e novas cargas permanece; navegar nos resultados não dispara nenhuma execução.
+
+Para apresentar a pesquisa, use **Resultados da campanha**, não os testes curtos
+da demonstração como se fossem novos resultados científicos. O **Modo Banca**
+tem quatro etapas: **Método → Resultados → Falhas → Conclusão**. Em Resultados,
+os blocos **O que mostrar** e **Como explicar à banca** ligam os valores reais ao
+argumento. A legenda explica p95, par, HTTP e commit; a coleta parcial e seu efeito
+ficam na etapa Método. Repetições, indicadores completos e auditoria são expansíveis
+para responder perguntas. A demonstração continua disponível, com todos os limites
+e proteções; nenhuma carga começa por navegar no roteiro.
+
+### Inicialização normal: tudo pelo Compose
+
+No PowerShell:
+
+```powershell
+.\Iniciar-TCC.ps1
+```
+
+Execute dentro de `implementacao-java`. Esse iniciador sobe o Compose e mantém sua
+sessão WSL de logs em segundo plano, sem um servidor Python fora do Docker. Isso
+evita o encerramento da instância WSL após uma chamada avulsa `wsl ... up -d` nesta
+máquina. Ele não altera configurações globais nem instala tarefa de autostart;
+reexecuções reutilizam o próprio processo. Seus registros ficam em
+`.runtime/demonstracao/painel/iniciador.json` e `compose-wsl.*.log`.
+No WSL, dentro de `implementacao-java`, basta `docker compose up -d`.
+Não é necessário manter terminal Python aberto, nem instalar Node/npm no host.
+O serviço `painel` compila o React durante seu build e publica somente `127.0.0.1:5666`.
+São seis serviços permanentes, três inicializadores que encerram (incluindo
+`k6-preparar`, que executa somente `k6 version`) e um k6 temporário quando você pede
+uma carga. Não há teste ou retomada automática na inicialização. A imagem fixada
+do k6 é disponibilizada pelo próprio Compose antes de iniciar o painel.
+
+O arquivo local `docker-compose.override.yml` é combinado automaticamente com o
+Compose-base; não muda os arquivos `-f` explícitos do experimento. Ele usa 15434 para
+o PostgreSQL (`TCC_LOCAL_POSTGRES_PORT` permite escolher outra porta local sem editar
+o `.env` histórico). O repositório é somente leitura; a única pasta do repositório
+gravável pelo painel é `.runtime/demonstracao/`, preservando histórico, pares e brutos.
+Os volumes PostgreSQL/Kafka permanecem os mesmos. Para encerrar sem apagar nada,
+use `docker compose stop`; para parar só a interface, `docker compose stop painel`.
+
+**Acesso ao Docker:** o contêiner precisa do socket Unix para controlar k6 e ler
+os cinco serviços. Isso concede poder administrativo sobre o daemon, mesmo que o
+mount seja `read_only`. Não exponha/tunele o painel na rede nem use código não confiável.
+O bootstrap valida rótulos, porta loopback, rede e binds e deixa o Web rodando como
+o proprietário local do repositório, não root. Host/Origin/token continuam exigidos.
+Os dois modos usam o mesmo lock: nunca execute o contêiner e um painel manual juntos.
+
+Atualização da interface, sem testes ativos: `docker compose build painel` e
+`docker compose up -d --no-deps painel`. Não use `--build` em todo o projeto para
+atualizar somente esta tela; as imagens Java da campanha devem ser preservadas.
+
+### Alternativa manual para desenvolvimento
+
+Com o serviço `painel` parado, prepare o React no host, dentro de `implementacao-java`:
+
+```powershell
+npm --prefix demo/resultados-ui ci
+npm --prefix demo/resultados-ui run build
+```
+
+Node/npm são usados para compilar, não para manter o painel em execução. Os arquivos
+gerados ficam em `demo/resultados-ui/dist/`, ignorados pelo Git. O servidor só publica
+o HTML compilado e ativos permitidos, não fontes, mapas, relatórios brutos ou arquivos
+arbitrários. Build ausente gera mensagem explícita; não substitui o React pelo legado.
+
+Somente no modo manual, abra o painel no PowerShell:
 
 ```powershell
 wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/implementacao-java -- python3 demo/panel.py
 ```
 
-1. Prepare os cinco serviços e a imagem k6 pela opção **1** do menu, se necessário.
-2. Mantenha o processo acima aberto e acesse [http://localhost:5666](http://localhost:5666).
+1. Inicie o ambiente pelo Compose; a imagem k6 fixada é preparada automaticamente, sem executar testes. No modo manual, a opção **1** do menu a prepara, se necessário.
+2. Acesse [http://localhost:5666](http://localhost:5666). No modo manual, mantenha o terminal Python aberto.
 3. Clique em **Verificar serviços**. É uma conferência de leitura; não envia eventos.
 4. Escolha taxa **1–10 eventos/s** e duração **1–30 s**. Padrão: **5/s por 20 s**.
 5. Clique em **Executar os dois e comparar** para a sequência síncrona → assíncrona,
@@ -23,12 +96,15 @@ wsl --cd /mnt/c/Users/ilan.wendling/OneDrive/sistemasDeInformacao/TCC/TCC-2026/i
    o resumo final substitui os valores provisórios. Consulte o console e o histórico.
 7. Inicie outro teste quando o anterior terminar. Não é preciso fechar a aba.
 
-O painel fica em pé **enquanto `python3 demo/panel.py` estiver em execução**, mesmo
-sem teste ativo. Não é um serviço instalado para iniciar junto com o Windows.
+No Compose, o painel permanece em segundo plano com `restart: unless-stopped`,
+desde que o Docker esteja ativo. Isso não instala/inicia o Docker junto com o Windows.
+No modo manual, fica em pé **enquanto `python3 demo/panel.py` estiver em execução**.
 Fechar/reabrir a aba mantém o teste e o histórico; reiniciar o servidor não repete
 testes. Pedidos ainda pendentes ficam interrompidos, sem presumir aprovação.
-Ctrl+C no terminal encerra o painel e interrompe somente seu teste ativo.
+No modo manual, Ctrl+C encerra o painel e interrompe somente seu teste ativo.
 O botão **Interromper teste** não para Kafka, PostgreSQL, APIs ou consumidor.
+As duas telas usam esse mesmo processo. Os serviços de negócio continuam independentes
+no Docker; os resultados históricos não dependem de eles estarem ativos.
 
 O painel não é o Web Dashboard nativo da Grafana. Ele executa a imagem k6 fixada,
 o mesmo `demo/load.js` e as proteções do menu através de
@@ -111,7 +187,11 @@ Testes offline, sem Docker real nem geração de carga:
 python3 -m unittest discover -s demo/tests -v
 bash demo/tests/test_menu.sh
 bash demo/tests/test_comparison.sh
+python3 demo/tests/check_compose.py
 ```
+
+No PowerShell, `./demo/tests/test_launcher.ps1` confere a identidade do iniciador
+sem iniciar/parar processos. Para subir depois dessas verificações, use `./Iniciar-TCC.ps1`.
 
 ## 1. Abrir o menu
 

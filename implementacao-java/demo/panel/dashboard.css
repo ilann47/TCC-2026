@@ -1,4 +1,8 @@
 main { max-width: 1440px; }
+.panel-pages { display: flex; flex-wrap: wrap; gap: 6px; }
+.panel-pages a { padding: 9px 12px; border: 1px solid #dce3ee; border-radius: 7px; font-size: 12px; font-weight: 600; }
+.panel-pages a[aria-current="page"] { background: #224fd4; border-color: #224fd4; color: white; }
+@media (max-width: 700px) { .topbar { height: auto; min-height: 64px; flex-wrap: wrap; gap: 12px; padding: 14px 0; } .panel-pages { order: 3; width: 100%; } }
 .dashboard-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
 .dashboard-nav a { padding: 9px 12px; border: 1px solid #dce3ee; border-radius: 6px; background: white; font-size: 11px; color: #415b83; }
 .dashboard-nav a:hover { background: #eaf0ff; text-decoration: none; }
