@@ -36,7 +36,11 @@ do servidor Python unificado e dos relatórios verificados.
 
 Dentro de `implementacao-java`, no WSL:
 
-    docker compose up -d
+    mkdir -p .runtime/demonstracao && docker compose up -d
+
+A pasta é criada pelo usuário do WSL antes de o Docker preparar o bind; assim,
+um clone novo não ganha um `.runtime` pertencente a root que bloqueie os outros
+temporários locais. O iniciador PowerShell já prepara esse caminho.
 
 No PowerShell, na mesma pasta, use `./Iniciar-TCC.ps1`: ele sobe esse Compose e
 mantém a sessão WSL necessária em segundo plano, sem um segundo servidor de UI.

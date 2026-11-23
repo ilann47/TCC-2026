@@ -45,7 +45,15 @@ No PowerShell, nesta máquina:
 .\Iniciar-TCC.ps1
 ```
 
-Ou, dentro de `implementacao-java` no WSL: `docker compose up -d`.
+Ou, dentro de `implementacao-java` no WSL:
+
+```bash
+mkdir -p .runtime/demonstracao && docker compose up -d
+```
+
+Crie a pasta como seu usuário antes do primeiro Compose em um clone novo. Isso
+evita que o Docker crie `.runtime` como root e impeça outros comandos locais de
+gravar seus próprios temporários. O iniciador PowerShell já prepara essa pasta.
 Execute o iniciador na pasta `implementacao-java`. Ele resolve o caminho do clone,
 executa exatamente `docker compose up -d` e mantém uma sessão oculta de logs do
 Compose no WSL. Neste computador, serviços systemd sozinhos não mantêm a instância

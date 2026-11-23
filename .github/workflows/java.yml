@@ -77,7 +77,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Subir serviços isolados
         working-directory: implementacao-java
-        run: docker compose up --build -d
+        run: |
+          # Create bind sources as the runner, before Docker can create root-owned parents.
+          mkdir -p .runtime/demonstracao
+          test -w .runtime
+          docker compose up --build -d
       - name: Exercitar as variantes e a persistência final
         working-directory: implementacao-java
         run: |

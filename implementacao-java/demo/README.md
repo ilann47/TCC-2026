@@ -39,7 +39,10 @@ evita o encerramento da instância WSL após uma chamada avulsa `wsl ... up -d` 
 máquina. Ele não altera configurações globais nem instala tarefa de autostart;
 reexecuções reutilizam o próprio processo. Seus registros ficam em
 `.runtime/demonstracao/painel/iniciador.json` e `compose-wsl.*.log`.
-No WSL, dentro de `implementacao-java`, basta `docker compose up -d`.
+No WSL, dentro de `implementacao-java`, use
+`mkdir -p .runtime/demonstracao && docker compose up -d`. Em um clone novo,
+preparar o bind como seu usuário impede que o Docker crie `.runtime` como root
+e bloqueie os temporários da comparação. O iniciador PowerShell já faz essa preparação.
 Não é necessário manter terminal Python aberto, nem instalar Node/npm no host.
 O serviço `painel` compila o React durante seu build e publica somente `127.0.0.1:5666`.
 São seis serviços permanentes, três inicializadores que encerram (incluindo
