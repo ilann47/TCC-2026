@@ -36,7 +36,7 @@ As três figuras de resultados estão em páginas horizontais para preservar esp
 
 Permanecem **65 coletas planejadas, 64 completas e uma parcial A1**, sem repetição ou substituição. São cinco tentativas por condição; o banco parado conserva quatro pares completos para a comparação primária de conclusão. HTTP 503 continua erro, mesmo na persistência final comprovada. Os 14 destinos em DLQ não são gravações no PostgreSQL. A leitura exploratória não substitui o resultado original.
 
-As capturas não demonstram desempenho de uma nova campanha. O painel de resultados é somente leitura; a demonstração k6 usa histórico próprio, não mede envio-commit no teste curto e não inicia a campanha definitiva.
+As capturas não demonstram desempenho de uma nova campanha. O painel de resultados é somente leitura. A demonstração k6 envia eventos sintéticos aos serviços e pode gravá-los no banco interativo; seu histórico é separado dos arquivos científicos, ela não mede envio-commit no teste curto e não inicia a campanha definitiva.
 
 ## Conferências
 
