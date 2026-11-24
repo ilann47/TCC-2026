@@ -1,6 +1,7 @@
 # Entregas acadêmicas
 
-- [Entrega 04 — ajustes documentais para a banca em 24/11/2026](2026-11-24-entrega-04-ajustes-banca/) — **PDF atual**: revisão pessoal do painel confirmada pelo autor na declaração de IA, tecnologias na seção 4.6.1 e cronologia da demonstração esclarecida na Figura 17; 93 páginas, sem mudar resultados ou conclusões.
+- [Entrega 04 — justificativa do painel em 24/11/2026](2026-11-24-entrega-04-justificativa-painel/) — **PDF atual**: esclarecimento na seção 4.5.1 sobre o painel posterior à campanha e separado das aplicações Java, sem integrar os recursos comparados; mantém os ajustes anteriores e as 93 páginas, sem mudar resultados ou conclusões.
+- [Entrega 04 — ajustes documentais para a banca em 24/11/2026](2026-11-24-entrega-04-ajustes-banca/) — versão anterior preservada: revisão pessoal do painel confirmada pelo autor na declaração de IA, tecnologias na seção 4.6.1 e cronologia da demonstração esclarecida na Figura 17.
 - [Entrega 04 — capturas do painel em 23/11/2026](2026-11-23-entrega-04-paineis/) — versão histórica preservada: quatro telas reais nos capítulos de desenvolvimento e resultados, documentação alinhada ao painel implementado e campanha inalterada.
 - [Entrega 04 — PDF com a declaração de IA revisada em 06/11/2026](../output/pdf/TCC-2026-declaracao-ia-revisada-2026-11-06.pdf) — versão histórica: registra a revisão pessoal confirmada pelo autor, sem alterar os resultados nem declarar aprovação institucional.
 - [Entrega 04 — correções do parecer em 30/10/2026](2026-10-30-entrega-04-correcao-parecer/) — pacote preservado: PDF daquela revisão, apresentação editável com dez slides principais e sete de apoio, roteiro sugerido de cinco minutos, conferência dos 17 itens e análise exploratória de recuperação.
