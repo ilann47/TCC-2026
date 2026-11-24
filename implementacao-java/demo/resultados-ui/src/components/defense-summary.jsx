@@ -20,7 +20,7 @@ const formatChange = (value, unit) => {
   return finite(value) ? signed(value, 1) + (unit === "%" ? "%" : " " + unit) : "—"
 }
 
-export function DefenseNavigation({ condition, onChange, onCompare, onEvidence }) {
+export function DefenseNavigation({ condition, onChange }) {
   return <nav aria-label="Cenários da defesa" className="flex flex-wrap items-center justify-between gap-2">
     <div className="grid w-full grid-cols-3 gap-1 rounded-xl border border-border bg-white p-1 sm:w-auto">
       {DEFENSE_SCENARIOS.map((item) => {
@@ -37,10 +37,10 @@ export function DefenseNavigation({ condition, onChange, onCompare, onEvidence }
       })}
     </div>
     <div className="flex flex-wrap gap-2 text-sm font-semibold text-primary">
-      <a href="#comparar-cenarios" onClick={onCompare} className="inline-flex items-center gap-1 rounded-md px-2 py-1 hover:underline">
+      <a href="#comparar-cenarios" className="inline-flex items-center gap-1 rounded-md px-2 py-1 hover:underline">
         Outras cargas e rajada <ArrowDown size={15} aria-hidden="true" />
       </a>
-      <a href="#evidencias" onClick={onEvidence} className="inline-flex items-center gap-1 rounded-md px-2 py-1 hover:underline">Ver repetições</a>
+      <a href="#evidencias" className="inline-flex items-center gap-1 rounded-md px-2 py-1 hover:underline">Repetições <ArrowDown size={15} aria-hidden="true" /></a>
     </div>
   </nav>
 }

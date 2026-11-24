@@ -85,12 +85,12 @@ A aplicação cliente inicia UC01 e UC02; Kafka fornece mensagens a UC03; o pesq
 
 \subsubsection{UC06 --- Consolidar e consultar indicadores}
 \textbf{Ator:} pesquisador.
-\textbf{Pré-condição:} arquivos brutos de execução disponíveis.
-\textbf{Ativação:} execução do analisador Java e dos agregadores offline.
+\textbf{Pré-condição:} arquivos brutos disponíveis para consolidação ou relatórios publicados e verificados para consulta.
+\textbf{Ativação:} execução do analisador Java e dos agregadores offline; acesso ao painel local para consultar os relatórios.
 \textbf{Fluxo principal:} verificar arquivos; correlacionar UUIDs; separar fases; calcular métricas e unidades; registrar inconsistências; produzir tabelas e relatório.
-\textbf{Alternativa:} inspecionar lag, reentregas, retry, DLQ e recuperação.
+\textbf{Alternativa:} inspecionar lag, reentregas, retry, DLQ e recuperação; consultar no painel cenários, pares e regras analíticas sem alterar os arquivos científicos.
 \textbf{Exceção:} ausência de instrumentação é sinalizada e não substituída por medição zero.
-\textbf{Pós-condição:} indicadores rastreáveis aos dados brutos. A consulta é realizada por relatórios e tabelas; o formulário gráfico completo permanece evolução proposta. Relaciona-se a RF11, RF14 e RN10.
+\textbf{Pós-condição:} indicadores rastreáveis aos dados brutos. A consulta é realizada por relatórios, tabelas e painel gráfico posterior à campanha; o formulário manual próprio permanece proposto. Relaciona-se a RF11, RF14 e RN10.
 
 \subsubsection{UC07 --- Consultar registro por UUID}
 \textbf{Ator:} pesquisador ou aplicação cliente.

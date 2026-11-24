@@ -1,8 +1,24 @@
 \section{Interface de inspeção e relatórios}
 \label{sec:interface}
-O acesso interativo implementado utiliza Swagger UI, hospedado pela API síncrona. Seu seletor carrega os contratos das duas variantes e permite enviar o mesmo evento, consultar o código HTTP e examinar a resposta. Para testar idempotência, o usuário preserva identificador, instante e conteúdo no JSON reenviado. A consulta de registro utiliza a API síncrona. Isso atende à inspeção manual; não equivale a um produto de operação com autenticação ou a um sistema de uso corporativo.
+O acesso manual aos registros utiliza Swagger UI, hospedado pela API síncrona. Seu seletor carrega os contratos das duas variantes e permite enviar o mesmo evento, consultar o código HTTP e examinar a resposta. Para testar idempotência, o usuário preserva identificador, instante e conteúdo no JSON reenviado. A consulta de registro utiliza a API síncrona. Isso atende à inspeção manual; não equivale a um produto de operação com autenticação ou a um sistema de uso corporativo.
 
-A avaliação quantitativa utiliza k6, executor e analisadores. Seus relatórios offline identificam coleta, variante, unidade e janela, distinguem HTTP de conclusão e sinalizam ausência de evidência. Esses instrumentos realizam UC05 e UC06 sem depender de uma tela web. Demonstrações interativas posteriores são separadas da campanha e não alteram seus resultados.
+A avaliação quantitativa utiliza k6, executor e analisadores. Seus relatórios offline identificam coleta, variante, unidade e janela, distinguem HTTP de conclusão e sinalizam ausência de evidência. Esses instrumentos realizam UC05 e a consolidação de UC06 sem depender de uma tela web. Posteriormente à campanha, foi implementado um painel local para consultar os relatórios publicados e controlar demonstrações separadas. As capturas desta revisão documental foram registradas em 23 de novembro de 2026; não representam a interface utilizada para obter as 65 coletas.
+
+\subsection{Painel local implementado}
+O painel possui duas áreas no mesmo serviço Web. A área de resultados, em \texttt{/resultados}, utiliza React, componentes shadcn/ui e Tailwind, com build realizado pelo Vite e servido pelo processo Python. Ela carrega os relatórios públicos após verificação dos hashes, sem modificar os arquivos científicos. O modo de apresentação separa método, resultados, falhas e conclusões; a consulta completa oferece filtros de cenário, carga e regra analítica. A comparação preserva as unidades por coleta e por par. As Figuras~\ref{fig:painel-resultados} a~\ref{fig:painel-falhas}, no Capítulo~\ref{cap:resultados}, registram essa visualização.
+
+A área de demonstração, em \texttt{/}, permite configurar de 1 a 10 eventos por segundo e duração de 1 a 30 segundos, executar cada variante ou a sequência síncrona seguida da assíncrona, verificar serviços e interromper a própria carga. Utiliza eventos sintéticos e mantém histórico, respostas HTTP e amostras de recursos. Não mede envio--commit nesses testes curtos, não utiliza os conjuntos pareados históricos e não possui comando para iniciar a campanha definitiva. A Figura~\ref{fig:painel-demonstracao} mostra os controles e um registro anterior da demonstração; seus valores não são incorporados à análise experimental. Nenhuma nova carga foi necessária para registrar a tela.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.90\textwidth,height=0.73\textheight,keepaspectratio]{Imagens/painel/2026-11-23-demonstracao-k6.jpg}
+\caption{Controles e acompanhamento da demonstração local com k6}
+\label{fig:painel-demonstracao}
+\fonte{Captura da interface implementada pelo autor, em 23 nov. 2026. Demonstração separada da campanha.}
+\end{figure}
+\FloatBarrier
+
+A implantação local acrescenta o contêiner do painel aos cinco serviços de negócio, usando uma extensão do Docker Compose. Esse contêiner posterior não integra o caminho de recursos medido na campanha. A publicação da interface fica em \textit{loopback}, na porta 5666; o acesso ao socket Docker permite controlar o gerador e exige uso local confiável. Os controles de Host, Origin e token não constituem autenticação de produção. A área de resultados é somente leitura, enquanto novas demonstrações escrevem apenas em seu histórico próprio, separado dos dados científicos.
 
 \subsection{Evoluções propostas de interface}
-Os wireframes anteriores descreviam um formulário próprio, acompanhamento visual de backlog e comparação de indicadores. Não foram usados como evidência de implementação. O formulário dedicado continua fora da entrega: exigiria controle de identidade em reenvios e apresentação distinta de aceite e persistência. Uma interface de operação também precisaria de autenticação, controle das ações de falha e tratamento de dados sensíveis. Essas evoluções são retomadas nos trabalhos futuros.
+Os wireframes anteriores não são utilizados como evidência de implementação. A consulta gráfica de indicadores e o controle de cargas de demonstração estão implementados nas telas registradas, mas não equivalem ao formulário manual dedicado dos wireframes. Esse formulário continua fora da entrega: exigiria controle explícito de identidade em reenvios e apresentação distinta de aceite e persistência. Uma interface de operação também precisaria de autenticação, controle das ações de falha e tratamento de dados sensíveis. Essas evoluções são retomadas nos trabalhos futuros.

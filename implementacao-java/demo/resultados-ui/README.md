@@ -10,8 +10,8 @@ tem quatro etapas clicáveis, sem sair da página:
 1. **Método:** o que 201 e 202 confirmam, fluxos de cada variante, desenho
    pareado, janelas da coleta e por que há uma parcial.
 2. **Resultados:** três recortes da defesa, gráficos HTTP/commit separados,
-   legenda de p95/par/diferença e cartões **O que mostrar** / **Como explicar
-   à banca**, calculados a partir do mesmo relatório verificado.
+   legenda de p95/par/diferença, bloco **O que mostrar** e texto de interpretação,
+   calculados a partir do mesmo relatório verificado, sem título exclusivo para o apresentador.
 3. **Falhas:** destinos de cada aceite e recuperação original versus leitura
    exploratória, sem transformar os 14 eventos da DLQ em gravações.
 4. **Conclusão:** decisões de projeto, apoio e limites das hipóteses e uma
@@ -20,10 +20,10 @@ tem quatro etapas clicáveis, sem sair da página:
 Os destaques usam a análise principal A1 e mudam com o cenário. A lateral
 seleciona indicadores úteis para cada explicação: não exibe CPU de componentes
 parados como evidência de eficiência. A tabela de todas as repetições e os 16
-indicadores continuam disponíveis ao expandir **Conferir os valores por repetição**
-ou **Consultar dados completos**. **Outras cargas e rajada** reúne os sete recortes
-em uma matriz síncrona / assíncrona. Auditoria, hashes e listas extensas ficam
-recolhidos, acessíveis para responder perguntas, não como conteúdo principal.
+indicadores ficam visíveis sem clicar para expandir. **Outras cargas e rajada** reúne os sete recortes
+em uma matriz síncrona / assíncrona. Repetições, auditoria, hashes e tempos de
+recuperação também são exibidos sem blocos recolhíveis. Os atalhos no topo apenas
+rolam até as seções já abertas; os filtros de cenário e o destaque de pares permanecem.
 Nenhuma informação científica foi apagada. As diferenças relativas usam a média síncrona dos
 mesmos pares elegíveis. A taxa de gravação divide o total gravado pelo
 total enviado, sem presumir que toda gravação veio de um aceite HTTP.

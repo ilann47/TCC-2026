@@ -18,3 +18,25 @@ test("navigation uses the same server and does not require a second port", () =>
   assert.match(demo, /href="\/resultados"/)
   assert.doesNotMatch(results, /localhost:566[67]/)
 })
+
+test("result evidence is rendered without collapsed sections or reveal actions", () => {
+  const results = read("../src/main.jsx")
+  const navigation = read("../src/components/defense-summary.jsx")
+  assert.doesNotMatch(results, /<details\b|<summary\b|showEvidence|showScenarios/)
+  assert.match(results, /<section id="comparar-cenarios" aria-labelledby="comparar-cenarios-heading"/)
+  assert.match(results, /<section id="evidencias" aria-labelledby="evidencias-heading"/)
+  assert.match(results, /<ScenarioComparisonTable report=\{report\} condition=\{condition\}/)
+  assert.match(results, /<section aria-label="Tempos de recupera\u00e7\u00e3o por execu\u00e7\u00e3o"/)
+  assert.match(results, /<section aria-labelledby="auditoria-heading"/)
+  assert.match(navigation, /href="#comparar-cenarios"/)
+  assert.match(navigation, /href="#evidencias"/)
+  assert.doesNotMatch(navigation, /onCompare|onEvidence|Ver repeti\u00e7\u00f5es/)
+})
+
+test("result interpretation keeps its content without a speaker-only heading", () => {
+  const guide = read("../src/components/defense-guide.jsx")
+  assert.doesNotMatch(guide, /Como explicar à banca|MessageSquareQuote/)
+  assert.match(guide, /aria-label="Interpretação do resultado"/)
+  assert.match(guide, /\{guide\.say\}/)
+  assert.match(guide, /\{guide\.caution\}/)
+})

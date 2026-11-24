@@ -95,6 +95,8 @@ Nos quatro pares estritos de banco parado, as médias dos p95 HTTP foram 4,14 ms
 
 A sensibilidade temporal, identificada no mesmo apêndice, apresenta separadamente a distribuição dos tempos observados da coleta parcial e a cobertura de 1.666/1.667. Não é uma estimativa corrigida da distribuição completa: o commit ausente pode pertencer à cauda, e a sua posição não é conhecida. Os limites de vazão restringem apenas a contagem na janela. Nem a pequena diferença numérica desses limites nem a integridade do conteúdo recuperam o instante desconhecido.
 
+\input{Capitulos/resultados-painel}
+
 \section{Vantagens, desvantagens e hipóteses: objetivo f}
 As expectativas recebem destinos distintos, sem teste de significância ou alegação de equivalência. Menor uso básico de CPU/memória síncrono em carga reduzida foi corroborado descritivamente pelos cinco pares de 12/s. Menor complexidade operacional permanece apenas descritiva pela topologia; esforço de manutenção e custo financeiro são inconclusivos porque não foram medidos. Menor p95 de aceitação assíncrono foi corroborado nos cinco pares das seis condições comparáveis. Retenção durante consumidor parado foi corroborada nas cinco execuções desse cenário, com aceites durante a parada e destino final no banco.
 

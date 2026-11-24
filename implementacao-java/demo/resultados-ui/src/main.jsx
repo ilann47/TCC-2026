@@ -240,13 +240,11 @@ function RepetitionSelector({ selected, onSelect }) {
 
 function Defense({ report, condition, setCondition }) {
   const [selected, setSelected] = useState(null)
-  const [showEvidence, setShowEvidence] = useState(false)
-  const [showScenarios, setShowScenarios] = useState(false)
   const overview = defenseOverview(report, condition)
   const http = comparison(report, condition, HTTP, "a1")
   const commit = comparison(report, condition, COMMIT, "a1")
   return <section className="space-y-2" aria-label="Modo Banca">
-    <DefenseNavigation condition={condition} onChange={(value) => { setCondition(value); setSelected(null) }} onCompare={() => setShowScenarios(true)} onEvidence={() => setShowEvidence(true)} />
+    <DefenseNavigation condition={condition} onChange={(value) => { setCondition(value); setSelected(null) }} />
     <DefenseFinding overview={overview} httpPairs={http.pairs.length} commitPairs={commit.pairs.length} report={report} />
     <div className="grid items-start gap-2 lg:grid-cols-[minmax(0,2.15fr)_minmax(315px,1fr)]">
       <div className="min-w-0 space-y-2">
@@ -259,14 +257,12 @@ function Defense({ report, condition, setCondition }) {
       <DefenseSidebar overview={overview} recovery={report.exploratory_recovery} report={report} />
     </div>
     <ExplainResult report={report} condition={condition} />
-    <details id="comparar-cenarios" open={showScenarios} onToggle={(event) => setShowScenarios(event.currentTarget.open)} className="rounded-xl border border-border bg-white p-3 scroll-mt-3">
-      <summary className="cursor-pointer text-sm font-semibold text-primary">Outras cargas e rajada · comparar os sete recortes</summary>
-      {showScenarios && <div className="pt-3"><ScenarioComparisonTable report={report} condition={condition} /></div>}
-    </details>
-    <details id="evidencias" open={showEvidence} onToggle={(event) => setShowEvidence(event.currentTarget.open)} className="rounded-xl border border-border bg-white p-3 scroll-mt-3">
-      <summary className="cursor-pointer text-sm font-semibold text-primary">Conferir os valores por repetição e os indicadores completos</summary>
-      {showEvidence && <section className="space-y-2 pt-3" aria-labelledby="evidencias-heading">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border px-1 pt-2">
+    <section id="comparar-cenarios" aria-labelledby="comparar-cenarios-heading" className="rounded-xl border border-border bg-white p-3 scroll-mt-3">
+      <h2 id="comparar-cenarios-heading" className="text-sm font-semibold text-primary">Outras cargas e rajada · comparar os sete recortes</h2>
+      <div className="pt-3"><ScenarioComparisonTable report={report} condition={condition} /></div>
+    </section>
+    <section id="evidencias" aria-labelledby="evidencias-heading" className="space-y-2 rounded-xl border border-border bg-white p-3 scroll-mt-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-1">
         <div>
           <h2 id="evidencias-heading" className="text-base font-semibold">Evidências por coleta</h2>
           <p className="text-xs text-muted-foreground">Cinco tentativas por condição. A unidade de análise é a coleta ou o par, não cada evento.</p>
@@ -277,8 +273,7 @@ function Defense({ report, condition, setCondition }) {
         <PairedValues http={http} commit={commit} selected={selected} onSelect={setSelected} />
         <MetricsMatrix key={condition} report={report} condition={condition} policy="a1" selected={selected} onSelect={setSelected} />
       </div>
-      </section>}
-    </details>
+    </section>
   </section>
 }
 
@@ -348,13 +343,13 @@ function Failures({ report }) {
           rows={review.runs.map((run) => ["R" + run.block, run.dlq_terminal, run.original ? "Observado" : "Não observado", run.exploratory ? "Observado" : "Não observado", format(run.confirmation_s)])} />
       </CardContent>
     </Card>
-    <details className="rounded-xl border border-border bg-white p-3"><summary className="cursor-pointer text-sm font-semibold text-primary">Consultar tempos de recuperação por execução</summary><Card className={cardStyle + " mt-3"}>
+    <section aria-label="Tempos de recuperação por execução" className="rounded-xl border border-border bg-white p-3"><Card className={cardStyle}>
       <CardHeader className={headStyle}><CardTitle>Marcos de recuperação originais</CardTitle><CardDescription>Tempos após o comando de retomada. {report.recovery_caveat}</CardDescription></CardHeader>
       <CardContent className={headStyle}>
         <GridTable label="Marcos originais por coleta" columns={["Cenário / variante", "Repetição", "Primeiro commit (s)", "Confirmação (s)", "Backlog integral (s)", "Critério sustentado"]}
           rows={recoveryRuns.map((run) => [conditionLabel(run.profile, run.rate) + " / " + variantLabel(run.variant), "R" + run.block, format(run.first_commit_after_restore_s), format(run.stable_recovery_confirmed_s), format(run.backlog_recovery_s), run.stable_recovery_observed ? "Observado" : "Não observado"])} />
       </CardContent>
-    </Card></details>
+    </Card></section>
   </section>
 }
 
@@ -435,7 +430,7 @@ function App() {
           {defenseStep === "results" && <Defense report={state.report} condition={condition} setCondition={setCondition} />}
           {defenseStep === "failures" && <Failures report={state.report} />}
           {defenseStep === "conclusions" && <DefenseConclusions report={state.report} />}
-          <details className="rounded-xl border border-border bg-white p-3"><summary className="cursor-pointer text-xs font-semibold text-muted-foreground">Consultar auditoria, fontes e detalhes do protocolo</summary><div className="pt-3"><Sources report={state.report} /></div></details>
+          <section aria-labelledby="auditoria-heading" className="rounded-xl border border-border bg-white p-3"><h2 id="auditoria-heading" className="text-sm font-semibold text-primary">Auditoria, fontes e detalhes do protocolo</h2><div className="pt-3"><Sources report={state.report} /></div></section>
         </> : <>
           <Comparison report={state.report} condition={condition} setCondition={setCondition} policy={policy} setPolicy={setPolicy} />
           <Failures report={state.report} />

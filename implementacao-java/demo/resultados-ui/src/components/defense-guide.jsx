@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, CheckCheck, CircleHelp, MessageSquareQuote, Pointer, Scale } from "lucide-react"
+import { ArrowRight, BookOpen, CheckCheck, CircleHelp, Pointer, Scale } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -18,15 +18,14 @@ export function DefenseSteps({ active, onChange }) {
 
 export function ExplainResult({ report, condition }) {
   const guide = defenseNarrative(report, condition)
-  return <section aria-label="Como explicar este resultado" className="grid gap-2 rounded-xl border border-indigo-200 bg-indigo-50/60 p-3 lg:grid-cols-[minmax(0,.85fr)_minmax(0,1.15fr)]">
+  return <section aria-label="Interpretação do resultado" className="grid gap-2 rounded-xl border border-indigo-200 bg-indigo-50/60 p-3 lg:grid-cols-[minmax(0,.85fr)_minmax(0,1.15fr)]">
     <div>
       <h2 className="flex items-center gap-1.5 text-sm font-semibold"><Pointer size={15} aria-hidden="true" /> O que mostrar</h2>
       <p className="mt-1 text-[13px] leading-snug font-medium">{guide.question}</p>
       <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{guide.pointTo}</p>
     </div>
     <div className="border-border lg:border-l lg:pl-3">
-      <h2 className="flex items-center gap-1.5 text-sm font-semibold"><MessageSquareQuote size={15} aria-hidden="true" /> Como explicar à banca</h2>
-      <p className="mt-1 text-[13px] leading-relaxed">{guide.say}</p>
+      <p className="text-[13px] leading-relaxed">{guide.say}</p>
       <p className="mt-1 text-xs leading-relaxed text-muted-foreground"><strong>Não confundir: </strong>{guide.caution}</p>
     </div>
   </section>

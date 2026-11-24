@@ -44,6 +44,7 @@ replay_pid*
 *.py[cod]
 
 # Saídas da compilação LaTeX e verificações visuais locais
+tmp/pdfs/
 projeto-latex/modelo.aux
 projeto-latex/modelo.bbl
 projeto-latex/modelo.blg

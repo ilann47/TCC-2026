@@ -19,10 +19,10 @@ e novas cargas permanece; navegar nos resultados não dispara nenhuma execução
 Para apresentar a pesquisa, use **Resultados da campanha**, não os testes curtos
 da demonstração como se fossem novos resultados científicos. O **Modo Banca**
 tem quatro etapas: **Método → Resultados → Falhas → Conclusão**. Em Resultados,
-os blocos **O que mostrar** e **Como explicar à banca** ligam os valores reais ao
+o bloco **O que mostrar** e o texto de interpretação ligam os valores reais ao
 argumento. A legenda explica p95, par, HTTP e commit; a coleta parcial e seu efeito
-ficam na etapa Método. Repetições, indicadores completos e auditoria são expansíveis
-para responder perguntas. A demonstração continua disponível, com todos os limites
+ficam na etapa Método. Repetições, indicadores completos e auditoria ficam visíveis,
+sem precisar expandir blocos para responder perguntas. A demonstração continua disponível, com todos os limites
 e proteções; nenhuma carga começa por navegar no roteiro.
 
 ### Inicialização normal: tudo pelo Compose
