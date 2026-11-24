@@ -7,14 +7,14 @@ A avaliação quantitativa utiliza k6, executor e analisadores. Seus relatórios
 \subsection{Painel local implementado}
 O painel possui duas áreas no mesmo serviço Web. A área de resultados, em \texttt{/resultados}, utiliza React, componentes shadcn/ui e Tailwind, com build realizado pelo Vite e servido pelo processo Python. Ela carrega os relatórios públicos após verificação dos hashes, sem modificar os arquivos científicos. O modo de apresentação separa método, resultados, falhas e conclusões; a consulta completa oferece filtros de cenário, carga e regra analítica. A comparação preserva as unidades por coleta e por par. As Figuras~\ref{fig:painel-resultados} a~\ref{fig:painel-falhas}, no Capítulo~\ref{cap:resultados}, registram essa visualização.
 
-A área de demonstração, em \texttt{/}, permite configurar de 1 a 10 eventos por segundo e duração de 1 a 30 segundos, executar cada variante ou a sequência síncrona seguida da assíncrona, verificar serviços e interromper a própria carga. Utiliza eventos sintéticos e mantém histórico, respostas HTTP e amostras de recursos. Não mede envio--commit nesses testes curtos, não utiliza os conjuntos pareados históricos e não possui comando para iniciar a campanha definitiva. A Figura~\ref{fig:painel-demonstracao} mostra os controles e um registro anterior da demonstração; seus valores não são incorporados à análise experimental. Nenhuma nova carga foi necessária para registrar a tela.
+A área de demonstração, em \texttt{/}, permite configurar de 1 a 10 eventos por segundo e duração de 1 a 30 segundos, executar cada variante ou a sequência síncrona seguida da assíncrona, verificar serviços e interromper a própria carga. Utiliza eventos sintéticos e mantém histórico, respostas HTTP e amostras de recursos. Não mede envio--commit nesses testes curtos, não utiliza os conjuntos pareados históricos e não possui comando para iniciar a campanha definitiva. A Figura~\ref{fig:painel-demonstracao} mostra os controles e o histórico de uma demonstração realizada em 27/10/2026, depois do encerramento das coletas da campanha naquele dia; seus valores não são incorporados à análise experimental. Nenhuma nova carga foi necessária para registrar a tela.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.90\textwidth,height=0.73\textheight,keepaspectratio]{Imagens/painel/2026-11-23-demonstracao-k6.jpg}
 \caption{Controles e acompanhamento da demonstração local com k6}
 \label{fig:painel-demonstracao}
-\fonte{Captura da interface implementada pelo autor, em 23 nov. 2026. Demonstração separada da campanha.}
+\fonte{Captura do autor em 23 nov. 2026. Demonstração de 27/10/2026, posterior ao encerramento das coletas e separada da campanha.}
 \end{figure}
 \FloatBarrier
 

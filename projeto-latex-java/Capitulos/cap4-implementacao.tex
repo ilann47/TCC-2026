@@ -7,6 +7,8 @@ Os endereços e limites descritos a seguir pertencem ao Compose-base. A extensã
 
 O projeto utiliza Java com bytecode alvo 21, Spring Boot 3.5.16, Maven Wrapper, driver PostgreSQL, Spring JDBC, Flyway, cliente Apache Kafka 3.9.1 e springdoc-openapi 2.9.1 para a documentação das APIs. A implantação descrita em \texttt{docker-compose.yml} utiliza PostgreSQL 16 e Kafka 3.9.1. O Maven compila cinco módulos: \texttt{audit-core}, \texttt{audit-storage}, \texttt{sync-api}, \texttt{async-api} e \texttt{consumer}. Os dois primeiros são bibliotecas compartilhadas; os três últimos são processos executáveis independentes.
 
+O painel posterior à campanha utiliza React, componentes shadcn/ui e Tailwind CSS na interface, Vite na compilação e Python no serviço que entrega os arquivos e controla as demonstrações; essa camada de apresentação não integra o caminho de negócio medido.
+
 \begin{table}[htbp]
 \centering\small
 \caption{Módulos Java e responsabilidades efetivas}\label{tab:modulos-implementados}
